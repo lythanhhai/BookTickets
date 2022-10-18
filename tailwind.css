@@ -2,21 +2,32 @@
   position: absolute
 }
 
+.inline {
+  display: inline
+}
+
 .flex {
   display: flex
+}
+
+.flex-row {
+  flex-direction: row
+}
+
+.flex-col {
+  flex-direction: column
 }
 
 .items-center {
   align-items: center
 }
 
-.rounded-full {
-  border-radius: 9999px
+.justify-between {
+  justify-content: space-between
 }
 
-.bg-blue-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(191 219 254 / var(--tw-bg-opacity))
+.rounded-full {
+  border-radius: 9999px
 }
 
 .px-3 {
@@ -46,12 +57,6 @@
   font-weight: 600
 }
 
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity))
-}
-
-.text-blue-800 {
-  --tw-text-opacity: 1;
-  color: rgb(30 64 175 / var(--tw-text-opacity))
+.underline {
+  text-decoration-line: underline
 }
