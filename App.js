@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import utilities from "./tailwind.json";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
+import BookingTickets from "./screens/BookingTickets/BookingTickets";
 
 
 export default function App() {
@@ -15,7 +16,8 @@ export default function App() {
   return (
     <TailwindProvider utilities={utilities}>
       <View style={styles.container}>
-        { isLoginScreen ? <Login checkScreen={checkScreen}/> : <Register checkScreen={checkScreen}/>}
+        {/* { isLoginScreen ? <Login checkScreen={checkScreen}/> : <Register checkScreen={checkScreen}/>} */}
+        <BookingTickets />
       </View>
     </TailwindProvider>
   );
