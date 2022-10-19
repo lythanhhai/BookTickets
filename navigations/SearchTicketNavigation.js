@@ -16,12 +16,7 @@ const SearchTicketNavigation = () => {
       }}
     >
       <Stack.Screen name="Search" component={BookingTickets} />
-      <Stack.Screen name="Login">
-        {props => <Login {...props} />}
-      </Stack.Screen>
-      <Stack.Screen name="Register">
-        {props => <Register {...props} />}
-      </Stack.Screen>
+      
     </Stack.Navigator>
   );
 };

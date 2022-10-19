@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import Icon from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Login = ({ navigation }) => {
   const tailwind = useTailwind();
@@ -27,7 +28,17 @@ const Login = ({ navigation }) => {
           paddingLeft: 25,
         }}
       >
-        <Text style={[tailwind("text-3xl font-bold"), {color: "white"}]}>Welcome!</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+          style={{ position: "absolute", top: 45, left: 13 }}
+        >
+          <Ionicons name="arrow-back" size={30} />
+        </TouchableOpacity>
+        <Text style={[tailwind("text-3xl font-bold"), { color: "white" }]}>
+          Welcome!
+        </Text>
         <Text style={{ color: "white", fontSize: 15 }}>
           Sign in to receive more multiple benefits
         </Text>

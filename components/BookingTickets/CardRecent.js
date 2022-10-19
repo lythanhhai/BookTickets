@@ -111,7 +111,7 @@ const CardRecent = ({ item }) => {
         <Text
           style={{
             color: "black",
-            marginTop: -2,
+            marginTop: 2,
             fontSize: 12,
             fontWeight: "bold",
           }}

@@ -19,9 +19,64 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import colors from "./constants/colors";
 import SearchTicketNavigation from "./navigations/SearchTicketNavigation";
+import Notification from "./components/Notification/Notification";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
+const Home = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      // tabBarOptions={{ showIcon: true }}
+
+      style={{ marginBottom: 10 }}
+    >
+      <Tab.Screen
+        name="Search tickets"
+        component={SearchTicketNavigation}
+        options={{
+          tabBarIcon: (tabInfo) => (
+            <Icon size={15} color="black" name="search1" />
+          ),
+        }}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="My tickets"
+        component={MyTicket}
+        options={{
+          tabBarIcon: (tabInfo) => (
+            <Entypo size={15} color="black" name="ticket" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={Notification}
+        options={{
+          tabBarIcon: (tabInfo) => (
+            <Ionicons size={15} color="black" name="notifications" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="My account"
+        component={Header}
+        options={{
+          tabBarIcon: (tabInfo) => (
+            <MaterialCommunityIcons
+              size={15}
+              color="black"
+              name="account-circle-outline"
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
 export default function App() {
   const [isLoginScreen, setIsLoginScreen] = useState(true);
@@ -39,56 +94,19 @@ export default function App() {
         {/* <View style={styles.container}> */}
         {/* { isLoginScreen ? <Login checkScreen={checkScreen}/> : <Register checkScreen={checkScreen}/>} */}
         {/* <BookingTickets /> */}
-        <Tab.Navigator
+        <Stack.Navigator
           screenOptions={{
             headerShown: false,
           }}
-          // tabBarOptions={{ showIcon: true }}
-
-          style={{ marginBottom: 10 }}
         >
-          <Tab.Screen
-            name="Search tickets"
-            component={SearchTicketNavigation}
-            options={{
-              tabBarIcon: (tabInfo) => (
-                <Icon size={15} color="black" name="search1" />
-              ),
-            }}
-          ></Tab.Screen>
-          <Tab.Screen
-            name="My tickets"
-            component={MyTicket}
-            options={{
-              tabBarIcon: (tabInfo) => (
-                <Entypo size={15} color="black" name="ticket" />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Notifications"
-            component={Header}
-            options={{
-              tabBarIcon: (tabInfo) => (
-                <Ionicons size={15} color="black" name="notifications" />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="My account"
-            component={Header}
-            options={{
-              tabBarIcon: (tabInfo) => (
-                <MaterialCommunityIcons
-                  size={15}
-                  color="black"
-                  name="account-circle-outline"
-                />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-
+          <Stack.Screen name="Home" component={Home}></Stack.Screen>
+          <Stack.Screen name="Login">
+            {(props) => <Login {...props} />}
+          </Stack.Screen>
+          <Stack.Screen name="Register">
+            {(props) => <Register {...props} />}
+          </Stack.Screen>
+        </Stack.Navigator>
         {/* <Text> aaa</Text> */}
         {/* </View> */}
       </NavigationContainer>

@@ -13,10 +13,17 @@ const styles = StyleSheet.create({});
 const Header = ({ whichScreen, navigation }) => {
   const tailwind = useTailwind();
   var title = "";
+  var pl = 0
   if (whichScreen === 1) {
     title = "Booking Tickets";
+    pl = Dimensions.get("screen").width / 90
   } else if (whichScreen === 2) {
     title = "My Tickets";
+    pl = Dimensions.get("screen").width / 17
+  }
+  else if (whichScreen === 3) {
+    title = "Notifications";
+    pl = Dimensions.get("screen").width / 17
   }
   return (
     <View
@@ -24,7 +31,7 @@ const Header = ({ whichScreen, navigation }) => {
         tailwind("flex flex-row justify-between"),
         {
           paddingTop: Dimensions.get("screen").height / 24,
-          paddingLeft: Dimensions.get("screen").width / 90,
+          paddingLeft: pl,
           backgroundColor: "transparent",
           height: Dimensions.get("screen").height / 8.5,
           display: "flex",
@@ -49,12 +56,13 @@ const Header = ({ whichScreen, navigation }) => {
         }}
       >
         <Text style={[tailwind("underline"), { color: "white" }]}>
-          Hello, Hai
+          {/* Hello, Hai */}
+          Login
         </Text>
         <MaterialIcons
           name="navigate-next"
           style={{
-            fontSize: 16,
+            fontSize: 20,
             color: "white",
           }}
         />
