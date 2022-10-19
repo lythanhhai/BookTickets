@@ -12,7 +12,7 @@ import {
 import { useTailwind } from "tailwind-rn";
 import Icon from "react-native-vector-icons/AntDesign";
 
-const Register = ({ checkScreen }) => {
+const Register = ({ navigation }) => {
   const tailwind = useTailwind();
   return (
     <View>
@@ -291,7 +291,9 @@ const Register = ({ checkScreen }) => {
           }}
         >
           <Text style={{ marginRight: 10 }}>Haven't you an account yet?</Text>
-          <TouchableOpacity onPress={() => { checkScreen(true) }}>
+          <TouchableOpacity onPress={() => {
+              navigation.navigate("Login");
+            }}>
             <Text style={{ color: "rgb(50,100,255)" }}>Sign In</Text>
           </TouchableOpacity>
         </View>

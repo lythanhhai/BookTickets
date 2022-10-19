@@ -12,6 +12,8 @@ import Icon from "react-native-vector-icons/AntDesign";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { DatePickerModal } from "react-native-paper-dates";
 import { registerTranslation } from "react-native-paper-dates";
+import Entypo from "react-native-vector-icons/Entypo";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const styles = StyleSheet.create({
   container: {
@@ -127,13 +129,13 @@ const SearchFrame = () => {
               marginTop: 10,
             }}
           >
-            <Icon
+            <Entypo
               size={18}
               color="black"
-              name="calendar"
+              name="location-pin"
               style={{
                 marginHorizontal: 15,
-                fontSize: 25,
+                fontSize: 26,
                 color: "rgb(35,115,228)",
               }}
             />
@@ -144,14 +146,14 @@ const SearchFrame = () => {
                 backgroundColor: "black",
               }}
             ></View>
-            <Icon
+            <Entypo
               size={18}
               color="black"
-              name="calendar"
+              name="location-pin"
               style={{
                 marginHorizontal: 15,
-                fontSize: 25,
-                color: "rgb(35,115,228)",
+                fontSize: 26,
+                color: "red",
               }}
             />
           </View>
@@ -211,6 +213,30 @@ const SearchFrame = () => {
                 left: 0,
               }}
             ></View>
+            <TouchableOpacity
+              style={{
+                position: "absolute",
+                top: "38.5%",
+                left: "60%",
+                transform: [{ rotateY: "180deg" }],
+                borderWidth: 1,
+                borderColor: "rgb(160, 160, 160)",
+                paddingHorizontal: 1,
+                paddingVertical: 6,
+                borderRadius: 50,
+              }}
+            >
+              <FontAwesome
+                size={18}
+                color="black"
+                name="exchange"
+                style={{
+                  marginHorizontal: 15,
+                  fontSize: 25,
+                  color: "rgb(35,115,228)",
+                }}
+              />
+            </TouchableOpacity>
             <View
               style={{
                 display: "flex",

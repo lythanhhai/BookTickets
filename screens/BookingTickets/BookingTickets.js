@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     // flexDirection: "column",
     // justifyContent: "center",
     paddingLeft: Dimensions.get("screen").width / 21,
-    borderBottomRightRadius: 40,
+    // borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,
   },
   backgroundBottom: {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const BookingTickets = () => {
+const BookingTickets = ({ navigation }) => {
   const tailwind = useTailwind();
   const [list, setList] = useState([
     {
@@ -69,8 +69,8 @@ const BookingTickets = () => {
   return (
     <View style={styles.backgroundBottom}>
       <View style={[styles.background]}>
-        <Header />
-        <View style={[{ paddingTop: 20 }]}>
+        <Header whichScreen={1} navigation={navigation} />
+        <View style={[{ paddingTop: 10 }]}>
           <Text style={[{ color: "white", fontSize: 25, fontWeight: "500" }]}>
             Hi you,
           </Text>
@@ -108,9 +108,15 @@ const BookingTickets = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{
-          marginTop: 7,
-        }}>
+        <View
+          style={{
+            height: "auto",
+            backgroundColor: "transparent",
+            paddingTop: 8,
+            paddingBottom: 15,
+            marginBottom: 10,
+          }}
+        >
           <FlatList
             data={Data}
             horizontal={true}
