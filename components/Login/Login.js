@@ -11,8 +11,9 @@ import {
 } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import Icon from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-const Login = ({ checkScreen }) => {
+const Login = ({ navigation }) => {
   const tailwind = useTailwind();
   return (
     <View>
@@ -27,17 +28,18 @@ const Login = ({ checkScreen }) => {
           paddingLeft: 25,
         }}
       >
-        <Text
-          style={
-            
-              tailwind('text-white text-3xl font-bold')
-          }
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+          style={{ position: "absolute", top: 45, left: 13 }}
         >
+          <Ionicons name="arrow-back" size={30} />
+        </TouchableOpacity>
+        <Text style={[tailwind("text-3xl font-bold"), { color: "white" }]}>
           Welcome!
         </Text>
-        <Text
-          style={{ color: "white", fontSize: 15,  }}
-        >
+        <Text style={{ color: "white", fontSize: 15 }}>
           Sign in to receive more multiple benefits
         </Text>
       </View>
@@ -259,7 +261,11 @@ const Login = ({ checkScreen }) => {
           }}
         >
           <Text style={{ marginRight: 10 }}>Haven't you an account yet?</Text>
-          <TouchableOpacity onPress={() => { checkScreen(false) }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Register");
+            }}
+          >
             <Text style={{ color: "rgb(50,100,255)" }}>Sign Up</Text>
           </TouchableOpacity>
         </View>

@@ -4,11 +4,6 @@
 			"position": "absolute"
 		}
 	},
-	"inline": {
-		"style": {
-			"display": "inline"
-		}
-	},
 	"flex": {
 		"style": {
 			"display": "flex"

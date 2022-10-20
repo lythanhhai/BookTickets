@@ -13,6 +13,8 @@ import SearchFrame from "../../components/BookingTickets/SearchFrame";
 import { registerTranslation } from "react-native-paper-dates";
 import data from "../../constants/virtualDataRecent";
 import Icon from "react-native-vector-icons/AntDesign";
+import Entypo from "react-native-vector-icons/Entypo";
+
 
 const styles = StyleSheet.create({
   background: {
@@ -40,20 +42,28 @@ const CardRecent = ({ item }) => {
         alignItems: "flex-start",
         marginTop: 10,
         width: Dimensions.get("screen").width / 2,
-
+        height: "auto",
         backgroundColor: "white",
         paddingVertical: 8,
 
-        shadowColor: "#000",
+        shadowColor: "#000000",
         shadowOffset: {
           width: 0,
-          height: 2,
+          height: 3,
         },
-        shadowOpacity: 0.14,
-        shadowRadius: 10,
+        shadowOpacity: 0.17,
+        shadowRadius: 3.05,
+        elevation: 4,
+        // shadowColor: "#000",
+        // shadowOffset: {
+        //   width: 0,
+        //   height: 12,
+        // },
+        // shadowOpacity: 0.58,
+        // shadowRadius: 16.0,
 
-        elevation: 9,
-        borderRadius: 10,
+        // elevation: 24,
+        borderRadius: 8,
         marginRight: 10,
       }}
     >
@@ -65,10 +75,10 @@ const CardRecent = ({ item }) => {
           alignItems: "center",
         }}
       >
-        <Icon
+        <Entypo
           size={18}
           color="black"
-          name="calendar"
+          name="location-pin"
           style={{
             marginHorizontal: 15,
             fontSize: 13,
@@ -82,14 +92,14 @@ const CardRecent = ({ item }) => {
             backgroundColor: "black",
           }}
         ></View>
-        <Icon
+        <Entypo
           size={18}
           color="black"
-          name="calendar"
+          name="location-pin"
           style={{
             marginHorizontal: 15,
             fontSize: 13,
-            color: "rgb(35,115,228)",
+            color: "red",
           }}
         />
       </View>
@@ -101,7 +111,7 @@ const CardRecent = ({ item }) => {
         <Text
           style={{
             color: "black",
-            marginTop: -2,
+            marginTop: 2,
             fontSize: 12,
             fontWeight: "bold",
           }}
@@ -116,7 +126,7 @@ const CardRecent = ({ item }) => {
             fontWeight: "bold",
           }}
         >
-          Quang Tri
+          {item.arriveLocation}
         </Text>
         <Text
           style={{
@@ -125,19 +135,18 @@ const CardRecent = ({ item }) => {
             fontSize: 10,
           }}
         >
-          19/10/2022
+          {item.date}
         </Text>
       </View>
       <Icon
         size={18}
-        color="black"
-        name="calendar"
+        name="arrowright"
         style={{
-          fontSize: 15,
-          color: "rgb(35,115,228)",
+          fontSize: 18,
+          color: "black",
           position: "absolute",
-          top: 20,
-          right: 20,
+          top: 10,
+          right: 15,
         }}
       />
     </View>

@@ -12,7 +12,9 @@ import Icon from "react-native-vector-icons/AntDesign";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { DatePickerModal } from "react-native-paper-dates";
 import { registerTranslation } from "react-native-paper-dates";
-
+import Entypo from "react-native-vector-icons/Entypo";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Ionicons from "react-native-vector-icons/Ionicons";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -57,7 +59,9 @@ const SearchFrame = () => {
     close: "Close",
   });
   const tailwind = useTailwind();
-  const [date, setDate] = useState(new Date());
+  var array = new Date().toString().split(" ");
+  var currentDate = array[0] + " " + array[1] + " " + array[2] + " " + array[3];
+  const [date, setDate] = useState(currentDate);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [open, setOpen] = useState(false);
   const showDatePicker = () => {
@@ -69,7 +73,10 @@ const SearchFrame = () => {
   };
 
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
+    var parts = date.split("T")[0].split('-');
+    var currentDateChange = new Date(parts[0], parts[1] - 1, parts[2])
+    setDate(currentDateChange.toDateString());
+    console.warn("A date has been picked: ", currentDateChange);
     hideDatePicker();
   };
 
@@ -127,13 +134,13 @@ const SearchFrame = () => {
               marginTop: 10,
             }}
           >
-            <Icon
+            <Entypo
               size={18}
               color="black"
-              name="calendar"
+              name="location-pin"
               style={{
                 marginHorizontal: 15,
-                fontSize: 25,
+                fontSize: 26,
                 color: "rgb(35,115,228)",
               }}
             />
@@ -144,14 +151,14 @@ const SearchFrame = () => {
                 backgroundColor: "black",
               }}
             ></View>
-            <Icon
+            <Entypo
               size={18}
               color="black"
-              name="calendar"
+              name="location-pin"
               style={{
                 marginHorizontal: 15,
-                fontSize: 25,
-                color: "rgb(35,115,228)",
+                fontSize: 26,
+                color: "red",
               }}
             />
           </View>
@@ -173,7 +180,7 @@ const SearchFrame = () => {
                 justifyContent: "center",
                 alignItems: "flex-start",
                 position: "absolute",
-                top: "7%",
+                top: "5%",
                 left: 0,
               }}
             >
@@ -211,6 +218,29 @@ const SearchFrame = () => {
                 left: 0,
               }}
             ></View>
+            <TouchableOpacity
+              style={{
+                position: "absolute",
+                top: "37%",
+                left: "65%",
+                // transform: [{ rotateY: "180deg" }],
+                borderWidth: 2,
+                borderColor: "rgb(160, 160, 160)",
+                paddingHorizontal: 6,
+                paddingVertical: 6,
+                borderRadius: 50,
+              }}
+            >
+              <Ionicons
+                size={18}
+                name="swap-vertical"
+                style={{
+                  // marginHorizontal: 15,
+                  fontSize: 25,
+                  color: "rgb(35,115,228)",
+                }}
+              />
+            </TouchableOpacity>
             <View
               style={{
                 display: "flex",
@@ -258,12 +288,12 @@ const SearchFrame = () => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "flex-start",
-            height: "25%",
+            height: "28%",
             alignItems: "center",
             borderTopWidth: 1,
             borderTopColor: "rgb(210, 210, 210)",
             marginLeft: 20,
-            marginBottom: 10,
+            marginBottom: 6,
           }}
         >
           <Icon
@@ -304,7 +334,7 @@ const SearchFrame = () => {
                   fontSize: 20,
                 }}
               >
-                18-10-2022
+                {date}
               </Text>
             </TouchableOpacity>
             {Platform.OS === "ios" ? (
