@@ -211,17 +211,19 @@ const SearchFrame = ({ navigation }) => {
                   // setOpen(true);
                   navigation.setOptions({
                     ...setTabStyleVisibility(false),
-                    headerTitle: "okela"
+                    headerTitle: "okela",
                   });
                   // console.warn(...setTabStyleVisibility(true).tabBarStyle.display)
-                  navigation.navigate("LocationStart", {screen: "startpoint"})
+                  navigation.navigate("LocationStart", {
+                    screen: "startpoint",
+                  });
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "bold",
                     fontSize: 17,
-                    width: Dimensions.get("screen").width / 2
+                    width: Dimensions.get("screen").width / 2,
                   }}
                 >
                   Thanh pho Ho Chi Minh
@@ -292,7 +294,7 @@ const SearchFrame = ({ navigation }) => {
                   navigation.setOptions({
                     ...setTabStyleVisibility(false),
                   });
-                  navigation.navigate("LocationStop", {screen: "stoppoint"})
+                  navigation.navigate("LocationStop", { screen: "stoppoint" });
                 }}
               >
                 <Text

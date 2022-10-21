@@ -15,7 +15,6 @@ import data from "../../constants/virtualDataRecent";
 import Icon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 
-
 const styles = StyleSheet.create({
   background: {
     backgroundColor: "rgb(35,115,228)",
@@ -42,7 +41,7 @@ const CardRecent = ({ item }) => {
         alignItems: "flex-start",
         marginTop: 10,
         width: Dimensions.get("screen").width / 2,
-        height: 75,
+        height: 90,
         backgroundColor: "white",
         paddingVertical: 8,
 
@@ -79,7 +78,7 @@ const CardRecent = ({ item }) => {
         />
         <View
           style={{
-            height: "17%",
+            height: "27%",
             width: 1,
             backgroundColor: "black",
           }}
@@ -95,7 +94,11 @@ const CardRecent = ({ item }) => {
           }}
         />
       </View>
-      <View>
+      <View
+        style={{
+          width: 120,
+        }}
+      >
         {/* <Text style={{ color: "black" }}>{data.departLocation}</Text>
         <Text>{data.arriveLocation}</Text>
         <Text>{data.date}</Text>
@@ -115,7 +118,7 @@ const CardRecent = ({ item }) => {
           style={{
             color: "black",
             position: "absolute",
-            top: 21,
+            top: 30,
             fontSize: 12,
             fontWeight: "bold",
           }}
@@ -126,7 +129,7 @@ const CardRecent = ({ item }) => {
           style={{
             color: "rgb(110, 110, 110)",
             position: "absolute",
-            top: 43,
+            top: 60,
             fontSize: 10,
           }}
         >

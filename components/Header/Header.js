@@ -4,6 +4,7 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -12,22 +13,52 @@ const styles = StyleSheet.create({});
 
 const Header = ({ whichScreen, navigation }) => {
   const tailwind = useTailwind();
-  var title = "";
+  var title;
   var pl = 0;
   if (whichScreen === 1) {
     title = "Booking Tickets";
+    title = (
+      <Text style={{ color: "white", fontSize: 16 }}>Booking Tickets</Text>
+    );
     pl = Dimensions.get("screen").width / 90;
   } else if (whichScreen === 2) {
-    title = "My Tickets";
+    title = <Text style={{ color: "white", fontSize: 16 }}>My Tickets</Text>;
     pl = Dimensions.get("screen").width / 17;
   } else if (whichScreen === 3) {
-    title = "Notifications";
+    title = <Text style={{ color: "white", fontSize: 16 }}>Notifications</Text>;
+    pl = Dimensions.get("screen").width / 17;
+  } else if (whichScreen === "StartPoint") {
+    // title = "Start point";
+    title = (
+      <Text style={{ color: "white", fontSize: 16 }}>Booking Tickets</Text>
+    );
+    pl = Dimensions.get("screen").width / 17;
+  } else if (whichScreen === 4) {
+    title = (
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Image
+          source={require("../../assets/Image/account.png")}
+          style={{
+            height: 30,
+            width: 30,
+            objectFit: "cover",
+            resizeMode: "contain",
+            marginRight: 10,
+          }}
+        ></Image>
+        <Text style={{ color: "white", fontSize: 16 }}>My account</Text>
+      </View>
+    );
     pl = Dimensions.get("screen").width / 17;
   }
-  else if (whichScreen === "StartPoint") {
-    title = "Start point";
-    pl = Dimensions.get("screen").width / 17;
-  }
+
   return (
     <View
       style={[
@@ -44,7 +75,7 @@ const Header = ({ whichScreen, navigation }) => {
         },
       ]}
     >
-      <Text style={{ color: "white", fontSize: 16 }}>{title}</Text>
+      {title}
       <TouchableOpacity
         style={{
           display: "flex",
@@ -58,10 +89,15 @@ const Header = ({ whichScreen, navigation }) => {
           navigation.navigate("Login");
         }}
       >
-        <Text style={[tailwind("underline"), { color: "white" }]}>
-          {/* Hello, Hai */}
-          Log in
-        </Text>
+        {whichScreen === 3 ? (
+          ""
+        ) : (
+          <Text style={[tailwind("underline"), { color: "white" }]}>
+            {/* Hello, Hai */}
+            Log in
+          </Text>
+        )}
+
         {/* <MaterialIcons
           name="navigate-next"
           style={{

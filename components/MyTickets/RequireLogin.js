@@ -51,25 +51,27 @@ const RequireLogin = ({ item }) => {
           height: 75,
           width: 75,
           marginBottom: 10,
-        //   shadowColor: "#000",
-        //   shadowOffset: {
-        //     width: 0,
-        //     height: 100,
-        //   },
-        //   shadowOpacity: 0.8,
-        //   shadowRadius: 5.46,
+          //   shadowColor: "#000",
+          //   shadowOffset: {
+          //     width: 0,
+          //     height: 100,
+          //   },
+          //   shadowOpacity: 0.8,
+          //   shadowRadius: 5.46,
 
-        //   elevation: 24,
+          //   elevation: 24,
         }}
       />
-      <View style={{
-        height: 8,
-        width: 11,
-        backgroundColor: "rgb(220, 220, 220)",
-        marginBottom: 20,
-        borderRadius: 50,
-        transform: [{ scaleX: 3 }],
-      }}></View>
+      <View
+        style={{
+          height: 8,
+          width: 11,
+          backgroundColor: "rgb(220, 220, 220)",
+          marginBottom: 20,
+          borderRadius: 50,
+          transform: [{ scaleX: 3 }],
+        }}
+      ></View>
       <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 6 }}>
         Signin required
       </Text>
