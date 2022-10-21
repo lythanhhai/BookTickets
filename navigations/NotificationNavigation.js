@@ -5,7 +5,7 @@ import BookingTickets from "../screens/BookingTickets/BookingTickets";
 import Login from "../components/Login/Login";
 import { StyleSheet, Text, View } from "react-native";
 import Register from "../components/Register/Register";
-import Notification from "../components/Notification/Notification";
+import Notification from "../screens/Notifications/Notification";
 
 const Stack = createStackNavigator();
 

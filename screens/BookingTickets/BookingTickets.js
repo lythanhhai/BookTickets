@@ -78,11 +78,15 @@ const BookingTickets = ({ navigation }) => {
   return (
     <ScrollView
       style={styles.backgroundBottom}
-      contentContainerStyle={{ display: "flex", flexDirection: "column", paddingLeft: 20, }}
+      contentContainerStyle={{
+        display: "flex",
+        flexDirection: "column",
+        paddingLeft: 20,
+      }}
     >
       <View style={[styles.background]}></View>
       <Header whichScreen={1} navigation={navigation} />
-      <View style={[{ paddingTop: 10, }]}>
+      <View style={[{ paddingTop: 10 }]}>
         <Text style={[{ color: "white", fontSize: 25, fontWeight: "500" }]}>
           Hi you,
         </Text>
@@ -139,7 +143,7 @@ const BookingTickets = ({ navigation }) => {
 
       <View
         style={{
-          marginTop: 20,
+          marginTop: 0,
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
@@ -184,7 +188,6 @@ const BookingTickets = ({ navigation }) => {
         ></FlatList>
       </View>
 
-      
       {/* <CardRecent item={{ departLocation: "haha" }} /> */}
       {/* </View> */}
     </ScrollView>

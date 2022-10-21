@@ -19,7 +19,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import colors from "./constants/colors";
 import SearchTicketNavigation from "./navigations/SearchTicketNavigation";
-import Notification from "./components/Notification/Notification";
+import Notification from "./screens/Notifications/Notification";
 import MyTicketNavigation from "./navigations/MyTicketNavigation";
 import NotificationNavigation from "./navigations/NotificationNavigation";
 import AccountNavigation from "./navigations/AccountNavigation";

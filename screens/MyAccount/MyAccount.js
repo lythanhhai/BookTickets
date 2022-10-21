@@ -19,23 +19,22 @@ import Ticket from "../../components/MyTickets/Ticket";
 import styleGlobal from "../../constants/styleGlobal";
 import RequireLogin from "../../components/MyTickets/RequireLogin";
 import Logged from "../../components/MyTickets/Logged";
+import MenuFunction from "../../components/MyAccount/Menu";
 
 const styles = StyleSheet.create(styleGlobal);
 
-const MyTicket = ({ navigation }) => {
+const MyAccount = ({ navigation }) => {
   const tailwind = useTailwind();
   const [list, setList] = useState([]);
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(true);
   return (
     <View style={styles.backgroundBottom}>
       <View style={[styles.background]}>
-        <Header whichScreen={2} navigation={navigation} />
-        <Ticket />
-        {isLogged ? <Logged /> : <RequireLogin />}
-        {/* <RequireLogin /> */}
+        <Header whichScreen={4} navigation={navigation} />
+        <MenuFunction />
       </View>
     </View>
   );
 };
 
-export default MyTicket;
+export default MyAccount;
