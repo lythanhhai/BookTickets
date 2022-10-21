@@ -34,7 +34,7 @@ const Login = ({ navigation }) => {
           }}
           style={{ position: "absolute", top: 45, left: 13 }}
         >
-          <Ionicons name="arrow-back" size={30} />
+          <Ionicons name="arrow-back" size={30} style={{ color: "white" }} />
         </TouchableOpacity>
         <Text style={[tailwind("text-3xl font-bold"), { color: "white" }]}>
           Welcome!
@@ -90,7 +90,7 @@ const Login = ({ navigation }) => {
             <Text style={{}}>+84</Text>
           </View>
           <TextInput
-            autoComplete="cc-number"
+            keyboardType="numeric"
             placeholder="Phone Number"
             style={{
               paddingLeft: 15,

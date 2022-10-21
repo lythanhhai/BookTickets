@@ -15,6 +15,7 @@ import data from "../../constants/virtualDataRecent";
 import Icon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import colors from "../../constants/colors";
+import RequireLogin from "./RequireLogin";
 
 const styles = StyleSheet.create({
   background: {
@@ -169,7 +170,7 @@ const Ticket = ({ item }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View></View>
+      {/* <RequireLogin /> */}
     </View>
   );
 };

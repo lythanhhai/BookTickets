@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "booking_tickets_app",
-    "slug": "booking_tickets_app",
+    "name": "booking-tickets-app",
+    "slug": "booking-tickets-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,6 +30,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "48faaa87-1d96-4057-8f1d-0ba6749a8186"
+      }
     }
   }
 }

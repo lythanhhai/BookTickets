@@ -16,6 +16,7 @@ import {
   import Entypo from "react-native-vector-icons/Entypo";
   import colors from "../../constants/colors";
   import styleGlobal from "../../constants/styleGlobal";
+import EmptyNotification from "./EmptyNotification";
   
   const styles = StyleSheet.create(styleGlobal);
   
@@ -26,6 +27,7 @@ import {
       <View style={styles.backgroundBottom}>
       <View style={[styles.background]}>
         <Header whichScreen={3} />
+        <EmptyNotification />
       </View>
     </View>
     );
