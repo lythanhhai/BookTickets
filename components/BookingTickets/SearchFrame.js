@@ -15,6 +15,8 @@ import { registerTranslation } from "react-native-paper-dates";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import setTabStyleVisibility from "../../utils/setVisible";
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SearchFrame = () => {
+const SearchFrame = ({ navigation }) => {
   registerTranslation("pl", {
     save: "Save",
     selectSingle: "Select date",
@@ -59,9 +61,11 @@ const SearchFrame = () => {
     close: "Close",
   });
   const tailwind = useTailwind();
+
   var array = new Date().toString().split(" ");
   var currentDate = array[0] + " " + array[1] + " " + array[2] + " " + array[3];
   const [date, setDate] = useState(currentDate);
+  const [dateIphone, setDateIphone] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [open, setOpen] = useState(false);
   const showDatePicker = () => {
@@ -73,10 +77,12 @@ const SearchFrame = () => {
   };
 
   const handleConfirm = (date) => {
-    var parts = date.split("T")[0].split('-');
-    var currentDateChange = new Date(parts[0], parts[1] - 1, parts[2])
-    setDate(currentDateChange.toDateString());
-    console.warn("A date has been picked: ", currentDateChange);
+    var date1 = date.split("")[0];
+    console.warn("A date has been picked: ", date1);
+    // var currentDateChange = new Date(date1)
+    // setDate(currentDateChange);
+    // // console.warn("A date has been picked: ", currentDateChange);
+    // console.warn("A date has been picked: ", currentDateChange);
     hideDatePicker();
   };
 
@@ -148,9 +154,16 @@ const SearchFrame = () => {
               style={{
                 height: "35%",
                 width: 1,
+                // border: "none",
+                // borderTopWidth: 1,
+                // borderTopColor: "black",
+                // borderStyle: 'dashed',
+                // borderRadius: 1,
                 backgroundColor: "black",
               }}
-            ></View>
+            >
+              {/* <Text>111</Text> */}
+            </View>
             <Entypo
               size={18}
               color="black"
@@ -180,7 +193,7 @@ const SearchFrame = () => {
                 justifyContent: "center",
                 alignItems: "flex-start",
                 position: "absolute",
-                top: "5%",
+                top: "7%",
                 left: 0,
               }}
             >
@@ -194,17 +207,24 @@ const SearchFrame = () => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  showDatePicker();
-                  setOpen(true);
+                  // showDatePicker();
+                  // setOpen(true);
+                  navigation.setOptions({
+                    ...setTabStyleVisibility(false),
+                    headerTitle: "okela"
+                  });
+                  // console.warn(...setTabStyleVisibility(true).tabBarStyle.display)
+                  navigation.navigate("LocationStart", {screen: "startpoint"})
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "bold",
-                    fontSize: 20,
+                    fontSize: 17,
+                    width: Dimensions.get("screen").width / 2
                   }}
                 >
-                  Da Nang
+                  Thanh pho Ho Chi Minh
                 </Text>
               </TouchableOpacity>
             </View>
@@ -248,7 +268,7 @@ const SearchFrame = () => {
                 justifyContent: "center",
                 alignItems: "flex-start",
                 position: "absolute",
-                top: "50%",
+                top: "52%",
                 left: 0,
                 // borderTopWidth: 1,
                 // borderTopColor: "rgb(210, 210, 210)",
@@ -267,14 +287,18 @@ const SearchFrame = () => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  showDatePicker();
-                  setOpen(true);
+                  // showDatePicker();
+                  // setOpen(true);
+                  navigation.setOptions({
+                    ...setTabStyleVisibility(false),
+                  });
+                  navigation.navigate("LocationStop", {screen: "stoppoint"})
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "bold",
-                    fontSize: 20,
+                    fontSize: 17,
                   }}
                 >
                   Quang Tri
@@ -331,7 +355,7 @@ const SearchFrame = () => {
               <Text
                 style={{
                   fontWeight: "bold",
-                  fontSize: 20,
+                  fontSize: 17,
                 }}
               >
                 {date}
@@ -343,7 +367,7 @@ const SearchFrame = () => {
                 mode="single"
                 visible={open}
                 onDismiss={onDismissSingle}
-                date={date}
+                date={dateIphone}
                 onConfirm={onConfirmSingle}
               />
             ) : (
@@ -353,7 +377,6 @@ const SearchFrame = () => {
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
                 isDarkModeEnabled={false}
-                // display="spinner"
               />
               // <DatePickerModal
               //   // locale="en"

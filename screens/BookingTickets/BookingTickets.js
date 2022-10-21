@@ -5,6 +5,7 @@ import {
   Dimensions,
   FlatList,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { useState } from "react";
@@ -13,6 +14,8 @@ import SearchFrame from "../../components/BookingTickets/SearchFrame";
 import { registerTranslation } from "react-native-paper-dates";
 import CardRecent from "../../components/BookingTickets/CardRecent";
 import Data from "../../constants/virtualDataRecent";
+import colors from "../../constants/colors";
+import CardRoute from "../../components/BookingTickets/CardRoute";
 
 const styles = StyleSheet.create({
   background: {
@@ -22,17 +25,23 @@ const styles = StyleSheet.create({
     display: "flex",
     // flexDirection: "column",
     // justifyContent: "center",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: -1,
     paddingLeft: Dimensions.get("screen").width / 21,
     // borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,
   },
   backgroundBottom: {
-    backgroundColor: "rgb(246,246,246)",
+    backgroundColor: "rgb(246, 246, 246)",
     width: Dimensions.get("screen").width,
-    height: Dimensions.get("screen").height,
-    display: "flex",
-    // position: "absolute",
-    // top: Dimensions.get("screen").height / 3.5,
+    // height: 2000,
+    // display: "flex",
+    // flexDirection: "column",
+    // justifyContent: "center",
+    // position: "relative",
+    // top: 0,
     // left: 0,
   },
 });
@@ -67,67 +76,118 @@ const BookingTickets = ({ navigation }) => {
     },
   ]);
   return (
-    <View style={styles.backgroundBottom}>
-      <View style={[styles.background]}>
-        <Header whichScreen={1} navigation={navigation} />
-        <View style={[{ paddingTop: 10 }]}>
-          <Text style={[{ color: "white", fontSize: 25, fontWeight: "500" }]}>
-            Hi you,
-          </Text>
-          <Text style={[{ color: "white", fontSize: 14 }]}>
-            Where do you want to go today?
-          </Text>
-        </View>
-        <SearchFrame />
-        <View
+    <ScrollView
+      style={styles.backgroundBottom}
+      contentContainerStyle={{ display: "flex", flexDirection: "column", paddingLeft: 20, }}
+    >
+      <View style={[styles.background]}></View>
+      <Header whichScreen={1} navigation={navigation} />
+      <View style={[{ paddingTop: 10, }]}>
+        <Text style={[{ color: "white", fontSize: 25, fontWeight: "500" }]}>
+          Hi you,
+        </Text>
+        <Text style={[{ color: "white", fontSize: 14 }]}>
+          Where do you want to go today?
+        </Text>
+      </View>
+      <SearchFrame navigation={navigation} />
+      <View
+        style={{
+          marginTop: 20,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Text
           style={{
-            marginTop: 20,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            fontSize: 17,
+            fontWeight: "600",
           }}
         >
+          Recent searches
+        </Text>
+        <TouchableOpacity>
           <Text
             style={{
-              fontSize: 17,
-              fontWeight: "600",
+              fontSize: 13,
+              color: "rgb(35,115,238)",
+              marginRight: 20,
             }}
           >
-            Recent searches
+            Remove all
           </Text>
-          <TouchableOpacity>
-            <Text
-              style={{
-                fontSize: 13,
-                color: "rgb(35,115,238)",
-                marginRight: 20,
-              }}
-            >
-              Remove all
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          height: "auto",
+          backgroundColor: "transparent",
+          paddingTop: 8,
+          paddingBottom: 15,
+          marginBottom: 10,
+        }}
+      >
+        <FlatList
+          data={Data}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => <CardRecent item={item} />}
+        ></FlatList>
+      </View>
+
+      <View
+        style={{
+          marginTop: 20,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Text
           style={{
-            height: "auto",
-            backgroundColor: "transparent",
-            paddingTop: 8,
-            paddingBottom: 15,
-            marginBottom: 10,
+            fontSize: 17,
+            fontWeight: "600",
           }}
         >
-          <FlatList
-            data={Data}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => <CardRecent item={item} />}
-          ></FlatList>
-        </View>
-
-        {/* <CardRecent item={{ departLocation: "haha" }} /> */}
+          Popular routes
+        </Text>
+        <TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 13,
+              color: "rgb(35,115,238)",
+              marginRight: 20,
+            }}
+          >
+            {/* Remove all */}
+          </Text>
+        </TouchableOpacity>
       </View>
-    </View>
+
+      <View
+        style={{
+          height: "auto",
+          backgroundColor: "transparent",
+          paddingTop: 8,
+          paddingBottom: 15,
+          marginBottom: 10,
+        }}
+      >
+        <FlatList
+          data={Data}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => <CardRoute item={item} />}
+        ></FlatList>
+      </View>
+
+      
+      {/* <CardRecent item={{ departLocation: "haha" }} /> */}
+      {/* </View> */}
+    </ScrollView>
   );
 };
 

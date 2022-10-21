@@ -13,17 +13,20 @@ const styles = StyleSheet.create({});
 const Header = ({ whichScreen, navigation }) => {
   const tailwind = useTailwind();
   var title = "";
-  var pl = 0
+  var pl = 0;
   if (whichScreen === 1) {
     title = "Booking Tickets";
-    pl = Dimensions.get("screen").width / 90
+    pl = Dimensions.get("screen").width / 90;
   } else if (whichScreen === 2) {
     title = "My Tickets";
-    pl = Dimensions.get("screen").width / 17
-  }
-  else if (whichScreen === 3) {
+    pl = Dimensions.get("screen").width / 17;
+  } else if (whichScreen === 3) {
     title = "Notifications";
-    pl = Dimensions.get("screen").width / 17
+    pl = Dimensions.get("screen").width / 17;
+  }
+  else if (whichScreen === "StartPoint") {
+    title = "Start point";
+    pl = Dimensions.get("screen").width / 17;
   }
   return (
     <View
@@ -49,7 +52,7 @@ const Header = ({ whichScreen, navigation }) => {
           justifyContent: "flex-start",
           alignItems: "center",
           backgroundColor: "transparent",
-          paddingRight: 17,
+          paddingRight: 27,
         }}
         onPress={() => {
           navigation.navigate("Login");
@@ -57,15 +60,15 @@ const Header = ({ whichScreen, navigation }) => {
       >
         <Text style={[tailwind("underline"), { color: "white" }]}>
           {/* Hello, Hai */}
-          Login
+          Log in
         </Text>
-        <MaterialIcons
+        {/* <MaterialIcons
           name="navigate-next"
           style={{
             fontSize: 20,
             color: "white",
           }}
-        />
+        /> */}
       </TouchableOpacity>
     </View>
   );

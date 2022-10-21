@@ -32,9 +32,9 @@ const Register = ({ navigation }) => {
           onPress={() => {
             navigation.navigate("Home");
           }}
-          style={{ position: "absolute", top: 45, left: 13 }}
+          style={{ position: "absolute", top: 45, left: 13, color: "white" }}
         >
-          <Ionicons name="arrow-back" size={30} />
+          <Ionicons name="arrow-back" size={30} style={{ color: "white" }} />
         </TouchableOpacity>
         <Text
           style={{
@@ -91,12 +91,18 @@ const Register = ({ navigation }) => {
           >
             <Image
               source={require("../../assets/Image/adaptive-icon.png")}
-              style={{ height: "80%", width: "30%", borderRadius: 10 }}
+              style={{
+                height: "80%",
+                width: "30%",
+                borderRadius: 10,
+                objectFit: "cover",
+                resizeMode: "contain",
+              }}
             />
             <Text style={{}}>+84</Text>
           </View>
           <TextInput
-            autoComplete="cc-number"
+            keyboardType="numeric"
             placeholder="Phone Number"
             style={{
               paddingLeft: 15,

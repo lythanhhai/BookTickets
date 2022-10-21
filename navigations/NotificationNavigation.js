@@ -5,33 +5,21 @@ import BookingTickets from "../screens/BookingTickets/BookingTickets";
 import Login from "../components/Login/Login";
 import { StyleSheet, Text, View } from "react-native";
 import Register from "../components/Register/Register";
-import ChooseLocation from "../screens/BookingTickets/ChooseLocation";
+import Notification from "../components/Notification/Notification";
 
 const Stack = createStackNavigator();
 
-const SearchTicketNavigation = () => {
+const NotificationNavigation = () => {
   return (
     <Stack.Navigator
-    // screenOptions={{
-    //   headerShown: false,
-    // }}
+      screenOptions={{
+        headerShown: false,
+      }}
     >
-      <Stack.Screen
-        name="Search"
-        component={BookingTickets}
-        options={{
-          headerShown: false,
-        }}
-      />
-      {/* <Stack.Screen
-        name="LocationStart"
-        component={ChooseLocation}
-        options={({ route }) => ({
-          title: "Start point",
-        })}
-      /> */}
+      <Stack.Screen name="Notication" component={Notification} />
+      
     </Stack.Navigator>
   );
 };
 
-export default SearchTicketNavigation;
+export default NotificationNavigation;

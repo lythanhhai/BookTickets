@@ -42,7 +42,7 @@ const CardRecent = ({ item }) => {
         alignItems: "flex-start",
         marginTop: 10,
         width: Dimensions.get("screen").width / 2,
-        height: "auto",
+        height: 75,
         backgroundColor: "white",
         paddingVertical: 8,
 
@@ -54,15 +54,7 @@ const CardRecent = ({ item }) => {
         shadowOpacity: 0.17,
         shadowRadius: 3.05,
         elevation: 4,
-        // shadowColor: "#000",
-        // shadowOffset: {
-        //   width: 0,
-        //   height: 12,
-        // },
-        // shadowOpacity: 0.58,
-        // shadowRadius: 16.0,
 
-        // elevation: 24,
         borderRadius: 8,
         marginRight: 10,
       }}
@@ -87,7 +79,7 @@ const CardRecent = ({ item }) => {
         />
         <View
           style={{
-            height: "15%",
+            height: "17%",
             width: 1,
             backgroundColor: "black",
           }}
@@ -111,7 +103,8 @@ const CardRecent = ({ item }) => {
         <Text
           style={{
             color: "black",
-            marginTop: 2,
+            position: "absolute",
+            top: -1,
             fontSize: 12,
             fontWeight: "bold",
           }}
@@ -121,7 +114,8 @@ const CardRecent = ({ item }) => {
         <Text
           style={{
             color: "black",
-            paddingTop: 5,
+            position: "absolute",
+            top: 21,
             fontSize: 12,
             fontWeight: "bold",
           }}
@@ -131,7 +125,8 @@ const CardRecent = ({ item }) => {
         <Text
           style={{
             color: "rgb(110, 110, 110)",
-            paddingTop: 5,
+            position: "absolute",
+            top: 43,
             fontSize: 10,
           }}
         >

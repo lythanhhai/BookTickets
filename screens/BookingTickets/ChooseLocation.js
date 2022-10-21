@@ -19,23 +19,18 @@ import Ticket from "../../components/MyTickets/Ticket";
 import styleGlobal from "../../constants/styleGlobal";
 import RequireLogin from "../../components/MyTickets/RequireLogin";
 import Logged from "../../components/MyTickets/Logged";
+import SearchLocation from "../../components/BookingTickets/SearchLocation";
 
 const styles = StyleSheet.create(styleGlobal);
 
-const MyTicket = () => {
+const ChooseLocation = ({ navigation, route }) => {
   const tailwind = useTailwind();
-  const [list, setList] = useState([]);
-  const [isLogged, setIsLogged] = useState(true);
+
   return (
     <View style={styles.backgroundBottom}>
-      <View style={[styles.background]}>
-        <Header whichScreen={2} />
-        <Ticket />
-        {isLogged ? <Logged /> : <RequireLogin />}
-        {/* <RequireLogin /> */}
-      </View>
+      <SearchLocation navigation={navigation} route={route} />
     </View>
   );
 };
 
-export default MyTicket;
+export default ChooseLocation;

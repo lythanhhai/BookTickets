@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 // import 'react-native-gesture-handler';
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { TailwindProvider } from "tailwind-rn";
 import { useState, useEffect } from "react";
 import utilities from "./tailwind.json";
@@ -20,11 +20,26 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import colors from "./constants/colors";
 import SearchTicketNavigation from "./navigations/SearchTicketNavigation";
 import Notification from "./components/Notification/Notification";
+import MyTicketNavigation from "./navigations/MyTicketNavigation";
+import NotificationNavigation from "./navigations/NotificationNavigation";
+import AccountNavigation from "./navigations/AccountNavigation";
+import ChooseLocation from "./screens/BookingTickets/ChooseLocation";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const Home = () => {
+  const getTabBarVisibility = (route) => {
+    const routeName = route.state
+      ? route.state.routes[route.state.index].name
+      : "";
+
+    if (routeName === "Location") {
+      return false;
+    }
+
+    return false;
+  };
   return (
     <Tab.Navigator
       screenOptions={{
@@ -32,46 +47,95 @@ const Home = () => {
       }}
       // tabBarOptions={{ showIcon: true }}
 
-      style={{ marginBottom: 10 }}
+      tabBarStyle={{ marginBottom: 10 }}
     >
       <Tab.Screen
-        name="Search tickets"
+        name="Search_tickets"
         component={SearchTicketNavigation}
-        options={{
-          tabBarIcon: (tabInfo) => (
-            <Icon size={15} color="black" name="search1" />
-          ),
-        }}
+        options={({ route }) => ({
+          // ​tabBarLabel: ({ focused, color }) => {
+          //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
+          // },
+          tabBarIcon: ({ focused, color, size }) => {
+            var elem;
+            focused
+              ? (elem = <Icon size={17} color={colors.blue} name="search1" />)
+              : (elem = <Icon size={17} color={colors.gray} name="search1" />);
+            return elem;
+          },
+          // tabBarStyle: { display: 'flex' }
+        })}
       ></Tab.Screen>
       <Tab.Screen
-        name="My tickets"
-        component={MyTicket}
+        name="My_tickets"
+        component={MyTicketNavigation}
         options={{
-          tabBarIcon: (tabInfo) => (
-            <Entypo size={15} color="black" name="ticket" />
-          ),
+          // ​tabBarLabel: ({ focused, color }) => {
+          //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
+          // },
+          tabBarIcon: ({ focused, color, size }) => {
+            var elem;
+            focused
+              ? (elem = <Entypo size={17} color={colors.blue} name="ticket" />)
+              : (elem = <Entypo size={17} color={colors.gray} name="ticket" />);
+            return elem;
+          },
         }}
       />
       <Tab.Screen
         name="Notifications"
-        component={Notification}
+        component={NotificationNavigation}
         options={{
-          tabBarIcon: (tabInfo) => (
-            <Ionicons size={15} color="black" name="notifications" />
-          ),
+          // ​tabBarLabel: ({ focused, color }) => {
+          //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
+          // },
+          tabBarIcon: ({ focused, color, size }) => {
+            var elem;
+            focused
+              ? (elem = (
+                  <Ionicons
+                    size={17}
+                    color={colors.blue}
+                    name="notifications"
+                  />
+                ))
+              : (elem = (
+                  <Ionicons
+                    size={17}
+                    color={colors.gray}
+                    name="notifications"
+                  />
+                ));
+            return elem;
+          },
         }}
       />
       <Tab.Screen
-        name="My account"
-        component={Header}
+        name="My_account"
+        component={AccountNavigation}
         options={{
-          tabBarIcon: (tabInfo) => (
-            <MaterialCommunityIcons
-              size={15}
-              color="black"
-              name="account-circle-outline"
-            />
-          ),
+          // ​tabBarLabel: ({ focused, color }) => {
+          //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
+          // },
+          tabBarIcon: ({ focused, color, size }) => {
+            var elem;
+            focused
+              ? (elem = (
+                  <MaterialCommunityIcons
+                    size={17}
+                    color={colors.blue}
+                    name="account-circle-outline"
+                  />
+                ))
+              : (elem = (
+                  <MaterialCommunityIcons
+                    size={17}
+                    color={colors.gray}
+                    name="account-circle-outline"
+                  />
+                ));
+            return elem;
+          },
         }}
       />
     </Tab.Navigator>
@@ -100,12 +164,44 @@ export default function App() {
           }}
         >
           <Stack.Screen name="Home" component={Home}></Stack.Screen>
-          <Stack.Screen name="Login">
-            {(props) => <Login {...props} />}
-          </Stack.Screen>
-          <Stack.Screen name="Register">
-            {(props) => <Register {...props} />}
-          </Stack.Screen>
+          <Stack.Group>
+            <Stack.Screen
+              name="LocationStart"
+              component={ChooseLocation}
+              options={{
+                title: "Start point",
+                headerShown: true,
+                headerStyle: {
+                  backgroundColor: colors.blue,
+                  // height: Dimensions.get("screen").height / 8,
+                },
+                headerTintColor: '#fff',
+              }}
+              
+            />
+            <Stack.Screen
+              name="LocationStop"
+              component={ChooseLocation}
+              options={{
+                title: "Stop point",
+                headerShown: true,
+                headerStyle: {
+                  backgroundColor: colors.blue,
+                  // height: Dimensions.get("screen").height / 8,
+                },
+                headerTintColor: '#fff',
+              }}
+              
+            />
+          </Stack.Group>
+          <Stack.Group>
+            <Stack.Screen name="Login">
+              {(props) => <Login {...props} />}
+            </Stack.Screen>
+            <Stack.Screen name="Register">
+              {(props) => <Register {...props} />}
+            </Stack.Screen>
+          </Stack.Group>
         </Stack.Navigator>
         {/* <Text> aaa</Text> */}
         {/* </View> */}
