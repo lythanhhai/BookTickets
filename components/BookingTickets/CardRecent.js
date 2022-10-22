@@ -14,6 +14,7 @@ import { registerTranslation } from "react-native-paper-dates";
 import data from "../../constants/virtualDataRecent";
 import Icon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const styles = StyleSheet.create({
   background: {
@@ -56,9 +57,10 @@ const CardRecent = ({ item }) => {
 
         borderRadius: 8,
         marginRight: 10,
+        marginBottom: 10,
       }}
     >
-      <View
+      {/* <View
         style={{
           display: "flex",
           flexDirection: "column",
@@ -66,10 +68,10 @@ const CardRecent = ({ item }) => {
           alignItems: "center",
         }}
       >
-        <Entypo
+        <FontAwesome
           size={18}
           color="black"
-          name="location-pin"
+          name="dot-circle-o"
           style={{
             marginHorizontal: 15,
             fontSize: 13,
@@ -83,58 +85,99 @@ const CardRecent = ({ item }) => {
             backgroundColor: "black",
           }}
         ></View>
-        <Entypo
+        <FontAwesome
           size={18}
           color="black"
-          name="location-pin"
+          name="dot-circle-o"
           style={{
             marginHorizontal: 15,
             fontSize: 13,
             color: "red",
           }}
         />
-      </View>
+      </View> */}
       <View
         style={{
           width: 120,
+          // display: "flex",
+          // flexDirection: "column",
+          // justifyContent: "center",
+          // alignItems: "flex-start",
         }}
       >
         {/* <Text style={{ color: "black" }}>{data.departLocation}</Text>
         <Text>{data.arriveLocation}</Text>
         <Text>{data.date}</Text>
          */}
-        <Text
+        <View
           style={{
-            color: "black",
-            position: "absolute",
-            top: -1,
-            fontSize: 12,
-            fontWeight: "bold",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
           }}
         >
-          {item.departLocation}
-        </Text>
-        <Text
+          <FontAwesome
+            size={18}
+            color="black"
+            name="dot-circle-o"
+            style={{
+              marginHorizontal: 10,
+              fontSize: 13,
+              color: "rgb(35,115,228)",
+            }}
+          />
+          <Text
+            style={{
+              color: "black",
+              // position: "absolute",
+              // top: -1,
+              fontSize: 12,
+              fontWeight: "bold",
+            }}
+          >
+            {item.departLocation}
+          </Text>
+        </View>
+        <View
           style={{
-            color: "black",
-            position: "absolute",
-            top: 30,
-            fontSize: 12,
-            fontWeight: "bold",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
           }}
         >
-          {item.arriveLocation}
-        </Text>
-        <Text
-          style={{
-            color: "rgb(110, 110, 110)",
-            position: "absolute",
-            top: 60,
-            fontSize: 10,
-          }}
-        >
-          {item.date}
-        </Text>
+          <FontAwesome
+            size={18}
+            color="black"
+            name="dot-circle-o"
+            style={{
+              marginHorizontal: 10,
+              fontSize: 13,
+              color: "red",
+            }}
+          />
+          <Text
+            style={{
+              color: "black",
+              // position: "absolute",
+              // top: 30,
+              fontSize: 12,
+              fontWeight: "bold",
+            }}
+          >
+            {item.arriveLocation}
+          </Text>
+        </View>
+          <Text
+            style={{
+              color: "rgb(110, 110, 110)",
+              fontSize: 10,
+              paddingLeft: 30,
+            }}
+          >
+            {item.date}
+          </Text>
       </View>
       <Icon
         size={18}

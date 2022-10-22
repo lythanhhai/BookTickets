@@ -124,6 +124,7 @@ const MenuFunction = ({ item, navigation, route }) => {
     >
       <FlatList
         data={Data}
+        horizontal={false}
         renderItem={({ item }) => {
           return (
             <TouchableOpacity
