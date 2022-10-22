@@ -15,6 +15,7 @@ import { registerTranslation } from "react-native-paper-dates";
 import data from "../../constants/virtualDataRecent";
 import Icon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
+import { colorRoute } from "../../constants/colorsRoute";
 
 const styles = StyleSheet.create({
   background: {
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
 
 const CardRoute = ({ item }) => {
   const tailwind = useTailwind();
-
+  // console.warn(Object.keys(colorRoute)[Math.floor(Math.random()*Object.keys(colorRoute).length)])
   return (
     <View
       style={{
@@ -45,17 +46,25 @@ const CardRoute = ({ item }) => {
         backgroundColor: "white",
         // paddingVertical: 8,
 
-        shadowColor: "#000000",
+        shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 3,
+          width: 2,
+          height: 1,
         },
-        shadowOpacity: 0.17,
-        shadowRadius: 3.05,
-        elevation: 4,
+        shadowOpacity: 0.35,
+        shadowRadius: 5,
+
+        elevation: 6,
 
         borderRadius: 8,
         marginRight: 10,
+        marginBottom: 10,
+        backgroundColor:
+          colorRoute[
+            Object.keys(colorRoute)[
+              Math.floor(Math.random() * Object.keys(colorRoute).length)
+            ]
+          ],
       }}
     >
       <Image
@@ -76,18 +85,22 @@ const CardRoute = ({ item }) => {
         style={{
           paddingHorizontal: 6,
           paddingTop: 5,
-          fontWeight: "500",
+          fontWeight: "600",
+          color: "white",
         }}
       >
         {item.departLocation} - {item.arriveLocation}
       </Text>
-      <Text style={{ paddingHorizontal: 4, paddingTop: 4 }}>{item.price}</Text>
+      <Text style={{ paddingHorizontal: 6, fontSize: 12, paddingTop: 4, color: "white" }}>
+        From {item.price}
+      </Text>
       <Text
         style={{
-          paddingHorizontal: 4,
+          paddingHorizontal: 6,
           paddingTop: 2,
           paddingBottom: 5,
-          fontSize: 10,
+          fontSize: 9,
+          color: "white",
           textDecorationLine: "line-through",
         }}
       >

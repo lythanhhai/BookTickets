@@ -24,6 +24,7 @@ import MyTicketNavigation from "./navigations/MyTicketNavigation";
 import NotificationNavigation from "./navigations/NotificationNavigation";
 import AccountNavigation from "./navigations/AccountNavigation";
 import ChooseLocation from "./screens/BookingTickets/ChooseLocation";
+import SomeInformation from "./components/Register/SomeInformation";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -175,9 +176,8 @@ export default function App() {
                   backgroundColor: colors.blue,
                   // height: Dimensions.get("screen").height / 8,
                 },
-                headerTintColor: '#fff',
+                headerTintColor: "#fff",
               }}
-              
             />
             <Stack.Screen
               name="LocationStop"
@@ -187,19 +187,31 @@ export default function App() {
                 headerShown: true,
                 headerStyle: {
                   backgroundColor: colors.blue,
-                  // height: Dimensions.get("screen").height / 8,
                 },
-                headerTintColor: '#fff',
+                headerTintColor: "#fff",
               }}
-              
             />
           </Stack.Group>
           <Stack.Group>
-            <Stack.Screen name="Login">
+            <Stack.Screen name="Login" options={{ gestureEnabled: false }}>
               {(props) => <Login {...props} />}
             </Stack.Screen>
-            <Stack.Screen name="Register">
+            <Stack.Screen name="Register" options={{ gestureEnabled: false }}>
               {(props) => <Register {...props} />}
+            </Stack.Screen>
+            <Stack.Screen
+              name="Information"
+              options={{
+                title: "Account Information",
+                gestureEnabled: false,
+                headerShown: true,
+                headerStyle: {
+                  backgroundColor: colors.blue,
+                },
+                headerTintColor: "#fff",
+              }}
+            >
+              {(props) => <SomeInformation {...props} />}
             </Stack.Screen>
           </Stack.Group>
         </Stack.Navigator>

@@ -8,13 +8,16 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  BackHandler,
 } from "react-native";
+import { useState, useEffect } from "react";
 import { useTailwind } from "tailwind-rn";
 import Icon from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Register = ({ navigation }) => {
   const tailwind = useTailwind();
+  
   return (
     <View>
       <View
@@ -103,6 +106,7 @@ const Register = ({ navigation }) => {
           </View>
           <TextInput
             keyboardType="numeric"
+            label="Your phone number"
             placeholder="Phone Number"
             style={{
               paddingLeft: 15,
@@ -133,8 +137,8 @@ const Register = ({ navigation }) => {
           }}
         >
           <TextInput
-            autoComplete="cc-number"
-            placeholder="Introdutional Code (If have)"
+            autoComplete="email"
+            placeholder="Enter your email"
             style={{
               paddingLeft: 15,
               fontSize: 13,
@@ -156,13 +160,15 @@ const Register = ({ navigation }) => {
           }}
         >
           <TouchableOpacity
-            // onPress={onPressLearnMore}
             //   color="#841584"
             //   accessibilityLabel="Learn more about this purple button"
             style={{
               backgroundColor: "rgb(8,27,57)",
               width: Dimensions.get("screen").width / 1.1,
               borderRadius: 6,
+            }}
+            onPress={() => {
+              navigation.navigate("Information");
             }}
           >
             <Text
@@ -174,7 +180,7 @@ const Register = ({ navigation }) => {
                 fontWeight: "500",
               }}
             >
-              Sign Up
+              Continue
             </Text>
           </TouchableOpacity>
         </View>

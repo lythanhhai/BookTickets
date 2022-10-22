@@ -173,10 +173,10 @@ const BookingTickets = ({ navigation }) => {
 
       <View
         style={{
-          height: "auto",
+          // height: "auto",
           backgroundColor: "transparent",
           paddingTop: 8,
-          paddingBottom: 15,
+          // paddingBottom: 15,
           marginBottom: 10,
         }}
       >
