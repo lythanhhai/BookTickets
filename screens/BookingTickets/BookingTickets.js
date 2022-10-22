@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import SearchFrame from "../../components/BookingTickets/SearchFrame";
 import { registerTranslation } from "react-native-paper-dates";
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const BookingTickets = ({ navigation }) => {
+const BookingTickets = ({ navigation, route }) => {
   const tailwind = useTailwind();
   const [list, setList] = useState([
     {
@@ -75,6 +75,9 @@ const BookingTickets = ({ navigation }) => {
       date: "19/10/2022",
     },
   ]);
+  // useEffect(() => {
+  //   console.warn(route.params);
+  // });
   return (
     <ScrollView
       style={styles.backgroundBottom}
@@ -94,7 +97,7 @@ const BookingTickets = ({ navigation }) => {
           Where do you want to go today?
         </Text>
       </View>
-      <SearchFrame navigation={navigation} />
+      <SearchFrame navigation={navigation} route={route} />
       <View
         style={{
           marginTop: 20,

@@ -26,10 +26,17 @@ import AccountNavigation from "./navigations/AccountNavigation";
 import ChooseLocation from "./screens/BookingTickets/ChooseLocation";
 import SomeInformation from "./components/Register/SomeInformation";
 
+// import redux
+import { legacy_createStore as createStore } from "redux";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./redux/store/store";
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const Home = () => {
+  // store redux
   const getTabBarVisibility = (route) => {
     const routeName = route.state
       ? route.state.routes[route.state.index].name
@@ -57,6 +64,7 @@ const Home = () => {
           // ​tabBarLabel: ({ focused, color }) => {
           //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
           // },
+          title: "Search tickets",
           tabBarIcon: ({ focused, color, size }) => {
             var elem;
             focused
@@ -74,6 +82,7 @@ const Home = () => {
           // ​tabBarLabel: ({ focused, color }) => {
           //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
           // },
+          title: "My tickets",
           tabBarIcon: ({ focused, color, size }) => {
             var elem;
             focused
@@ -118,6 +127,7 @@ const Home = () => {
           // ​tabBarLabel: ({ focused, color }) => {
           //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
           // },
+          title: "My account",
           tabBarIcon: ({ focused, color, size }) => {
             var elem;
             focused
@@ -154,71 +164,78 @@ export default function App() {
     // style: { backgroundColor: "white" },
   };
   return (
-    <TailwindProvider utilities={utilities}>
-      <NavigationContainer>
-        {/* <View style={styles.container}> */}
-        {/* { isLoginScreen ? <Login checkScreen={checkScreen}/> : <Register checkScreen={checkScreen}/>} */}
-        {/* <BookingTickets /> */}
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="Home" component={Home}></Stack.Screen>
-          <Stack.Group>
-            <Stack.Screen
-              name="LocationStart"
-              component={ChooseLocation}
-              options={{
-                title: "Start point",
-                headerShown: true,
-                headerStyle: {
-                  backgroundColor: colors.blue,
-                  // height: Dimensions.get("screen").height / 8,
-                },
-                headerTintColor: "#fff",
-              }}
-            />
-            <Stack.Screen
-              name="LocationStop"
-              component={ChooseLocation}
-              options={{
-                title: "Stop point",
-                headerShown: true,
-                headerStyle: {
-                  backgroundColor: colors.blue,
-                },
-                headerTintColor: "#fff",
-              }}
-            />
-          </Stack.Group>
-          <Stack.Group>
-            <Stack.Screen name="Login" options={{ gestureEnabled: false }}>
-              {(props) => <Login {...props} />}
-            </Stack.Screen>
-            <Stack.Screen name="Register" options={{ gestureEnabled: false }}>
-              {(props) => <Register {...props} />}
-            </Stack.Screen>
-            <Stack.Screen
-              name="Information"
-              options={{
-                title: "Account Information",
-                gestureEnabled: false,
-                headerShown: true,
-                headerStyle: {
-                  backgroundColor: colors.blue,
-                },
-                headerTintColor: "#fff",
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <TailwindProvider utilities={utilities}>
+          <NavigationContainer>
+            {/* <View style={styles.container}> */}
+            {/* { isLoginScreen ? <Login checkScreen={checkScreen}/> : <Register checkScreen={checkScreen}/>} */}
+            {/* <BookingTickets /> */}
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: false,
               }}
             >
-              {(props) => <SomeInformation {...props} />}
-            </Stack.Screen>
-          </Stack.Group>
-        </Stack.Navigator>
-        {/* <Text> aaa</Text> */}
-        {/* </View> */}
-      </NavigationContainer>
-    </TailwindProvider>
+              <Stack.Screen name="Home" component={Home}></Stack.Screen>
+              <Stack.Group>
+                <Stack.Screen
+                  name="LocationStart"
+                  component={ChooseLocation}
+                  options={{
+                    title: "Start point",
+                    headerShown: true,
+                    headerStyle: {
+                      backgroundColor: colors.blue,
+                      // height: Dimensions.get("screen").height / 8,
+                    },
+                    headerTintColor: "#fff",
+                  }}
+                />
+                <Stack.Screen
+                  name="LocationStop"
+                  component={ChooseLocation}
+                  options={{
+                    title: "Stop point",
+                    headerShown: true,
+                    headerStyle: {
+                      backgroundColor: colors.blue,
+                    },
+                    headerTintColor: "#fff",
+                  }}
+                />
+              </Stack.Group>
+              <Stack.Group>
+                <Stack.Screen name="Login" options={{ gestureEnabled: false }}>
+                  {(props) => <Login {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name="Register"
+                  options={{ gestureEnabled: false }}
+                >
+                  {(props) => <Register {...props} />}
+                </Stack.Screen>
+                {/* <Stack.Screen
+                  name="Information"
+                  options={{
+                    title: "Account Information",
+                    gestureEnabled: false,
+                    headerShown: true,
+                    headerStyle: {
+                      backgroundColor: colors.blue,
+                    },
+                    headerTintColor: "#fff",
+                  }}
+                >
+                  {(props) => <SomeInformation {...props} />}
+                </Stack.Screen> */}
+              </Stack.Group>
+            </Stack.Navigator>
+            {/* <Text> aaa</Text> */}
+            {/* </View> */}
+          </NavigationContainer>
+        </TailwindProvider>
+      </PersistGate>
+    </Provider>
   );
 }
 

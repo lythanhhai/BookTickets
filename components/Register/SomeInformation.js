@@ -28,10 +28,10 @@ const SomeInformation = ({ navigation }) => {
   return (
     <View
       style={{
-        display: "flex",
-        flexDirection: "column",
-        height: Dimensions.get("window").height / 1.2,
-        // flex: 1,
+        // display: "flex",
+        // flexDirection: "column",
+        // height: Dimensions.get("window").height / 1.1,
+        flex: 1,
         justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "transparent",
@@ -51,7 +51,9 @@ const SomeInformation = ({ navigation }) => {
             paddingHorizontal: 8,
             backgroundColor: colors.blueLess,
             fontSize: 13,
-            fontWeight: "500"
+            // fontWeight: "500",
+            borderRadius: 6,
+            color: "rgb(40, 40, 40)"
           }}
         >
           Add extra information in order that we can support you better when
@@ -237,7 +239,7 @@ const SomeInformation = ({ navigation }) => {
       <View
         style={{
           position: "absolute",
-          bottom: 0,
+          bottom: 30,
           left: 0,
           borderTopWidth: 1,
           borderTopColor: "rgb(200, 200, 200)",
