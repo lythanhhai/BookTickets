@@ -31,6 +31,7 @@ import { legacy_createStore as createStore } from "redux";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./redux/store/store";
+import ModalCode from "./components/Modal/ModalCode";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

@@ -10,12 +10,13 @@ import {
   Image,
   BackHandler,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTailwind } from "tailwind-rn";
 import Icon from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import ModalCode from "../Modal/ModalCode";
 import colors from "../../constants/colors";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 const Register = ({ navigation }) => {
   const tailwind = useTailwind();
@@ -24,6 +25,7 @@ const Register = ({ navigation }) => {
     setModalVisible(true);
   };
   const [isPhoneNumber, setIsPhoneNumber] = useState(true);
+  const refRBSheet = useRef();
   return (
     <View>
       <View
@@ -336,7 +338,8 @@ const Register = ({ navigation }) => {
               borderRadius: 6,
             }}
             onPress={() => {
-              openModalConfirmationCode(setModalVisible);
+              // openModalConfirmationCode(setModalVisible);
+              refRBSheet.current.open();
             }}
           >
             <Text
@@ -352,8 +355,68 @@ const Register = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        {/* <ModalCode modalVisible={modalVisible} setModalVisible={setModalVisible}/> */}
+        {/* modal */}
+        <RBSheet
+          ref={refRBSheet}
+          closeOnDragDown={true}
+          closeOnPressMask={false}
+          height={280}
+          openDuration={500}
+          customStyles={{
+            wrapper: {
+              // backgroundColor: "transparent",
+            },
+            draggableIcon: {
+              backgroundColor: "#000",
+            },
+          }}
+        >
+          {/* <YourOwnComponent /> */}
+          <ModalCode />
+        </RBSheet>
         <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 10,
+            marginBottom: 25,
+          }}
+        >
+          <Text style={{ marginRight: 10 }}>Have you an account already?</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Login");
+            }}
+          >
+            <Text style={{ color: "rgb(50,100,255)" }}>Sign In</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* <ModalCode
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        /> */}
+    </View>
+    // <View style={tailwind("pt-12 items-center")}>
+    //   <View style={tailwind("bg-blue-200 px-3 py-1 rounded-full")}>
+    //     <Text style={tailwind("text-blue-800 font-semibold")}>
+    //       Hello Tailwind
+    //     </Text>
+    //   </View>
+    // </View>
+  );
+};
+
+export default Register;
+
+{
+  /* <ModalCode modalVisible={modalVisible} setModalVisible={setModalVisible}/> */
+}
+{
+  /* <View
           style={{
             display: "flex",
             flexDirection: "row",
@@ -385,8 +448,10 @@ const Register = ({ navigation }) => {
               marginLeft: 10,
             }}
           ></View>
-        </View>
-        <View
+        </View> */
+}
+{
+  /* <View
           style={{
             display: "flex",
             flexDirection: "column",
@@ -396,7 +461,7 @@ const Register = ({ navigation }) => {
             marginBottom: 25,
           }}
         >
-          {/* <Icon size={24} color="black" name="google" /> */}
+          <Icon size={24} color="black" name="google" />
           <TouchableOpacity
             // onPress={onPressLearnMore}
             //   color="#841584"
@@ -466,36 +531,5 @@ const Register = ({ navigation }) => {
               Sign In With Apple
             </Text>
           </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: 10,
-            marginBottom: 25,
-          }}
-        >
-          <Text style={{ marginRight: 10 }}>Have you an account already?</Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Login");
-            }}
-          >
-            <Text style={{ color: "rgb(50,100,255)" }}>Sign In</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-    // <View style={tailwind("pt-12 items-center")}>
-    //   <View style={tailwind("bg-blue-200 px-3 py-1 rounded-full")}>
-    //     <Text style={tailwind("text-blue-800 font-semibold")}>
-    //       Hello Tailwind
-    //     </Text>
-    //   </View>
-    // </View>
-  );
-};
-
-export default Register;
+        </View> */
+}
