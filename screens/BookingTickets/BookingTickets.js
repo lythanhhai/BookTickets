@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import SearchFrame from "../../components/BookingTickets/SearchFrame";
 import { registerTranslation } from "react-native-paper-dates";
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const BookingTickets = ({ navigation }) => {
+const BookingTickets = ({ navigation, route }) => {
   const tailwind = useTailwind();
   const [list, setList] = useState([
     {
@@ -75,14 +75,21 @@ const BookingTickets = ({ navigation }) => {
       date: "19/10/2022",
     },
   ]);
+  // useEffect(() => {
+  //   console.warn(route.params);
+  // });
   return (
     <ScrollView
       style={styles.backgroundBottom}
-      contentContainerStyle={{ display: "flex", flexDirection: "column", paddingLeft: 20, }}
+      contentContainerStyle={{
+        display: "flex",
+        flexDirection: "column",
+        paddingLeft: 20,
+      }}
     >
       <View style={[styles.background]}></View>
       <Header whichScreen={1} navigation={navigation} />
-      <View style={[{ paddingTop: 10, }]}>
+      <View style={[{ paddingTop: 10 }]}>
         <Text style={[{ color: "white", fontSize: 25, fontWeight: "500" }]}>
           Hi you,
         </Text>
@@ -90,7 +97,7 @@ const BookingTickets = ({ navigation }) => {
           Where do you want to go today?
         </Text>
       </View>
-      <SearchFrame navigation={navigation} />
+      <SearchFrame navigation={navigation} route={route} />
       <View
         style={{
           marginTop: 20,
@@ -139,7 +146,7 @@ const BookingTickets = ({ navigation }) => {
 
       <View
         style={{
-          marginTop: 20,
+          marginTop: 0,
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
@@ -169,10 +176,10 @@ const BookingTickets = ({ navigation }) => {
 
       <View
         style={{
-          height: "auto",
+          // height: "auto",
           backgroundColor: "transparent",
           paddingTop: 8,
-          paddingBottom: 15,
+          // paddingBottom: 15,
           marginBottom: 10,
         }}
       >
@@ -184,7 +191,6 @@ const BookingTickets = ({ navigation }) => {
         ></FlatList>
       </View>
 
-      
       {/* <CardRecent item={{ departLocation: "haha" }} /> */}
       {/* </View> */}
     </ScrollView>

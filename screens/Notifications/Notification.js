@@ -3,39 +3,34 @@ import {
   View,
   Text,
   Dimensions,
-  FlatList,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { useState } from "react";
 import Header from "../../components/Header/Header";
 import SearchFrame from "../../components/BookingTickets/SearchFrame";
 import { registerTranslation } from "react-native-paper-dates";
-import CardRecent from "../../components/BookingTickets/CardRecent";
-import Data from "../../constants/virtualDataRecent";
+import data from "../../constants/virtualDataRecent";
+import Icon from "react-native-vector-icons/AntDesign";
+import Entypo from "react-native-vector-icons/Entypo";
 import colors from "../../constants/colors";
-import Ticket from "../../components/MyTickets/Ticket";
-
 import styleGlobal from "../../constants/styleGlobal";
-import RequireLogin from "../../components/MyTickets/RequireLogin";
-import Logged from "../../components/MyTickets/Logged";
+import EmptyNotification from "../../components/Notification/EmptyNotification";
 
 const styles = StyleSheet.create(styleGlobal);
 
-const MyTicket = ({ navigation }) => {
+const Notification = ({ item, navigation }) => {
   const tailwind = useTailwind();
-  const [list, setList] = useState([]);
-  const [isLogged, setIsLogged] = useState(false);
+
   return (
     <View style={styles.backgroundBottom}>
       <View style={[styles.background]}>
-        <Header whichScreen={2} navigation={navigation} />
-        <Ticket />
-        {isLogged ? <Logged /> : <RequireLogin />}
-        {/* <RequireLogin /> */}
+        <Header whichScreen={3} navigation={navigation} />
+        <EmptyNotification />
       </View>
     </View>
   );
 };
 
-export default MyTicket;
+export default Notification;

@@ -5,6 +5,7 @@ import BookingTickets from "../screens/BookingTickets/BookingTickets";
 import Login from "../components/Login/Login";
 import { StyleSheet, Text, View } from "react-native";
 import Register from "../components/Register/Register";
+import MyAccount from "../screens/MyAccount/MyAccount";
 
 const Stack = createStackNavigator();
 
@@ -15,7 +16,7 @@ const AccountNavigation = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Account" component={BookingTickets} />
+      <Stack.Screen name="Account" component={MyAccount} />
       
     </Stack.Navigator>
   );
