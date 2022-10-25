@@ -2,7 +2,7 @@ import {
   ImageBackground,
   View,
   Text,
-  StyleSheets,
+  StyleSheet,
   Dimensions,
   Button,
   TouchableOpacity,
@@ -17,6 +17,21 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import ModalCode from "../Modal/ModalCode";
 import colors from "../../constants/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
+import Entypo from "react-native-vector-icons/Entypo";
+import { useValidation } from "react-native-form-validator";
+
+const styles = StyleSheet.create({
+  errMsg: {
+    color: "red",
+    fontSize: 12,
+    marginLeft: 20,
+    paddingVertical: 1,
+  },
+  errBorder: {
+    borderWidth: 1,
+    borderColor: "red",
+  },
+});
 
 const Register = ({ navigation }) => {
   const tailwind = useTailwind();
@@ -26,6 +41,98 @@ const Register = ({ navigation }) => {
   };
   const [isPhoneNumber, setIsPhoneNumber] = useState(true);
   const refRBSheet = useRef();
+  const [dataRegister, setDataRegister] = useState({
+    phoneNumber: "",
+    email: "",
+    password: "",
+    re_password: "",
+  });
+  const [inValidData, setInValidData] = useState({
+    errPhoneNumber: "",
+    errEmail: "",
+    errPassword: "",
+    errRe_password: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const onSubmitRegister = () => {
+    if (isPhoneNumber) {
+      refRBSheet.current.open();
+    }
+  };
+  // validate register data
+  const handleValidPhoneNumber = (val) => {
+    // console.warn("oke");
+    if (val.length > 11) {
+      setInValidData({
+        ...inValidData,
+        errPhoneNumber: "Phone number no more than 11 char",
+      });
+    } else if (!val) {
+      setInValidData({
+        ...inValidData,
+        errPhoneNumber: "Phone number is required",
+      });
+    } else {
+      setInValidData({
+        ...inValidData,
+        errPhoneNumber: "",
+      });
+    }
+  };
+  const handleValidEmail = (val) => {
+    if (!val) {
+      setInValidData({
+        ...inValidData,
+        errEmail: "Email is required",
+      });
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(val)) {
+      setInValidData({
+        ...inValidData,
+        errEmail: "You have entered an invalid email address!",
+      });
+    } else {
+      setInValidData({
+        ...inValidData,
+        errEmail: "",
+      });
+    }
+  };
+  const handleValidPassword = (val) => {
+    if (!val) {
+      setInValidData({
+        ...inValidData,
+        errPassword: "Password is required",
+      });
+    } else if (val.length < 8) {
+      setInValidData({
+        ...inValidData,
+        errPassword: "Password must have at least 8 char",
+      });
+    } else {
+      setInValidData({
+        ...inValidData,
+        errPassword: "",
+      });
+    }
+  };
+  const handleValidRePassword = (val) => {
+    if (!val) {
+      setInValidData({
+        ...inValidData,
+        errRe_password: "Confirm password is required",
+      });
+    } else if (val !== dataRegister.password) {
+      setInValidData({
+        ...inValidData,
+        errRe_password: "Confirm password must same with password",
+      });
+    } else {
+      setInValidData({
+        ...inValidData,
+        errRe_password: "",
+      });
+    }
+  };
   return (
     <View>
       <View
@@ -128,6 +235,9 @@ const Register = ({ navigation }) => {
                 fontSize: 14,
                 paddingLeft: 8,
               }}
+              onPress={() => {
+                setIsPhoneNumber(true);
+              }}
             >
               Phone number
             </Text>
@@ -163,6 +273,9 @@ const Register = ({ navigation }) => {
                 fontSize: 14,
                 paddingLeft: 8,
               }}
+              onPress={() => {
+                setIsPhoneNumber(false);
+              }}
             >
               Email
             </Text>
@@ -170,62 +283,134 @@ const Register = ({ navigation }) => {
         </View>
         {/* divide method sign up */}
         {isPhoneNumber ? (
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              marginTop: 20,
-              marginBottom: 12,
-            }}
-          >
+          <>
             <View
               style={{
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-evenly",
                 alignItems: "center",
-                // paddingLeft: 10,
-                height: 40,
-                fontSize: 13,
-                borderWidth: 1,
-                borderColor: "gray",
-                borderRadius: 6,
-                width: Dimensions.get("screen").width / 5,
+                marginTop: 20,
+                marginBottom: 12,
               }}
             >
-              <Image
-                source={require("../../assets/Image/adaptive-icon.png")}
+              <View
                 style={{
-                  height: "80%",
-                  width: "30%",
-                  borderRadius: 10,
-                  objectFit: "cover",
-                  resizeMode: "contain",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignItems: "center",
+                  // paddingLeft: 10,
+                  height: 40,
+                  fontSize: 13,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  borderRadius: 6,
+                  width: Dimensions.get("screen").width / 5,
                 }}
-              />
-              <Text style={{}}>+84</Text>
+              >
+                <Image
+                  source={require("../../assets/Image/adaptive-icon.png")}
+                  style={{
+                    height: "80%",
+                    width: "30%",
+                    borderRadius: 10,
+                    objectFit: "cover",
+                    resizeMode: "contain",
+                  }}
+                />
+                <Text style={{}}>+84</Text>
+              </View>
+              <TextInput
+                keyboardType="numeric"
+                label="Your phone number"
+                placeholder="Enter phone Number"
+                value={dataRegister.phoneNumber}
+                onChangeText={(value) => {
+                  setDataRegister({
+                    ...dataRegister,
+                    phoneNumber: value,
+                  });
+                  handleValidPhoneNumber(value);
+                }}
+                onEndEditing={(e) => {
+                  // handleValidPhoneNumber(e.nativeEvent.text);
+                }}
+                style={[
+                  {
+                    paddingLeft: 15,
+                    height: 40,
+                    fontSize: 13,
+                    borderWidth: 1,
+                    borderColor: "gray",
+                    borderRadius: 6,
+                    width: Dimensions.get("screen").width / 1.5,
+                    height: 40,
+                  },
+                  inValidData.errPhoneNumber && styles.errBorder,
+                ]}
+              ></TextInput>
             </View>
-            <TextInput
-              keyboardType="numeric"
-              label="Your phone number"
-              placeholder="Phone Number"
-              style={{
-                paddingLeft: 15,
-                height: 40,
-                fontSize: 13,
-                borderWidth: 1,
-                borderColor: "gray",
-                borderRadius: 6,
-                width: Dimensions.get("screen").width / 1.5,
-                height: 40,
-              }}
-            ></TextInput>
-          </View>
+            {inValidData.errPhoneNumber ? (
+              <Text style={styles.errMsg}>{inValidData.errPhoneNumber}</Text>
+            ) : (
+              ""
+            )}
+          </>
         ) : (
-          <View
-            style={{
+          <>
+            <View
+              style={[
+                {
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  marginLeft: 18,
+                  marginTop: 3,
+                  marginBottom: 8,
+                  width: Dimensions.get("screen").width / 1.1,
+                  height: 40,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  borderRadius: 6,
+                  marginTop: 20,
+                },
+                inValidData.errEmail && styles.errBorder,
+              ]}
+            >
+              <TextInput
+                autoComplete="email"
+                placeholder="Enter your email"
+                value={dataRegister.email}
+                onChangeText={(value) => {
+                  setDataRegister({
+                    ...dataRegister,
+                    email: value,
+                  });
+                  handleValidEmail(value);
+                }}
+                style={{
+                  paddingLeft: 15,
+                  fontSize: 13,
+                  width: "100%",
+                  height: "100%",
+                  // width: Dimensions.get("screen").width / 1.1,
+                  // height: 40,
+                }}
+              ></TextInput>
+            </View>
+            {inValidData.errEmail ? (
+              <Text style={styles.errMsg}>{inValidData.errEmail}</Text>
+            ) : (
+              ""
+            )}
+          </>
+        )}
+        {/*  */}
+        <View
+          style={[
+            {
               display: "flex",
               flexDirection: "row",
               justifyContent: "flex-end",
@@ -238,45 +423,23 @@ const Register = ({ navigation }) => {
               borderWidth: 1,
               borderColor: "gray",
               borderRadius: 6,
-              marginTop: 20,
-            }}
-          >
-            <TextInput
-              autoComplete="email"
-              placeholder="Enter your email"
-              style={{
-                paddingLeft: 15,
-                fontSize: 13,
-                width: "100%",
-                height: "100%",
-                // width: Dimensions.get("screen").width / 1.1,
-                // height: 40,
-              }}
-            ></TextInput>
-          </View>
-        )}
-        {/*  */}
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            marginLeft: 18,
-            marginTop: 3,
-            marginBottom: 8,
-            width: Dimensions.get("screen").width / 1.1,
-            height: 40,
-            borderWidth: 1,
-            borderColor: "gray",
-            borderRadius: 6,
-            marginTop: 10,
-          }}
+              marginTop: 10,
+            },
+            inValidData.errPassword && styles.errBorder,
+          ]}
         >
           <TextInput
             autoComplete="password"
             placeholder="Enter password"
-            secureTextEntry={true}
+            secureTextEntry={showPassword ? false : true}
+            value={dataRegister.password}
+            onChangeText={(value) => {
+              setDataRegister({
+                ...dataRegister,
+                password: value,
+              });
+              handleValidPassword(value);
+            }}
             style={{
               paddingLeft: 15,
               fontSize: 13,
@@ -285,30 +448,76 @@ const Register = ({ navigation }) => {
               // width: Dimensions.get("screen").width / 1.1,
               // height: 40,
             }}
+            onEndEditing={(e) => {
+              // handleValidPassword(e.nativeEvent.text);
+            }}
           ></TextInput>
+          {showPassword ? (
+            <Entypo
+              name="eye"
+              size={18}
+              style={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+              }}
+              onPress={() => {
+                setShowPassword(!showPassword);
+              }}
+            />
+          ) : (
+            <Entypo
+              name="eye-with-line"
+              size={18}
+              style={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+              }}
+              onPress={() => {
+                setShowPassword(!showPassword);
+              }}
+            />
+          )}
         </View>
+        {inValidData.errPassword ? (
+          <Text style={styles.errMsg}>{inValidData.errPassword}</Text>
+        ) : (
+          ""
+        )}
 
         <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            marginLeft: 18,
-            marginTop: 3,
-            marginBottom: 8,
-            width: Dimensions.get("screen").width / 1.1,
-            height: 40,
-            borderWidth: 1,
-            borderColor: "gray",
-            borderRadius: 6,
-            marginTop: 10,
-          }}
+          style={[
+            {
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginLeft: 18,
+              marginTop: 3,
+              marginBottom: 8,
+              width: Dimensions.get("screen").width / 1.1,
+              height: 40,
+              borderWidth: 1,
+              borderColor: "gray",
+              borderRadius: 6,
+              marginTop: 10,
+            },
+            inValidData.errRe_password && styles.errBorder,
+          ]}
         >
           <TextInput
             autoComplete="password"
             placeholder="Enter re-password"
-            secureTextEntry={true}
+            secureTextEntry={showPassword ? false : true}
+            value={dataRegister.re_password}
+            onChangeText={(value) => {
+              setDataRegister({
+                ...dataRegister,
+                re_password: value,
+              });
+              handleValidRePassword(value);
+            }}
             style={{
               paddingLeft: 15,
               fontSize: 13,
@@ -318,7 +527,33 @@ const Register = ({ navigation }) => {
               // height: 40,
             }}
           ></TextInput>
+          {/* {showPassword ? (
+            <Entypo
+              name="eye"
+              size={18}
+              style={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+              }}
+            />
+          ) : (
+            <Entypo
+              name="eye-with-line"
+              size={18}
+              style={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+              }}
+            />
+          )} */}
         </View>
+        {inValidData.errRe_password ? (
+          <Text style={styles.errMsg}>{inValidData.errRe_password}</Text>
+        ) : (
+          ""
+        )}
         <View
           style={{
             display: "flex",
@@ -339,7 +574,8 @@ const Register = ({ navigation }) => {
             }}
             onPress={() => {
               // openModalConfirmationCode(setModalVisible);
-              refRBSheet.current.open();
+              onSubmitRegister();
+              // _onPressButton();
             }}
           >
             <Text
@@ -355,25 +591,31 @@ const Register = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
+
         {/* modal */}
-        <RBSheet
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          closeOnPressMask={false}
-          height={280}
-          openDuration={500}
-          customStyles={{
-            wrapper: {
-              // backgroundColor: "transparent",
-            },
-            draggableIcon: {
-              backgroundColor: "#000",
-            },
-          }}
-        >
-          {/* <YourOwnComponent /> */}
-          <ModalCode />
-        </RBSheet>
+
+        {isPhoneNumber ? (
+          <RBSheet
+            ref={refRBSheet}
+            closeOnDragDown={true}
+            closeOnPressMask={false}
+            height={280}
+            openDuration={500}
+            customStyles={{
+              wrapper: {
+                // backgroundColor: "transparent",
+              },
+              draggableIcon: {
+                backgroundColor: "#000",
+              },
+            }}
+          >
+            {/* <YourOwnComponent /> */}
+            <ModalCode phoneNumber={dataRegister.phoneNumber} />
+          </RBSheet>
+        ) : (
+          <></>
+        )}
         <View
           style={{
             display: "flex",

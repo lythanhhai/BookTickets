@@ -25,25 +25,48 @@ const styles = StyleSheet.create({
   root: { flex: 1, padding: 20 },
   title: { textAlign: "center", fontSize: 30 },
   codeFieldRoot: { paddingVertical: 30 },
-  cell: {
-    width: width / 7 - 10,
-    height: 40,
-    lineHeight: 38,
-    fontSize: 24,
-    borderBottomWidth: 2,
-    borderColor: "#00000030",
-    textAlign: "center",
+  // cell: {
+  //   width: width / 7 - 10,
+  //   height: 40,
+  //   lineHeight: 38,
+  //   fontSize: 24,
+  //   borderBottomWidth: 2,
+  //   borderColor: "#00000030",
+  //   textAlign: "center",
+  //   marginRight: 10,
+  // },
+  // focusCell: {
+  //   borderColor: colors.blue,
+  //   color: colors.blue,
+  // },
+  // inputText: {
+  //   borderBottomWidth: 2,
+  //   borderBottomColor: "#00000030",
+  // },
+  cellRoot: {
+    width: (width / 7) - 10,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
     marginRight: 10,
   },
+  cellText: {
+    color: "#000",
+    fontSize: 36,
+    textAlign: "center",
+  },
   focusCell: {
-    borderColor: colors.blue,
-    color: colors.blue,
+    borderBottomColor: colors.blue,
+    // color: "gray",
+    borderBottomWidth: 2,
   },
 });
 
 const CELL_COUNT = 6;
 
-const ModalCode = ({ navigation, route }) => {
+const ModalCode = ({ navigation, route, phoneNumber }) => {
   const [value, setValue] = useState("");
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -85,7 +108,7 @@ const ModalCode = ({ navigation, route }) => {
             fontWeight: "600",
           }}
         >
-          +84978337444
+          (+84) {phoneNumber}
         </Text>
       </View>
       <View
@@ -102,7 +125,6 @@ const ModalCode = ({ navigation, route }) => {
         <CodeField
           ref={ref}
           {...props}
-          // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
           value={value}
           onChangeText={setValue}
           cellCount={CELL_COUNT}
@@ -110,13 +132,16 @@ const ModalCode = ({ navigation, route }) => {
           keyboardType="number-pad"
           textContentType="oneTimeCode"
           renderCell={({ index, symbol, isFocused }) => (
-            <Text
-              key={index}
-              style={[styles.cell, isFocused && styles.focusCell]}
+            <View
+              // Make sure that you pass onLayout={getCellOnLayoutHandler(index)} prop to root component of "Cell"
               onLayout={getCellOnLayoutHandler(index)}
+              key={index}
+              style={[styles.cellRoot, isFocused && styles.focusCell]}
             >
-              {symbol || (isFocused ? <Cursor /> : null)}
-            </Text>
+              <Text style={styles.cellText}>
+                {symbol || (isFocused ? <Cursor /> : null)}
+              </Text>
+            </View>
           )}
         />
         <TouchableOpacity
@@ -128,7 +153,6 @@ const ModalCode = ({ navigation, route }) => {
             borderRadius: 6,
             marginTop: 10,
           }}
-          
         >
           <Text
             style={{
