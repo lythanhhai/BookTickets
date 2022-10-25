@@ -16,6 +16,9 @@ import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import setTabStyleVisibility from "../../utils/setVisible";
+import { useDispatch, useSelector } from "react-redux";
+import { getLocationReducer } from "../../redux/reducers/getLocationReducer";
+import { swapLocation } from "../../redux/actions/getLocationAction";
 
 const styles = StyleSheet.create({
   container: {
@@ -41,7 +44,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SearchFrame = ({ navigation }) => {
+const SearchFrame = ({ navigation, route }) => {
   registerTranslation("pl", {
     save: "Save",
     selectSingle: "Select date",
@@ -77,12 +80,22 @@ const SearchFrame = ({ navigation }) => {
   };
 
   const handleConfirm = (date) => {
-    var date1 = date.split("")[0];
-    console.warn("A date has been picked: ", date1);
+    // var date1 = date.split("")[0];
+    // console.warn("A date has been picked: ", typeof date);
     // var currentDateChange = new Date(date1)
     // setDate(currentDateChange);
     // // console.warn("A date has been picked: ", currentDateChange);
     // console.warn("A date has been picked: ", currentDateChange);
+    var arrayDate = date.toString().split(" ");
+    var dateChoosen =
+      arrayDate[0] +
+      " " +
+      arrayDate[1] +
+      " " +
+      arrayDate[2] +
+      " " +
+      arrayDate[3];
+    setDate(dateChoosen);
     hideDatePicker();
   };
 
@@ -97,7 +110,15 @@ const SearchFrame = ({ navigation }) => {
     },
     [setOpen, setDate]
   );
-
+  // useSelector
+  const selector = useSelector((state) => state.getLocationReducer);
+  // useEffect(() => {
+  //   console.warn(selector)
+  // })
+  const dispatch = useDispatch()
+  const clickSwapLocation = () => {
+    dispatch(swapLocation())
+  }
   return (
     <View>
       <View
@@ -216,17 +237,21 @@ const SearchFrame = ({ navigation }) => {
                   // console.warn(...setTabStyleVisibility(true).tabBarStyle.display)
                   navigation.navigate("LocationStart", {
                     screen: "startpoint",
+                    // routeCurrent: route,
                   });
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "bold",
-                    fontSize: 17,
-                    width: Dimensions.get("screen").width / 2,
+                    fontSize: !selector.startPoint ? 14 : 14,
+                    width: Dimensions.get("screen").width / 1.8,
                   }}
                 >
-                  Thanh pho Ho Chi Minh
+                  {
+                    !selector.startPoint ? "Choose start point" : selector.startPoint
+                  }
+                  {/* {selector.startPoint} */}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -251,6 +276,9 @@ const SearchFrame = ({ navigation }) => {
                 paddingHorizontal: 6,
                 paddingVertical: 6,
                 borderRadius: 50,
+              }}
+              onPress={() => {
+                clickSwapLocation()
               }}
             >
               <Ionicons
@@ -300,10 +328,13 @@ const SearchFrame = ({ navigation }) => {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    fontSize: 17,
+                    fontSize:  !selector.stopPoint ? 14 : 14,
+                    width: Dimensions.get("screen").width / 1.8,
                   }}
                 >
-                  Quang Tri
+                  {
+                    !selector.stopPoint ? "Choose stop point" : selector.stopPoint
+                  }
                 </Text>
               </TouchableOpacity>
             </View>
@@ -357,20 +388,27 @@ const SearchFrame = ({ navigation }) => {
               <Text
                 style={{
                   fontWeight: "bold",
-                  fontSize: 17,
+                  fontSize: 15,
                 }}
               >
                 {date}
               </Text>
             </TouchableOpacity>
             {Platform.OS === "ios" ? (
-              <DatePickerModal
-                // locale="en"
-                mode="single"
-                visible={open}
-                onDismiss={onDismissSingle}
-                date={dateIphone}
-                onConfirm={onConfirmSingle}
+              // <DatePickerModal
+              //   // locale="en"
+              //   mode="single"
+              //   visible={open}
+              //   onDismiss={onDismissSingle}
+              //   date={dateIphone}
+              //   onConfirm={onConfirmSingle}
+              // />
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+                isDarkModeEnabled={false}
               />
             ) : (
               <DateTimePickerModal

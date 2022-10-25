@@ -26,6 +26,8 @@ import colors from "../../constants/colors";
 import { TextInput } from "react-native-paper";
 import Octicons from "react-native-vector-icons/Octicons";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { getLocationStart, getLocationStop } from "../../redux/actions/getLocationAction";
 
 const styles = StyleSheet.create({
   background: {
@@ -40,6 +42,7 @@ const styles = StyleSheet.create({
 });
 
 const SearchLocation = ({ item, navigation, route }) => {
+  const dispatch = useDispatch()
   const tailwind = useTailwind();
   const [listLocation, setListLocation] = useState([]);
   const [valueSearch, setValueSearch] = useState("");
@@ -108,7 +111,7 @@ const SearchLocation = ({ item, navigation, route }) => {
     setListSearchProvince(listProvince);
     setListSearchDistrict(listDistrict);
   };
-  useEffect(() => {
+  useLayoutEffect(() => {
     setData([
       {
         title: "City/Province",
@@ -217,6 +220,15 @@ const SearchLocation = ({ item, navigation, route }) => {
                   height: 50,
                   bacgroundColor: "red",
                   // flexWrap: "wrap"
+                }}
+                onPress={() => {
+                  if (route.params.screen === "startpoint") {
+                    navigation.navigate("Search")
+                    dispatch(getLocationStart(item))
+                  } else {
+                    navigation.navigate("Search")
+                    dispatch(getLocationStop(item))
+                  }
                 }}
               >
                 <Octicons
