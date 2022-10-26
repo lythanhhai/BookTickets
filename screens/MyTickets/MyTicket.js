@@ -22,7 +22,7 @@ import Logged from "../../components/MyTickets/Logged";
 
 const styles = StyleSheet.create(styleGlobal);
 
-const MyTicket = ({ navigation }) => {
+const MyTicket = ({ navigation, route }) => {
   const tailwind = useTailwind();
   const [list, setList] = useState([]);
   const [isLogged, setIsLogged] = useState(false);
@@ -30,8 +30,8 @@ const MyTicket = ({ navigation }) => {
     <View style={styles.backgroundBottom}>
       <View style={[styles.background]}>
         <Header whichScreen={2} navigation={navigation} />
-        <Ticket />
-        {isLogged ? <Logged /> : <RequireLogin />}
+        <Ticket navigation={navigation} route={route}/>
+        {isLogged ? <Logged /> : <RequireLogin navigation={navigation} route={route} />}
         {/* <RequireLogin /> */}
       </View>
     </View>

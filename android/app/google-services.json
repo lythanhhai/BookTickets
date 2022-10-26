@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "945689161740",
+    "project_id": "testotp123-8c200",
+    "storage_bucket": "testotp123-8c200.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945689161740:android:d07f5c31be3a57aca3fe29",
+        "android_client_info": {
+          "package_name": "bookingtickets.pbl6.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945689161740-dr4b20qir0jnotqu7ej5oqdp7jtltv4l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "bookingtickets.pbl6.android",
+            "certificate_hash": "7e65e0ab2284c656c6307996e4517b4bf7a032f6"
+          }
+        },
+        {
+          "client_id": "945689161740-f4dh6435bug6uopc3q6r62gjvskkacof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZj4IWqSrOVvCLxgZ-qzOXYfq0706FvOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945689161740-f4dh6435bug6uopc3q6r62gjvskkacof.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
