@@ -68,11 +68,14 @@ const Register = ({ navigation }) => {
       if (
         !inValidData.errPhoneNumber &&
         !inValidData.errPassword &&
-        !inValidData.errRe_password
+        !inValidData.errRe_password &&
+        dataRegister.password &&
+        dataRegister.phoneNumber &&
+        dataRegister.re_password
       ) {
         // getConfirmMethod("+84"+dataRegister.phoneNumber.slice(1, dataRegister.phoneNumber.length))
-        sendVerification(dataRegister.phoneNumber);
         refRBSheet.current.open();
+        sendVerification(dataRegister.phoneNumber);
       }
     } else {
       if (
@@ -189,6 +192,7 @@ const Register = ({ navigation }) => {
     } else {
       handlePhone = phoneNumber;
     }
+
     phoneProvider
       .verifyPhoneNumber("+84" + phoneNumber, recaptchaVerifier.current)
       .then(setVerificationId)
@@ -209,6 +213,7 @@ const Register = ({ navigation }) => {
         //     },
         //   ]
         // );
+        // console.warn(err);
         refRBSheet.current.close();
         handleShowAlert();
       });
@@ -773,7 +778,9 @@ const Register = ({ navigation }) => {
           <Text style={{ marginRight: 10 }}>Have you an account already?</Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Login");
+              navigation.navigate("Login", {
+                username: ""
+              });
             }}
           >
             <Text style={{ color: "rgb(50,100,255)" }}>Sign In</Text>

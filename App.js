@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 // import 'react-native-gesture-handler';
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View, Platform } from "react-native";
 import { TailwindProvider } from "tailwind-rn";
 import { useState, useEffect } from "react";
 import utilities from "./tailwind.json";
@@ -49,11 +49,14 @@ const Home = () => {
 
     return false;
   };
+  const tabBarStyleForAndroid = {
+    paddingBottom: 10, height: 53,
+  }
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { paddingBottom: 10, height: 60, }
+        tabBarStyle: Platform.OS === 'android' ? tabBarStyleForAndroid : {},
       }}
       // tabBarOptions={{ showIcon: true }}
 

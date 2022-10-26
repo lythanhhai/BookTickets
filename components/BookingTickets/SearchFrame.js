@@ -215,7 +215,7 @@ const SearchFrame = ({ navigation, route }) => {
                 // top: "7%",
                 // left: 0,
                 height: "42%",
-                paddingTop: 8,
+                paddingTop: 12,
               }}
             >
               <Text

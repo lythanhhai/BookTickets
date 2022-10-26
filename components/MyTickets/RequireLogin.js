@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RequireLogin = ({ item }) => {
+const RequireLogin = ({ item, navigation, route }) => {
   const tailwind = useTailwind();
 
   return (
@@ -86,6 +86,11 @@ const RequireLogin = ({ item }) => {
           backgroundColor: colors.colorButton,
           width: Dimensions.get("screen").width / 1.3,
           borderRadius: 6,
+        }}
+        onPress={() => {
+          navigation.navigate("Login", {
+            username: ""
+          })
         }}
       >
         <Text
