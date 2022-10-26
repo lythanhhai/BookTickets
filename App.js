@@ -53,6 +53,7 @@ const Home = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarStyle: { paddingBottom: 10, height: 60, }
       }}
       // tabBarOptions={{ showIcon: true }}
 

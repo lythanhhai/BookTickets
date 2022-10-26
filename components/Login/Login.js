@@ -23,9 +23,13 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     paddingTop: 0,
   },
+  errBorder: {
+    borderWidth: 1,
+    borderColor: "red",
+  },
 });
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation, route }) => {
   const tailwind = useTailwind();
   const [dataLogin, setDataLogin] = useState({
     username: "",
@@ -35,6 +39,18 @@ const Login = ({ navigation }) => {
     errUsername: "",
     errPassword: "",
   });
+  // var usernameRegis, passwordRegister = ""
+  // useEffect(
+  //   () => {
+  //     if(route.params)
+  //     {
+  //       setDataLogin({
+  //         username: route.params.username,
+  //         password: route.params.password
+  //       })
+  //     }
+  //   }, []
+  // )
   const [showPassword, setShowPassword] = useState(false);
   const handleValidPassword = (val) => {
     if (!val) {
@@ -126,7 +142,8 @@ const Login = ({ navigation }) => {
           <TextInput
             keyboardType="text"
             placeholder="Enter phone Number or your email"
-            style={{
+            defaultValue={route.params.username}
+            style={[{
               paddingLeft: 15,
               height: 40,
               fontSize: 13,
@@ -134,7 +151,7 @@ const Login = ({ navigation }) => {
               borderColor: "gray",
               borderRadius: 6,
               width: Dimensions.get("screen").width / 1.1,
-            }}
+            }, inValidData.errUsername && styles.errBorder]}
             onChangeText={(value) => {
               setDataLogin({
                 ...dataLogin,
@@ -150,7 +167,7 @@ const Login = ({ navigation }) => {
           ""
         )}
         <View
-          style={{
+          style={[{
             display: "flex",
             flexDirection: "row",
             justifyContent: "flex-end",
@@ -162,7 +179,7 @@ const Login = ({ navigation }) => {
             borderWidth: 1,
             borderColor: "gray",
             borderRadius: 6,
-          }}
+          }, inValidData.errPassword && styles.errBorder]}
         >
           <TextInput
             autoComplete="password"

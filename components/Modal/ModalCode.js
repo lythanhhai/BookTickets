@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
 
 const CELL_COUNT = 6;
 
-const ModalCode = ({ navigation, route, phoneNumber }) => {
+const ModalCode = ({ navigation, route, phoneNumber, confirmCode }) => {
   const [value, setValue] = useState("");
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -152,6 +152,10 @@ const ModalCode = ({ navigation, route, phoneNumber }) => {
             width: Dimensions.get("screen").width / 1.1,
             borderRadius: 6,
             marginTop: 10,
+          }}
+          onPress={() => {
+            confirmCode(value)
+            // confirmVerificationCode(value)
           }}
         >
           <Text

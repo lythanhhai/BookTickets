@@ -68,7 +68,7 @@ const SearchFrame = ({ navigation, route }) => {
   var array = new Date().toString().split(" ");
   var currentDate = array[0] + " " + array[1] + " " + array[2] + " " + array[3];
   const [date, setDate] = useState(currentDate);
-  const [dateIphone, setDateIphone] = useState(new Date());
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [open, setOpen] = useState(false);
   const showDatePicker = () => {
@@ -115,10 +115,10 @@ const SearchFrame = ({ navigation, route }) => {
   // useEffect(() => {
   //   console.warn(selector)
   // })
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const clickSwapLocation = () => {
-    dispatch(swapLocation())
-  }
+    dispatch(swapLocation());
+  };
   return (
     <View>
       <View
@@ -126,7 +126,7 @@ const SearchFrame = ({ navigation, route }) => {
           tailwind("flex flex-col justify-between"),
           {
             backgroundColor: "white",
-            height: Dimensions.get("screen").height / 4,
+            height: Dimensions.get("window").height / 3.5,
             width: Dimensions.get("screen").width / 1.1,
             marginTop: 20,
             borderRadius: 10,
@@ -149,16 +149,20 @@ const SearchFrame = ({ navigation, route }) => {
             justifyContent: "flex-start",
             alignItems: "center",
             marginLeft: 10,
+            height: "72%",
+            // backgroundColor: "red"
           }}
         >
           <View
             style={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              justifyContent: "center",
               alignItems: "center",
               marginLeft: 10,
-              marginTop: 10,
+              // marginTop: 10,
+              // backgroundColor: "blue",
+              height: "100%",
             }}
           >
             <Entypo
@@ -175,11 +179,6 @@ const SearchFrame = ({ navigation, route }) => {
               style={{
                 height: "35%",
                 width: 1,
-                // border: "none",
-                // borderTopWidth: 1,
-                // borderTopColor: "black",
-                // borderStyle: 'dashed',
-                // borderRadius: 1,
                 backgroundColor: "black",
               }}
             >
@@ -201,21 +200,22 @@ const SearchFrame = ({ navigation, route }) => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              alignItems: "flex-end",
-              height: "90%",
+              alignItems: "flex-start",
+              height: "100%",
               width: "100%",
-              // backgroundColor: "red",
             }}
           >
             <View
               style={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 alignItems: "flex-start",
-                position: "absolute",
-                top: "7%",
-                left: 0,
+                // position: "absolute",
+                // top: "7%",
+                // left: 0,
+                height: "42%",
+                paddingTop: 8,
               }}
             >
               <Text
@@ -232,7 +232,7 @@ const SearchFrame = ({ navigation, route }) => {
                   // setOpen(true);
                   navigation.setOptions({
                     ...setTabStyleVisibility(false),
-                    headerTitle: "okela",
+                    headerTitle: "ok",
                   });
                   // console.warn(...setTabStyleVisibility(true).tabBarStyle.display)
                   navigation.navigate("LocationStart", {
@@ -248,63 +248,63 @@ const SearchFrame = ({ navigation, route }) => {
                     width: Dimensions.get("screen").width / 1.8,
                   }}
                 >
-                  {
-                    !selector.startPoint ? "Choose start point" : selector.startPoint
-                  }
+                  {!selector.startPoint
+                    ? "Choose start point"
+                    : selector.startPoint}
                   {/* {selector.startPoint} */}
                 </Text>
               </TouchableOpacity>
             </View>
             <View
               style={{
-                height: 1,
-                width: "80%",
-                backgroundColor: "rgb(210, 210, 210)",
-                position: "absolute",
-                top: "55%",
-                left: 0,
-              }}
-            ></View>
-            <TouchableOpacity
-              style={{
-                position: "absolute",
-                top: "37%",
-                left: "65%",
-                // transform: [{ rotateY: "180deg" }],
-                borderWidth: 2,
-                borderColor: "rgb(160, 160, 160)",
-                paddingHorizontal: 6,
-                paddingVertical: 6,
-                borderRadius: 50,
-              }}
-              onPress={() => {
-                clickSwapLocation()
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
               }}
             >
-              <Ionicons
-                size={18}
-                name="swap-vertical"
+              <View
                 style={{
-                  // marginHorizontal: 15,
-                  fontSize: 25,
-                  color: "rgb(35,115,228)",
+                  height: 1,
+                  width: "80%",
+                  backgroundColor: "rgb(120, 120, 120)",
                 }}
-              />
-            </TouchableOpacity>
+              ></View>
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  top: -20,
+                  right: 7,
+                  // borderWidth: 2,
+                  borderColor: "transparent",
+                  paddingHorizontal: 6,
+                  paddingVertical: 6,
+                  borderRadius: 50,
+                  backgroundColor: "rgb(230, 230, 230)",
+                }}
+                onPress={() => {
+                  clickSwapLocation();
+                }}
+              >
+                <Ionicons
+                  size={18}
+                  name="swap-vertical"
+                  style={{
+                    // marginHorizontal: 15,
+                    fontSize: 25,
+                    color: "rgb(35,115,228)",
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
             <View
               style={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 alignItems: "flex-start",
-                position: "absolute",
-                top: "52%",
-                left: 0,
-                // borderTopWidth: 1,
-                // borderTopColor: "rgb(210, 210, 210)",
-                // width: "90%",
-                marginTop: 10,
-                height: "50%",
+                height: "42%",
+                // backgroundColor: "blue"
               }}
             >
               <Text
@@ -328,13 +328,13 @@ const SearchFrame = ({ navigation, route }) => {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    fontSize:  !selector.stopPoint ? 14 : 14,
+                    fontSize: !selector.stopPoint ? 14 : 14,
                     width: Dimensions.get("screen").width / 1.8,
                   }}
                 >
-                  {
-                    !selector.stopPoint ? "Choose stop point" : selector.stopPoint
-                  }
+                  {!selector.stopPoint
+                    ? "Choose stop point"
+                    : selector.stopPoint}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -350,7 +350,8 @@ const SearchFrame = ({ navigation, route }) => {
             borderTopWidth: 1,
             borderTopColor: "rgb(210, 210, 210)",
             marginLeft: 20,
-            marginBottom: 6,
+            paddingBottom: 6,
+            // backgroundColor: "red",
           }}
         >
           <Icon
@@ -418,14 +419,6 @@ const SearchFrame = ({ navigation, route }) => {
                 onCancel={hideDatePicker}
                 isDarkModeEnabled={false}
               />
-              // <DatePickerModal
-              //   // locale="en"
-              //   mode="single"
-              //   visible={open}
-              //   onDismiss={onDismissSingle}
-              //   date={date}
-              //   onConfirm={onConfirmSingle}
-              // />
             )}
           </View>
         </View>

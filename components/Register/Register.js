@@ -9,6 +9,7 @@ import {
   TextInput,
   Image,
   BackHandler,
+  Alert,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { useTailwind } from "tailwind-rn";
@@ -19,6 +20,15 @@ import colors from "../../constants/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useValidation } from "react-native-form-validator";
+import AwesomeAlert from "react-native-awesome-alerts";
+// authen with phonenumber
+// import auth from '@react-native-firebase/auth';
+// import { auth } from "../../firebase/ConfigureFirebase";
+// import { auth, signInWithPhoneNumber } from "../../firebase/ConfigureFirebase";
+
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import { firebaseConfig } from "../../firebase/ConfigureFirebase";
+import firebase from "firebase/compat/app";
 
 const styles = StyleSheet.create({
   errMsg: {
@@ -35,10 +45,7 @@ const styles = StyleSheet.create({
 
 const Register = ({ navigation }) => {
   const tailwind = useTailwind();
-  const [modalVisible, setModalVisible] = useState(false);
-  const openModalConfirmationCode = (setModalVisible) => {
-    setModalVisible(true);
-  };
+
   const [isPhoneNumber, setIsPhoneNumber] = useState(true);
   const refRBSheet = useRef();
   const [dataRegister, setDataRegister] = useState({
@@ -54,9 +61,26 @@ const Register = ({ navigation }) => {
     errRe_password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+
+  // sign up
   const onSubmitRegister = () => {
     if (isPhoneNumber) {
-      refRBSheet.current.open();
+      if (
+        !inValidData.errPhoneNumber &&
+        !inValidData.errPassword &&
+        !inValidData.errRe_password
+      ) {
+        // getConfirmMethod("+84"+dataRegister.phoneNumber.slice(1, dataRegister.phoneNumber.length))
+        sendVerification(dataRegister.phoneNumber);
+        refRBSheet.current.open();
+      }
+    } else {
+      if (
+        !inValidData.errEmail &&
+        !inValidData.errPassword &&
+        !inValidData.errRe_password
+      ) {
+      }
     }
   };
   // validate register data
@@ -132,6 +156,99 @@ const Register = ({ navigation }) => {
         errRe_password: "",
       });
     }
+  };
+  // authentication with phone number in firebase
+  // const [confirm, setConfirm] = useState(null);
+  // async function getConfirmMethod(phoneNumber) {
+  //   try {
+  //     const confirmation = await signInWithPhoneNumber(phoneNumber);
+  //     setConfirm(confirmation);
+  //   } catch (error) {
+  //     console.warn("oke1")
+  //     alert(error);
+  //   }
+  // }
+  // async function confirmVerificationCode(code) {
+  //   try {
+  //     await confirm.confirm(code);
+  //     setConfirm(null);
+  //   } catch (error) {
+  //     console.warn("oke2")
+  //     alert('Invalid code');
+  //   }
+  // }
+  // const [code, setCode] = useState("");
+  const [verificationId, setVerificationId] = useState(null);
+  const recaptchaVerifier = useRef(null);
+
+  const sendVerification = (phoneNumber) => {
+    const phoneProvider = new firebase.auth.PhoneAuthProvider();
+    var handlePhone = "";
+    if (phoneNumber.length === 10) {
+      handlePhone = phoneNumber.slice(1, phoneNumber.length);
+    } else {
+      handlePhone = phoneNumber;
+    }
+    phoneProvider
+      .verifyPhoneNumber("+84" + phoneNumber, recaptchaVerifier.current)
+      .then(setVerificationId)
+      .catch((err) => {
+        // Alert.alert(
+        //   "Invalid phone number",
+        //   "Please enter your valid phone number!",
+        //   [
+        //     {
+        //       text: "Cancel",
+        //       onPress: () => Alert.alert("Cancel Pressed"),
+        //       style: "cancel",
+        //     },
+        //     {
+        //       text: "Ok",
+        //       onPress: () => Alert.alert("Cancel Pressed"),
+        //       style: "cancel",
+        //     },
+        //   ]
+        // );
+        refRBSheet.current.close();
+        handleShowAlert();
+      });
+  };
+
+  const confirmCode = (code) => {
+    const credential = firebase.auth.PhoneAuthProvider.credential(
+      verificationId,
+      code
+    );
+    firebase
+      .auth()
+      .signInWithCredential(credential)
+      .then(() => {
+        // setCode("");
+      })
+      .catch((err) => {
+        alert(err);
+      });
+    Alert.alert("Register succefully!!!", "Enter Ok to navigate login screen", [
+      {
+        text: "Ok",
+        onPress: () => {
+          navigation.navigate("Login", {
+            username: dataRegister.phoneNumber,
+          });
+        },
+        style: "cancel",
+      },
+    ]);
+  };
+
+  // show alert
+  const [showAlert, setShowAlert] = useState(false);
+  const handleShowAlert = () => {
+    setShowAlert(true);
+  };
+
+  const handleHideAlert = () => {
+    setShowAlert(false);
   };
   return (
     <View>
@@ -575,7 +692,6 @@ const Register = ({ navigation }) => {
             onPress={() => {
               // openModalConfirmationCode(setModalVisible);
               onSubmitRegister();
-              // _onPressButton();
             }}
           >
             <Text
@@ -611,11 +727,39 @@ const Register = ({ navigation }) => {
             }}
           >
             {/* <YourOwnComponent /> */}
-            <ModalCode phoneNumber={dataRegister.phoneNumber} />
+            <ModalCode
+              phoneNumber={dataRegister.phoneNumber}
+              confirmCode={confirmCode}
+            />
+            {/* <ModalCode phoneNumber={dataRegister.phoneNumber} /> */}
           </RBSheet>
         ) : (
           <></>
         )}
+
+        <FirebaseRecaptchaVerifierModal
+          ref={recaptchaVerifier}
+          firebaseConfig={firebaseConfig}
+        />
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Invalid phone number"
+          message="Please enter your valid phone number!"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="Cancel"
+          confirmText="Ok"
+          confirmButtonColor="#008080"
+          onCancelPressed={() => {
+            handleHideAlert();
+          }}
+          onConfirmPressed={() => {
+            handleHideAlert();
+          }}
+        />
         <View
           style={{
             display: "flex",
