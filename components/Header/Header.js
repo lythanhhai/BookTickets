@@ -86,7 +86,9 @@ const Header = ({ whichScreen, navigation }) => {
           paddingRight: 27,
         }}
         onPress={() => {
-          navigation.navigate("Login");
+          navigation.navigate("Login", {
+            username: "",
+          });
         }}
       >
         {whichScreen === 3 ? (

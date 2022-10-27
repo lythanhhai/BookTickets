@@ -9,7 +9,11 @@ import com.facebook.react.ReactRootView;
 
 import expo.modules.ReactActivityDelegateWrapper;
 
+// import 'io.invertase.firebase.app.ReactNativeFirebaseAppPackage';
+
 public class MainActivity extends ReactActivity {
+
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     // Set the theme to AppTheme BEFORE onCreate to support 

@@ -20,6 +20,12 @@ import expo.modules.ReactNativeHostWrapper;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+// import io.invertase.firebase.RNFirebasePackage;
+// import io.invertase.firebase.auth.RNFirebaseAuthPackage;
+// import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+// import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+// import 'io.invertase.firebase.app.ReactNativeFirebaseAppPackage';
+
 public class MainApplication extends Application implements ReactApplication {
   private final ReactNativeHost mReactNativeHost = new ReactNativeHostWrapper(
     this,
@@ -37,6 +43,7 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new MyReactNativePackage());
       return packages;
     }
+
 
     @Override
     protected String getJSMainModuleName() {

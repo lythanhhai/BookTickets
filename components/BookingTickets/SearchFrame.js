@@ -19,6 +19,7 @@ import setTabStyleVisibility from "../../utils/setVisible";
 import { useDispatch, useSelector } from "react-redux";
 import { getLocationReducer } from "../../redux/reducers/getLocationReducer";
 import { swapLocation } from "../../redux/actions/getLocationAction";
+import colors from "../../constants/colors";
 
 const styles = StyleSheet.create({
   container: {
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
 });
-
+const heightSearchFrame = Dimensions.get("window").height / 3.5;
 const SearchFrame = ({ navigation, route }) => {
   registerTranslation("pl", {
     save: "Save",
@@ -68,7 +69,7 @@ const SearchFrame = ({ navigation, route }) => {
   var array = new Date().toString().split(" ");
   var currentDate = array[0] + " " + array[1] + " " + array[2] + " " + array[3];
   const [date, setDate] = useState(currentDate);
-  const [dateIphone, setDateIphone] = useState(new Date());
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [open, setOpen] = useState(false);
   const showDatePicker = () => {
@@ -115,10 +116,10 @@ const SearchFrame = ({ navigation, route }) => {
   // useEffect(() => {
   //   console.warn(selector)
   // })
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const clickSwapLocation = () => {
-    dispatch(swapLocation())
-  }
+    dispatch(swapLocation());
+  };
   return (
     <View>
       <View
@@ -126,7 +127,7 @@ const SearchFrame = ({ navigation, route }) => {
           tailwind("flex flex-col justify-between"),
           {
             backgroundColor: "white",
-            height: Dimensions.get("screen").height / 4,
+            height: Dimensions.get("window").height / 3.5,
             width: Dimensions.get("screen").width / 1.1,
             marginTop: 20,
             borderRadius: 10,
@@ -145,20 +146,26 @@ const SearchFrame = ({ navigation, route }) => {
         <View
           style={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
             justifyContent: "flex-start",
-            alignItems: "center",
-            marginLeft: 10,
+            alignItems: "flex-start",
+            height: "70%",
+            width: "100%",
+            paddingLeft: 20,
+            // backgroundColor: "blue",
           }}
         >
           <View
             style={{
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
+              flexDirection: "row",
+              justifyContent: "flex-start",
               alignItems: "center",
-              marginLeft: 10,
-              marginTop: 10,
+              height: "50%",
+              width: "100%",
+              // backgroundColor: "blue",
+              // borderBottomWidth: 1,
+              // borderBottomColor: colors.borderGray,
             }}
           >
             <Entypo
@@ -173,49 +180,14 @@ const SearchFrame = ({ navigation, route }) => {
             />
             <View
               style={{
-                height: "35%",
-                width: 1,
-                // border: "none",
-                // borderTopWidth: 1,
-                // borderTopColor: "black",
-                // borderStyle: 'dashed',
-                // borderRadius: 1,
-                backgroundColor: "black",
-              }}
-            >
-              {/* <Text>111</Text> */}
-            </View>
-            <Entypo
-              size={18}
-              color="black"
-              name="location-pin"
-              style={{
-                marginHorizontal: 15,
-                fontSize: 26,
-                color: "red",
-              }}
-            />
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              height: "90%",
-              width: "100%",
-              // backgroundColor: "red",
-            }}
-          >
-            <View
-              style={{
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "flex-start",
-                position: "absolute",
-                top: "7%",
-                left: 0,
+                height: "100%",
+                // backgroundColor: "blue",
+                borderBottomWidth: 1,
+                borderBottomColor: colors.borderGray,
               }}
             >
               <Text
@@ -232,7 +204,7 @@ const SearchFrame = ({ navigation, route }) => {
                   // setOpen(true);
                   navigation.setOptions({
                     ...setTabStyleVisibility(false),
-                    headerTitle: "okela",
+                    headerTitle: "ok",
                   });
                   // console.warn(...setTabStyleVisibility(true).tabBarStyle.display)
                   navigation.navigate("LocationStart", {
@@ -244,66 +216,93 @@ const SearchFrame = ({ navigation, route }) => {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    fontSize: !selector.startPoint ? 14 : 14,
-                    width: Dimensions.get("screen").width / 1.8,
+                    fontSize: !selector.startPoint ? 15 : 15,
+                    width: Dimensions.get("screen").width / 1.6,
                   }}
                 >
-                  {
-                    !selector.startPoint ? "Choose start point" : selector.startPoint
-                  }
+                  {!selector.startPoint
+                    ? "Choose start point"
+                    : selector.startPoint}
                   {/* {selector.startPoint} */}
                 </Text>
               </TouchableOpacity>
             </View>
-            <View
+          </View>
+          {/* <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              // backgroundColor: "red",
+              height: 1,
+              width: "100%",
+            }}
+          > */}
+          {/* <View
               style={{
-                height: 1,
-                width: "80%",
-                backgroundColor: "rgb(210, 210, 210)",
+                height: heightSearchFrame / 4,
+                width: 1,
+                backgroundColor: "rgb(120, 120, 120)",
                 position: "absolute",
-                top: "55%",
-                left: 0,
+                top: -heightSearchFrame / 8,
+                left: 27.5,
               }}
-            ></View>
-            <TouchableOpacity
+            ></View> */}
+          <TouchableOpacity
+            style={{
+              position: "absolute",
+              top: (heightSearchFrame * (70 / 100) * (50 / 100) - 22),
+              right: 5,
+              // borderWidth: 2,
+              borderColor: "transparent",
+              paddingHorizontal: 8,
+              paddingVertical: 7,
+              borderRadius: 50,
+              backgroundColor: "rgb(240, 240, 240)",
+            }}
+            onPress={() => {
+              clickSwapLocation();
+            }}
+          >
+            <Ionicons
+              size={18}
+              name="swap-vertical"
               style={{
-                position: "absolute",
-                top: "37%",
-                left: "65%",
-                // transform: [{ rotateY: "180deg" }],
-                borderWidth: 2,
-                borderColor: "rgb(160, 160, 160)",
-                paddingHorizontal: 6,
-                paddingVertical: 6,
-                borderRadius: 50,
+                // marginHorizontal: 15,
+                fontSize: 25,
+                color: "rgb(35,115,228)",
               }}
-              onPress={() => {
-                clickSwapLocation()
+            />
+          </TouchableOpacity>
+          {/* </View> */}
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              height: "50%",
+              width: "100%",
+              // backgroundColor: "yellow"
+            }}
+          >
+            <Entypo
+              size={18}
+              color="black"
+              name="location-pin"
+              style={{
+                marginHorizontal: 15,
+                fontSize: 26,
+                color: "red",
               }}
-            >
-              <Ionicons
-                size={18}
-                name="swap-vertical"
-                style={{
-                  // marginHorizontal: 15,
-                  fontSize: 25,
-                  color: "rgb(35,115,228)",
-                }}
-              />
-            </TouchableOpacity>
+            />
             <View
               style={{
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "flex-start",
-                position: "absolute",
-                top: "52%",
-                left: 0,
-                // borderTopWidth: 1,
-                // borderTopColor: "rgb(210, 210, 210)",
-                // width: "90%",
-                marginTop: 10,
                 height: "50%",
               }}
             >
@@ -322,35 +321,39 @@ const SearchFrame = ({ navigation, route }) => {
                   navigation.setOptions({
                     ...setTabStyleVisibility(false),
                   });
-                  navigation.navigate("LocationStop", { screen: "stoppoint" });
+                  navigation.navigate("LocationStop", {
+                    screen: "stoppoint",
+                  });
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "bold",
-                    fontSize:  !selector.stopPoint ? 14 : 14,
-                    width: Dimensions.get("screen").width / 1.8,
+                    fontSize: !selector.stopPoint ? 15 : 15,
+                    width: Dimensions.get("screen").width / 1.6,
                   }}
                 >
-                  {
-                    !selector.stopPoint ? "Choose stop point" : selector.stopPoint
-                  }
+                  {!selector.stopPoint
+                    ? "Choose stop point"
+                    : selector.stopPoint}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
+
         <View
           style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "flex-start",
-            height: "28%",
+            height: "30%",
             alignItems: "center",
             borderTopWidth: 1,
-            borderTopColor: "rgb(210, 210, 210)",
+            borderTopColor: colors.borderGray,
             marginLeft: 20,
-            marginBottom: 6,
+            paddingBottom: 6,
+            // backgroundColor: "red",
           }}
         >
           <Icon
@@ -418,14 +421,6 @@ const SearchFrame = ({ navigation, route }) => {
                 onCancel={hideDatePicker}
                 isDarkModeEnabled={false}
               />
-              // <DatePickerModal
-              //   // locale="en"
-              //   mode="single"
-              //   visible={open}
-              //   onDismiss={onDismissSingle}
-              //   date={date}
-              //   onConfirm={onConfirmSingle}
-              // />
             )}
           </View>
         </View>
