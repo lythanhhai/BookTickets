@@ -26,9 +26,20 @@ import AwesomeAlert from "react-native-awesome-alerts";
 // import { auth } from "../../firebase/ConfigureFirebase";
 // import { auth, signInWithPhoneNumber } from "../../firebase/ConfigureFirebase";
 
-import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import { initializeApp, getApp } from "firebase/app";
+import {
+  getAuth,
+  PhoneAuthProvider,
+  signInWithCredential,
+} from "firebase/auth";
+
+import {
+  FirebaseRecaptchaVerifierModal,
+  FirebaseRecaptchaBanner,
+} from "expo-firebase-recaptcha";
 import { firebaseConfig } from "../../firebase/ConfigureFirebase";
 import firebase from "firebase/compat/app";
+import { ApiRegister } from "../../API/ApiLoginRegister";
 
 const styles = StyleSheet.create({
   errMsg: {
@@ -45,7 +56,7 @@ const styles = StyleSheet.create({
 
 const Register = ({ navigation }) => {
   const tailwind = useTailwind();
-
+  const attemptInvisibleVerification = false;
   const [isPhoneNumber, setIsPhoneNumber] = useState(true);
   const refRBSheet = useRef();
   const [dataRegister, setDataRegister] = useState({
@@ -74,8 +85,8 @@ const Register = ({ navigation }) => {
         dataRegister.re_password
       ) {
         // getConfirmMethod("+84"+dataRegister.phoneNumber.slice(1, dataRegister.phoneNumber.length))
-        refRBSheet.current.open();
         sendVerification(dataRegister.phoneNumber);
+        refRBSheet.current.open();
       }
     } else {
       if (
@@ -194,7 +205,7 @@ const Register = ({ navigation }) => {
     }
 
     phoneProvider
-      .verifyPhoneNumber("+84" + phoneNumber, recaptchaVerifier.current)
+      .verifyPhoneNumber("+84" + handlePhone, recaptchaVerifier.current)
       .then(setVerificationId)
       .catch((err) => {
         // Alert.alert(
@@ -213,7 +224,7 @@ const Register = ({ navigation }) => {
         //     },
         //   ]
         // );
-        // console.warn(err);
+        console.warn(err);
         refRBSheet.current.close();
         handleShowAlert();
       });
@@ -229,6 +240,10 @@ const Register = ({ navigation }) => {
       .signInWithCredential(credential)
       .then(() => {
         // setCode("");
+        ApiRegister({
+          username: dataRegister.phoneNumber,
+          password: dataRegister.password,
+        });
       })
       .catch((err) => {
         alert(err);
@@ -745,7 +760,12 @@ const Register = ({ navigation }) => {
         <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
           firebaseConfig={firebaseConfig}
+          androidHardwareAccelerationDisabled={true}
+          androidLayerType="software"
+          attemptInvisibleVerification={attemptInvisibleVerification}
+          // appVerificationDisabledForTesting={__DEV__}
         />
+        {attemptInvisibleVerification && <FirebaseRecaptchaBanner />}
         <AwesomeAlert
           show={showAlert}
           showProgress={false}
@@ -779,7 +799,7 @@ const Register = ({ navigation }) => {
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("Login", {
-                username: ""
+                username: "",
               });
             }}
           >
