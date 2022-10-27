@@ -344,7 +344,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation "com.google.firebase:firebase-storage:15.0.2"
     implementation "com.google.firebase:firebase-auth:17.0.0"
-    // implementation "androidx.browser:browser:1.2.0"
+    implementation "androidx.browser:browser:1.2.0"
 }
 
 if (isNewArchitectureEnabled()) {
