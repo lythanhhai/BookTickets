@@ -27,7 +27,10 @@ import { TextInput } from "react-native-paper";
 import Octicons from "react-native-vector-icons/Octicons";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { getLocationStart, getLocationStop } from "../../redux/actions/getLocationAction";
+import {
+  getLocationStart,
+  getLocationStop,
+} from "../../redux/actions/getLocationAction";
 
 const styles = StyleSheet.create({
   background: {
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
 });
 
 const SearchLocation = ({ item, navigation, route }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const tailwind = useTailwind();
   const [listLocation, setListLocation] = useState([]);
   const [valueSearch, setValueSearch] = useState("");
@@ -190,87 +193,91 @@ const SearchLocation = ({ item, navigation, route }) => {
           // height: 2000,
         }}
       >
-        <SectionList
-          sections={Data}
-          // style={{
-          //   backgroundColor: "white",
-          //   width: Dimensions.get("screen").width,
-          //   // position: "absolute",
-          //   // top: 60,
-          //   // left: 0,
-          //   // minHeight: 1000,
-          //   // overflowY: "scroll",
-          //   // overflowX: "hidden",
-          // }}
-          keyExtractor={(item, index) => item + index}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  marginLeft: 10,
-                  marginRight: 10,
-                  paddingVertical: 15,
-                  borderBottomColor: "rgb(220, 220, 220)",
-                  borderBottomWidth: 1,
-                  width: Dimensions.get("screen").width / 1.05,
-                  height: 50,
-                  bacgroundColor: "red",
-                  // flexWrap: "wrap"
-                }}
-                onPress={() => {
-                  if (route.params.screen === "startpoint") {
-                    navigation.navigate("Search")
-                    dispatch(getLocationStart(item))
-                  } else {
-                    navigation.navigate("Search")
-                    dispatch(getLocationStop(item))
-                  }
-                }}
-              >
-                <Octicons
-                  name="location"
+        {listSearchDistrict.length === 0 && listSearchProvince.length === 0 ? (
+          <Text>okela</Text>
+        ) : (
+          <SectionList
+            sections={Data}
+            // style={{
+            //   backgroundColor: "white",
+            //   width: Dimensions.get("screen").width,
+            //   // position: "absolute",
+            //   // top: 60,
+            //   // left: 0,
+            //   // minHeight: 1000,
+            //   // overflowY: "scroll",
+            //   // overflowX: "hidden",
+            // }}
+            keyExtractor={(item, index) => item + index}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity
                   style={{
-                    color: colors.gray,
-                    paddingHorizontal: 10,
-                    fontSize: 17,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    marginLeft: 10,
+                    marginRight: 10,
+                    paddingVertical: 15,
+                    borderBottomColor: "rgb(220, 220, 220)",
+                    borderBottomWidth: 1,
+                    width: Dimensions.get("screen").width / 1.05,
+                    height: 50,
+                    bacgroundColor: "red",
+                    // flexWrap: "wrap"
                   }}
-                />
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "450",
-                    paddingRight: 10,
+                  onPress={() => {
+                    if (route.params.screen === "startpoint") {
+                      navigation.navigate("Search");
+                      dispatch(getLocationStart(item));
+                    } else {
+                      navigation.navigate("Search");
+                      dispatch(getLocationStop(item));
+                    }
                   }}
                 >
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
-          renderSectionHeader={({ section }) => {
-            var elem;
-
-            section.data.length > 0
-              ? (elem = (
+                  <Octicons
+                    name="location"
+                    style={{
+                      color: colors.gray,
+                      paddingHorizontal: 10,
+                      fontSize: 17,
+                    }}
+                  />
                   <Text
                     style={{
-                      fontSize: 18,
-                      color: colors.gray,
-                      paddingLeft: 20,
-                      paddingTop: 10,
+                      fontSize: 14,
+                      fontWeight: "450",
+                      paddingRight: 10,
                     }}
                   >
-                    {section.title}
+                    {item}
                   </Text>
-                ))
-              : "";
-            return elem;
-          }}
-        />
+                </TouchableOpacity>
+              );
+            }}
+            renderSectionHeader={({ section }) => {
+              var elem;
+
+              section.data.length > 0
+                ? (elem = (
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: colors.gray,
+                        paddingLeft: 20,
+                        paddingTop: 10,
+                      }}
+                    >
+                      {section.title}
+                    </Text>
+                  ))
+                : "";
+              return elem;
+            }}
+          />
+        )}
       </View>
     </View>
   );

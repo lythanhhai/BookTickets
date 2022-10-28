@@ -19,6 +19,7 @@ import Ticket from "../../components/MyTickets/Ticket";
 import styleGlobal from "../../constants/styleGlobal";
 import RequireLogin from "../../components/MyTickets/RequireLogin";
 import Logged from "../../components/MyTickets/Logged";
+import { useSelector } from "react-redux";
 
 const styles = StyleSheet.create(styleGlobal);
 
@@ -26,12 +27,13 @@ const MyTicket = ({ navigation, route }) => {
   const tailwind = useTailwind();
   const [list, setList] = useState([]);
   const [isLogged, setIsLogged] = useState(false);
+  const User = useSelector(state => state.authenReducer)
   return (
     <View style={styles.backgroundBottom}>
       <View style={[styles.background]}>
         <Header whichScreen={2} navigation={navigation} />
         <Ticket navigation={navigation} route={route}/>
-        {isLogged ? <Logged /> : <RequireLogin navigation={navigation} route={route} />}
+        {User.accessToken ? <Logged /> : <RequireLogin navigation={navigation} route={route} />}
         {/* <RequireLogin /> */}
       </View>
     </View>

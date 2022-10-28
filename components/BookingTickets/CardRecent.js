@@ -173,7 +173,7 @@ const CardRecent = ({ item }) => {
             style={{
               color: "rgb(110, 110, 110)",
               fontSize: 10,
-              paddingLeft: 30,
+              paddingLeft: 32,
             }}
           >
             {item.date}

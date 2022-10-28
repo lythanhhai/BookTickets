@@ -8,19 +8,62 @@ import {
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { getTokenAferAuthen } from "../../utils/getJWT";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import authenReducer from "../../redux/reducers/authenReducer";
 
 const styles = StyleSheet.create({});
 
 const Header = ({ whichScreen, navigation }) => {
+  
   const tailwind = useTailwind();
+  const User = useSelector(state => state.authenReducer)
   var title;
   var pl = 0;
+  var loginOrEdit;
   if (whichScreen === 1) {
-    title = "Booking Tickets";
     title = (
       <Text style={{ color: "white", fontSize: 16 }}>Booking Tickets</Text>
     );
     pl = Dimensions.get("screen").width / 90;
+    loginOrEdit = (
+      <TouchableOpacity
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          backgroundColor: "transparent",
+          paddingRight: 27,
+        }}
+        onPress={() => {
+          if (User.accessToken) {
+          } else {
+            navigation.navigate("Login", {
+              username: "",
+            });
+          }
+        }}
+      >
+        {whichScreen === 3 ? (
+          ""
+        ) : (
+          <Text style={[tailwind("underline"), { color: "white" }]}>
+            {/* Hello, Hai */}
+            {User.accessToken ? "Profile" : "Log in"}
+          </Text>
+        )}
+
+        {/* <MaterialIcons
+      name="navigate-next"
+      style={{
+        fontSize: 20,
+        color: "white",
+      }}
+    /> */}
+      </TouchableOpacity>
+    );
   } else if (whichScreen === 2) {
     title = <Text style={{ color: "white", fontSize: 16 }}>My Tickets</Text>;
     pl = Dimensions.get("screen").width / 17;
@@ -57,6 +100,43 @@ const Header = ({ whichScreen, navigation }) => {
       </View>
     );
     pl = Dimensions.get("screen").width / 17;
+    loginOrEdit = (
+      <TouchableOpacity
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          backgroundColor: "transparent",
+          paddingRight: 27,
+        }}
+        onPress={() => {
+          if (User.accessToken) {
+          } else {
+            navigation.navigate("Login", {
+              username: "",
+            });
+          }
+        }}
+      >
+        {whichScreen === 3 ? (
+          ""
+        ) : (
+          <Text style={[tailwind("underline"), { color: "white" }]}>
+            {/* Hello, Hai */}
+            {User.accessToken ? "Profile" : "Log in"}
+          </Text>
+        )}
+
+        {/* <MaterialIcons
+      name="navigate-next"
+      style={{
+        fontSize: 20,
+        color: "white",
+      }}
+    /> */}
+      </TouchableOpacity>
+    );
   }
 
   return (
@@ -76,38 +156,7 @@ const Header = ({ whichScreen, navigation }) => {
       ]}
     >
       {title}
-      <TouchableOpacity
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          backgroundColor: "transparent",
-          paddingRight: 27,
-        }}
-        onPress={() => {
-          navigation.navigate("Login", {
-            username: "",
-          });
-        }}
-      >
-        {whichScreen === 3 ? (
-          ""
-        ) : (
-          <Text style={[tailwind("underline"), { color: "white" }]}>
-            {/* Hello, Hai */}
-            Log in
-          </Text>
-        )}
-
-        {/* <MaterialIcons
-          name="navigate-next"
-          style={{
-            fontSize: 20,
-            color: "white",
-          }}
-        /> */}
-      </TouchableOpacity>
+      {loginOrEdit}
     </View>
   );
 };
