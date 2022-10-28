@@ -1,18 +1,30 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
+import { useDispatch } from "react-redux";
+import { loginAction, signupAction } from "../redux/actions/authenAction";
 
-const ApiLogin = (Data) => {
+const ApiLogin = (Data, navigation, dispatch) => {
+  // const dispatch = useDispatch()
   axios({
     method: "post",
     url: "https://book-ticket-doan.herokuapp.com/api/auth/login",
     data: Data,
   })
     .then((res) => {
+      // console.warn(res.data);
       return res.data;
     })
-    .then(async (data) => {
+    .then((data) => {
       try {
-        await AsyncStorage.setItem("accessToken", data.accessToken);
+        if (data.message) {
+          // console.warn(data.message);
+          Alert.alert(data.message, "Your username or password are incorrect");
+        } else {
+          dispatch(loginAction(data));
+          // console.warn(data)
+          navigation.navigate("Home");
+        }
       } catch (e) {
         console.warn(e);
       }
@@ -22,7 +34,7 @@ const ApiLogin = (Data) => {
     });
 };
 
-const ApiRegister = (Data) => {
+const ApiRegister = (Data, dataRegister, navigation, dispatch) => {
   axios({
     method: "post",
     url: "https://book-ticket-doan.herokuapp.com/api/auth/signup",
@@ -31,10 +43,31 @@ const ApiRegister = (Data) => {
     .then((res) => {
       return res.data;
     })
-    .then(async (data) => {
+    .then((data) => {
       try {
-        await AsyncStorage.setItem("accessToken", data.accessToken);
-        // console.warn(data.accessToken)
+        if (data.message) {
+          // console.warn(res.data.message)
+          // setErrRegister(data.message);
+          Alert.alert(data.message, "Your phone number is existed");
+        } else {
+          // console.warn(data.accessToken);
+          dispatch(signupAction(data));
+          Alert.alert(
+            "Register succefully!!!",
+            "Enter Ok to navigate login screen",
+            [
+              {
+                text: "Ok",
+                onPress: () => {
+                  navigation.navigate("Login", {
+                    username: dataRegister.phoneNumber,
+                  });
+                },
+                style: "cancel",
+              },
+            ]
+          );
+        }
       } catch (e) {
         console.warn(e);
       }

@@ -14,6 +14,8 @@ import { useState, useEffect, useRef } from "react";
 import Icon from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
+import { ApiLogin } from "../../API/ApiLoginRegister";
+import { useDispatch } from "react-redux";
 
 const styles = StyleSheet.create({
   errMsg: {
@@ -86,6 +88,14 @@ const Login = ({ navigation, route }) => {
       });
     }
   };
+  const dispatch = useDispatch()
+  const handleSignin = () => {
+    ApiLogin({
+      username: dataLogin.username,
+      password: dataLogin.password
+    }, navigation, dispatch)
+    // console.warn("aa")
+  }
   return (
     <View>
       <View
@@ -271,6 +281,9 @@ const Login = ({ navigation, route }) => {
               backgroundColor: "rgb(8,27,57)",
               width: Dimensions.get("screen").width / 1.1,
               borderRadius: 6,
+            }}
+            onPress={() => {
+              handleSignin()
             }}
           >
             <Text

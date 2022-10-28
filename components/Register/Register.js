@@ -40,6 +40,7 @@ import {
 import { firebaseConfig } from "../../firebase/ConfigureFirebase";
 import firebase from "firebase/compat/app";
 import { ApiRegister } from "../../API/ApiLoginRegister";
+import { useDispatch } from "react-redux";
 
 const styles = StyleSheet.create({
   errMsg: {
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
 
 const Register = ({ navigation }) => {
   const tailwind = useTailwind();
-  const attemptInvisibleVerification = false;
+  const attemptInvisibleVerification = true;
   const [isPhoneNumber, setIsPhoneNumber] = useState(true);
   const refRBSheet = useRef();
   const [dataRegister, setDataRegister] = useState({
@@ -71,6 +72,7 @@ const Register = ({ navigation }) => {
     errPassword: "",
     errRe_password: "",
   });
+  const [errRegister, setErrRegister] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   // sign up
@@ -85,7 +87,16 @@ const Register = ({ navigation }) => {
         dataRegister.re_password
       ) {
         // getConfirmMethod("+84"+dataRegister.phoneNumber.slice(1, dataRegister.phoneNumber.length))
-        sendVerification(dataRegister.phoneNumber);
+        // sendVerification(dataRegister.phoneNumber);
+        ApiRegister(
+          {
+            username: dataRegister.phoneNumber,
+            password: dataRegister.password,
+          },
+          dataRegister,
+          navigation,
+          dispatch
+        );
         refRBSheet.current.open();
       }
     } else {
@@ -224,7 +235,7 @@ const Register = ({ navigation }) => {
         //     },
         //   ]
         // );
-        console.warn(err);
+        // console.warn(err);
         refRBSheet.current.close();
         handleShowAlert();
       });
@@ -240,25 +251,19 @@ const Register = ({ navigation }) => {
       .signInWithCredential(credential)
       .then(() => {
         // setCode("");
-        ApiRegister({
-          username: dataRegister.phoneNumber,
-          password: dataRegister.password,
-        });
+        ApiRegister(
+          {
+            username: dataRegister.phoneNumber,
+            password: dataRegister.password,
+          },
+          dataRegister,
+          navigation,
+          dispatch
+        );
       })
       .catch((err) => {
         alert(err);
       });
-    Alert.alert("Register succefully!!!", "Enter Ok to navigate login screen", [
-      {
-        text: "Ok",
-        onPress: () => {
-          navigation.navigate("Login", {
-            username: dataRegister.phoneNumber,
-          });
-        },
-        style: "cancel",
-      },
-    ]);
   };
 
   // show alert
@@ -270,6 +275,8 @@ const Register = ({ navigation }) => {
   const handleHideAlert = () => {
     setShowAlert(false);
   };
+
+  const dispatch = useDispatch();
   return (
     <View>
       <View
@@ -691,6 +698,7 @@ const Register = ({ navigation }) => {
         ) : (
           ""
         )}
+        {errRegister ? <Text style={styles.errMsg}>{errRegister}</Text> : ""}
         <View
           style={{
             display: "flex",
@@ -760,12 +768,12 @@ const Register = ({ navigation }) => {
         <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
           firebaseConfig={firebaseConfig}
-          androidHardwareAccelerationDisabled={true}
-          androidLayerType="software"
-          attemptInvisibleVerification={attemptInvisibleVerification}
+          // androidHardwareAccelerationDisabled={true}
+          // androidLayerType="software"
+          attemptInvisibleVerification={true}
           // appVerificationDisabledForTesting={__DEV__}
         />
-        {attemptInvisibleVerification && <FirebaseRecaptchaBanner />}
+        {/* {attemptInvisibleVerification && <FirebaseRecaptchaBanner />} */}
         <AwesomeAlert
           show={showAlert}
           showProgress={false}

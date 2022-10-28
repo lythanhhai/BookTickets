@@ -30,6 +30,10 @@ import EvilIcons from "react-native-vector-icons/EvilIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getTokenAferAuthen } from "../../utils/getJWT";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutAction } from "../../redux/actions/authenAction";
 
 const styles = StyleSheet.create({
   background: {
@@ -106,7 +110,29 @@ const MenuFunction = ({ item, navigation, route }) => {
       desc: "",
     },
   ]);
-
+  const dispatch = useDispatch();
+  const User = useSelector((state) => state.authenReducer);
+  const handleLogout = async () => {
+    // var User = await getTokenAferAuthen()
+    // if(User)
+    // {
+    //   await AsyncStorage.removeItem("User")
+    //   console.warn(User)
+    // }
+    // else
+    // {
+    //   console.warn(User)
+    // }
+    // console.warn(User);
+    dispatch(
+      logoutAction({
+        userId: null,
+        username: "",
+        accessToken: "",
+        tokenType: "",
+      })
+    );
+  };
   return (
     <View
       style={{
@@ -135,6 +161,9 @@ const MenuFunction = ({ item, navigation, route }) => {
                 alignItems: "center",
                 paddingTop: 15,
                 // width: Dimensions.get("screen").width,
+              }}
+              onPress={() => {
+                handleLogout();
               }}
             >
               {item.icon}

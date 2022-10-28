@@ -68,7 +68,7 @@ const CardRoute = ({ item }) => {
       }}
     >
       <Image
-        source={require("../../assets/Image/busDemonstrate.jpeg")}
+        source={{uri: item.image}}
         style={{
           width: Dimensions.get("screen").width / 3,
           height: 100,

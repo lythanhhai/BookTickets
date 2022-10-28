@@ -1,4 +1,5 @@
 import { getLocationReducer } from "../reducers/getLocationReducer";
+import authenReducer from "../reducers/authenReducer";
 // import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import { legacy_createStore as createStore } from "redux";
@@ -10,12 +11,13 @@ import { persistStore, persistReducer } from "redux-persist";
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: ['getLocationReducer'],
+  blacklist: ['getLocationReducer', 'authenReducer'],
   // whitelist: ['getLocationReducer']
 };
 
 const rootReducer = combineReducers({
   getLocationReducer: getLocationReducer,
+  authenReducer: authenReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
