@@ -35,6 +35,7 @@ import ModalCode from "./components/Modal/ModalCode";
 import { getTokenAferAuthen } from "./utils/getJWT";
 
 import authenReducer from "./redux/reducers/authenReducer";
+import ChooseTrip from "./screens/BookingTickets/ChooseTrip";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -229,6 +230,21 @@ export default function App() {
                     headerTintColor: "#fff",
                   }}
                 />
+              </Stack.Group>
+              <Stack.Group>
+                <Stack.Screen
+                  name="ChooseTrip"
+                  options={{
+                    gestureEnabled: false,
+                    // headerShown: false,
+                    // headerStyle: {
+                    //   backgroundColor: colors.blue,
+                    // },
+                    // headerTintColor: "#fff",
+                  }}
+                >
+                  {(props) => <ChooseTrip {...props} />}
+                </Stack.Screen>
               </Stack.Group>
               {false ? (
                 <></>

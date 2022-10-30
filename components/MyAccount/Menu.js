@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
 });
 const MenuFunction = ({ item, navigation, route }) => {
   const tailwind = useTailwind();
+  var User = useSelector((state) => state.authenReducer);
   const [Data, setData] = useState([
     {
       icon: (
@@ -63,6 +64,27 @@ const MenuFunction = ({ item, navigation, route }) => {
       ),
       title: "My reward points",
       desc: "Collect reward points to exchange facinating vouchers",
+      iconEndYetLogin: (
+        <Entypo
+          name="lock"
+          color={colors.blue}
+          style={{
+            fontSize: 20,
+            color: "black",
+            paddingRight: 70,
+          }}
+        />
+      ),
+      iconEndLogged: (
+        <MaterialIcons
+          name="navigate-next"
+          style={{
+            fontSize: 20,
+            color: "black",
+            paddingRight: 70,
+          }}
+        />
+      ),
     },
     {
       icon: (
@@ -78,6 +100,27 @@ const MenuFunction = ({ item, navigation, route }) => {
       ),
       title: "Vouchers",
       desc: "See list of voucher which spend on you",
+      iconEndYetLogin: (
+        <Entypo
+          name="lock"
+          color={colors.blue}
+          style={{
+            fontSize: 20,
+            color: "black",
+            paddingRight: 70,
+          }}
+        />
+      ),
+      iconEndLogged: (
+        <MaterialIcons
+          name="navigate-next"
+          style={{
+            fontSize: 20,
+            color: "black",
+            paddingRight: 70,
+          }}
+        />
+      ),
     },
     {
       icon: (
@@ -93,6 +136,27 @@ const MenuFunction = ({ item, navigation, route }) => {
       ),
       title: "Rate for trip",
       desc: "Share your feeling about trip to receive reward points",
+      iconEndYetLogin: (
+        <Entypo
+          name="lock"
+          color={colors.blue}
+          style={{
+            fontSize: 20,
+            color: "black",
+            paddingRight: 70,
+          }}
+        />
+      ),
+      iconEndLogged: (
+        <MaterialIcons
+          name="navigate-next"
+          style={{
+            fontSize: 20,
+            color: "black",
+            paddingRight: 70,
+          }}
+        />
+      ),
     },
     {
       icon: (
@@ -111,7 +175,7 @@ const MenuFunction = ({ item, navigation, route }) => {
     },
   ]);
   const dispatch = useDispatch();
-  const User = useSelector((state) => state.authenReducer);
+
   const handleLogout = async () => {
     // var User = await getTokenAferAuthen()
     // if(User)
@@ -152,70 +216,73 @@ const MenuFunction = ({ item, navigation, route }) => {
         data={Data}
         horizontal={false}
         renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                paddingTop: 15,
-                // width: Dimensions.get("screen").width,
-              }}
-              onPress={() => {
-                handleLogout();
-              }}
-            >
-              {item.icon}
-              {/* <AntDesign name="logout" /> */}
-              <View
+          if (!User.accessToken && item.title === "Log out") {
+              return <></>
+          }
+          else 
+          {
+
+            return (
+              <TouchableOpacity
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "space-between",
+                  justifyContent: "flex-start",
                   alignItems: "center",
-                  width: Dimensions.get("screen").width / 1,
-                  borderBottomColor: "rgb(210, 210, 210)",
-                  borderBottomWidth: 1,
-                  borderBottomColor: "rgb(210, 210, 210)",
-                  borderBottomWidth: 1,
-                  paddingBottom: 10,
+                  marginTop: 7,
+                  height: Dimensions.get("screen").height / 13,
+                  // width: Dimensions.get("screen").width,
+                }}
+                onPress={() => {
+                  handleLogout();
                 }}
               >
+                {item.icon}
+                {/* <AntDesign name="logout" /> */}
                 <View
                   style={{
                     display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "flex-start",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: Dimensions.get("screen").width / 1.15,
+                    borderBottomColor: "rgb(210, 210, 210)",
+                    borderBottomWidth: 1,
+                    paddingBottom: 10,
+                    height: "100%",
+                    // backgroundColor: "red"
                   }}
                 >
-                  <Text
+                  <View
                     style={{
-                      fontWeight: "400",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "flex-start",
+                      // backgroundColor: "black",
+                      width: "90%",
                     }}
                   >
-                    {item.title}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                    }}
-                  >
-                    {item.desc}
-                  </Text>
+                    <Text
+                      style={{
+                        fontWeight: "400",
+                      }}
+                    >
+                      {item.title}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 10,
+                      }}
+                    >
+                      {item.desc}
+                    </Text>
+                  </View>
+                  {User.accessToken ? item.iconEndLogged : item.iconEndYetLogin}
                 </View>
-                <MaterialIcons
-                  name="navigate-next"
-                  style={{
-                    fontSize: 20,
-                    color: "black",
-                    paddingRight: 70,
-                  }}
-                />
-              </View>
-            </TouchableOpacity>
-          );
+              </TouchableOpacity>
+            );
+          }
         }}
       ></FlatList>
     </View>

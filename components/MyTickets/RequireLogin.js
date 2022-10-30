@@ -88,9 +88,7 @@ const RequireLogin = ({ item, navigation, route }) => {
           borderRadius: 6,
         }}
         onPress={() => {
-          navigation.navigate("Login", {
-            username: ""
-          })
+          navigation.navigate("Login")
         }}
       >
         <Text
