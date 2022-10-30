@@ -12,13 +12,20 @@ import { getTokenAferAuthen } from "../../utils/getJWT";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import authenReducer from "../../redux/reducers/authenReducer";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 const styles = StyleSheet.create({});
 
-const Header = ({ whichScreen, navigation }) => {
-  
+const Header = ({
+  whichScreen,
+  navigation,
+  titleElement,
+  setShowChangeModal,
+  showChangeModal,
+}) => {
   const tailwind = useTailwind();
-  const User = useSelector(state => state.authenReducer)
+  const User = useSelector((state) => state.authenReducer);
   var title;
   var pl = 0;
   var loginOrEdit;
@@ -40,9 +47,7 @@ const Header = ({ whichScreen, navigation }) => {
         onPress={() => {
           if (User.accessToken) {
           } else {
-            navigation.navigate("Login", {
-              username: "",
-            });
+            navigation.navigate("Login");
           }
         }}
       >
@@ -69,12 +74,6 @@ const Header = ({ whichScreen, navigation }) => {
     pl = Dimensions.get("screen").width / 17;
   } else if (whichScreen === 3) {
     title = <Text style={{ color: "white", fontSize: 16 }}>Notifications</Text>;
-    pl = Dimensions.get("screen").width / 17;
-  } else if (whichScreen === "StartPoint") {
-    // title = "Start point";
-    title = (
-      <Text style={{ color: "white", fontSize: 16 }}>Booking Tickets</Text>
-    );
     pl = Dimensions.get("screen").width / 17;
   } else if (whichScreen === 4) {
     title = (
@@ -113,9 +112,7 @@ const Header = ({ whichScreen, navigation }) => {
         onPress={() => {
           if (User.accessToken) {
           } else {
-            navigation.navigate("Login", {
-              username: "",
-            });
+            navigation.navigate("Login");
           }
         }}
       >
@@ -136,6 +133,76 @@ const Header = ({ whichScreen, navigation }) => {
       }}
     /> */}
       </TouchableOpacity>
+    );
+  } else if (whichScreen === "ChooseTrip") {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Home");
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+
+          <View style={[tailwind("flex flex-col items-start"), {}]}>
+            <View style={[tailwind("flex flex-row items-center"), {}]}>
+              <Text style={[tailwind("text-[color:white]"), {}]}>
+                {titleElement.departLocation}
+              </Text>
+              <AntDesign
+                name="swapright"
+                // size={30}
+                style={[
+                  tailwind("text-[color:white]"),
+                  {
+                    fontSize: 25,
+                  },
+                ]}
+              />
+              <Text style={[tailwind("text-[color:white]"), {}]}>
+                {titleElement.arrivalLocation}
+              </Text>
+            </View>
+            <Text style={[tailwind("text-[color:white]"), {}]}>
+              {titleElement.date}
+            </Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            // close
+            if (showChangeModal) {
+              setShowChangeModal(false);
+            } else {
+              setShowChangeModal(true);
+            }
+          }}
+        >
+          <Text style={[tailwind("underline"), { color: "white" }]}>
+            {/* Hello, Hai */}
+            {!showChangeModal ? "Change" : "Close"}
+          </Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 

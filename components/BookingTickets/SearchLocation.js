@@ -26,7 +26,7 @@ import colors from "../../constants/colors";
 import { TextInput } from "react-native-paper";
 import Octicons from "react-native-vector-icons/Octicons";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getLocationStart,
   getLocationStop,
@@ -126,6 +126,8 @@ const SearchLocation = ({ item, navigation, route }) => {
       },
     ]);
   }, [listSearchProvince, listSearchDistrict]);
+  // location from redux
+  const location = useSelector((state) => state.getLocationReducer);
   return (
     <View
       style={{
@@ -184,17 +186,31 @@ const SearchLocation = ({ item, navigation, route }) => {
         />
       </View>
       <View
-        style={{
-          backgroundColor: "white",
-          width: Dimensions.get("screen").width,
-          position: "relative",
-          top: 60,
-          left: 0,
-          // height: 2000,
-        }}
+        style={[
+          {
+            backgroundColor: "white",
+            width: Dimensions.get("screen").width,
+            position: "relative",
+            top: 60,
+            left: 0,
+            // height: 2000,
+          },
+          listSearchDistrict.length === 0 &&
+            listSearchProvince.length === 0 && {
+              backgroundColor: "transparent",
+              marginTop: 10,
+            },
+        ]}
       >
         {listSearchDistrict.length === 0 && listSearchProvince.length === 0 ? (
-          <Text>okela</Text>
+          <Text
+            style={[
+              tailwind("text-sm flex justify-center items-center text-center"),
+              {},
+            ]}
+          >
+            Haven't location match with you search
+          </Text>
         ) : (
           <SectionList
             sections={Data}
@@ -228,12 +244,38 @@ const SearchLocation = ({ item, navigation, route }) => {
                     // flexWrap: "wrap"
                   }}
                   onPress={() => {
-                    if (route.params.screen === "startpoint") {
-                      navigation.navigate("Search");
-                      dispatch(getLocationStart(item));
+                    if (route.params.screenReturn === "ChooseTrip") {
+                      if (route.params.screen === "startpoint") {
+                        navigation.navigate("ChooseTrip", {
+                          departLocation: item,
+                          arrivalLocation: location.stopPoint,
+                          date: route.params.date,
+                          showModal: false,
+                        });
+                        dispatch(getLocationStart(item));
+                      } else {
+                        navigation.navigate("ChooseTrip", {
+                          departLocation: location.startPoint,
+                          arrivalLocation: item,
+                          date: route.params.date,
+                          showModal: false,
+                        });
+                        // , {
+                        //   departLocation: location.startPoint,
+                        //   arrivalLocation: location.stopPoint,
+                        //   date: "date",
+                        //   showModal: false,
+                        // }
+                        dispatch(getLocationStop(item));
+                      }
                     } else {
-                      navigation.navigate("Search");
-                      dispatch(getLocationStop(item));
+                      if (route.params.screen === "startpoint") {
+                        navigation.navigate("Search");
+                        dispatch(getLocationStart(item));
+                      } else {
+                        navigation.navigate("Search");
+                        dispatch(getLocationStop(item));
+                      }
                     }
                   }}
                 >

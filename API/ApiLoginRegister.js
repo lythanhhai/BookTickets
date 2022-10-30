@@ -4,8 +4,9 @@ import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
 import { loginAction, signupAction } from "../redux/actions/authenAction";
 
-const ApiLogin = (Data, navigation, dispatch) => {
+const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
   // const dispatch = useDispatch()
+  setIsLoading(true);
   axios({
     method: "post",
     url: "https://book-ticket-doan.herokuapp.com/api/auth/login",
@@ -16,6 +17,7 @@ const ApiLogin = (Data, navigation, dispatch) => {
       return res.data;
     })
     .then((data) => {
+      setIsLoading(false);
       try {
         if (data.message) {
           // console.warn(data.message);
@@ -34,7 +36,14 @@ const ApiLogin = (Data, navigation, dispatch) => {
     });
 };
 
-const ApiRegister = (Data, dataRegister, navigation, dispatch) => {
+const ApiRegister = (
+  Data,
+  dataRegister,
+  navigation,
+  dispatch,
+  setIsLoading
+) => {
+  setIsLoading(true);
   axios({
     method: "post",
     url: "https://book-ticket-doan.herokuapp.com/api/auth/signup",
@@ -44,6 +53,7 @@ const ApiRegister = (Data, dataRegister, navigation, dispatch) => {
       return res.data;
     })
     .then((data) => {
+      setIsLoading(false);
       try {
         if (data.message) {
           // console.warn(res.data.message)

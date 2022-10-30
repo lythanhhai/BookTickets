@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
 });
 const heightSearchFrame = Dimensions.get("window").height / 3.5;
-const SearchFrame = ({ navigation, route }) => {
+const SearchFrame = ({ navigation, route, screen }) => {
   registerTranslation("pl", {
     save: "Save",
     selectSingle: "Select date",
@@ -120,6 +120,16 @@ const SearchFrame = ({ navigation, route }) => {
   const clickSwapLocation = () => {
     dispatch(swapLocation());
   };
+  const location = useSelector(state => state.getLocationReducer)
+  const SearchTicket = () => {
+    navigation.navigate("ChooseTrip", {
+      departLocation: location.startPoint,
+      arrivalLocation: location.stopPoint,
+      date: date,
+      showModal: false,
+    })
+    // console.warn("a")
+  }
   return (
     <View>
       <View
@@ -209,6 +219,8 @@ const SearchFrame = ({ navigation, route }) => {
                   // console.warn(...setTabStyleVisibility(true).tabBarStyle.display)
                   navigation.navigate("LocationStart", {
                     screen: "startpoint",
+                    screenReturn: screen,
+                    date: date,
                     // routeCurrent: route,
                   });
                 }}
@@ -323,6 +335,8 @@ const SearchFrame = ({ navigation, route }) => {
                   });
                   navigation.navigate("LocationStop", {
                     screen: "stoppoint",
+                    screenReturn: screen,
+                    date: date,
                   });
                 }}
               >
@@ -434,6 +448,9 @@ const SearchFrame = ({ navigation, route }) => {
           width: Dimensions.get("screen").width / 1.1,
           borderRadius: 6,
           marginTop: 15,
+        }}
+        onPress={() => {
+          SearchTicket()
         }}
       >
         <Text
