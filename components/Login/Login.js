@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  ScrollView,
 } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useState, useEffect, useRef } from "react";
@@ -130,7 +131,7 @@ const Login = ({ navigation, route }) => {
       {isLoading ? (
         <Loading />
       ) : (
-        <View>
+        <ScrollView>
           <View
             style={{
               backgroundColor: "rgb(35,115,228)",
@@ -168,9 +169,13 @@ const Login = ({ navigation, route }) => {
               //   justifyContent: "center",
               //   paddingLeft: 25,
               backgroundColor: "white",
-              height:
+              // height:
+              //   Dimensions.get("screen").height -
+              //   Dimensions.get("screen").height / 3,
+              minHeight:
                 Dimensions.get("screen").height -
-                Dimensions.get("screen").height / 3,
+                Dimensions.get("screen").height / 3 +
+                45,
               transform: [{ translateY: -45 }],
               borderTopRightRadius: 30,
               borderTopLeftRadius: 30,
@@ -184,7 +189,7 @@ const Login = ({ navigation, route }) => {
                   fontWeight: "600",
                   fontSize: 20,
                   marginTop: 20,
-                  textAlign: "center"
+                  textAlign: "center",
                 },
               ]}
             >
@@ -428,7 +433,7 @@ const Login = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </ScrollView>
       )}
     </View>
     // <View style={tailwind("pt-12 items-center")}>

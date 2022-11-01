@@ -36,6 +36,7 @@ import { getTokenAferAuthen } from "./utils/getJWT";
 
 import authenReducer from "./redux/reducers/authenReducer";
 import ChooseTrip from "./screens/BookingTickets/ChooseTrip";
+import ChooseSeat from "./screens/BookingTickets/ChooseSeat";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -244,6 +245,9 @@ export default function App() {
                   }}
                 >
                   {(props) => <ChooseTrip {...props} />}
+                </Stack.Screen>
+                <Stack.Screen name="ChooseSeat">
+                  {(props) => <ChooseSeat {...props} />}
                 </Stack.Screen>
               </Stack.Group>
               {false ? (

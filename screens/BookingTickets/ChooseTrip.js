@@ -13,111 +13,131 @@ import { useState } from "react";
 import Header from "../../components/Header/Header";
 import SearchFrame from "../../components/BookingTickets/SearchFrame";
 import { registerTranslation } from "react-native-paper-dates";
-import CardRecent from "../../components/BookingTickets/CardRecent";
-import Data from "../../constants/virtualDataRecent";
 import colors from "../../constants/colors";
-import Ticket from "../../components/MyTickets/Ticket";
 
 import styleGlobal from "../../constants/styleGlobal";
-import RequireLogin from "../../components/MyTickets/RequireLogin";
-import Logged from "../../components/MyTickets/Logged";
-import SearchLocation from "../../components/BookingTickets/SearchLocation";
 import CardTrip from "../../components/BookingTickets/CardTrip";
 import { useEffect } from "react";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const styles = StyleSheet.create(styleGlobal);
+const stylesFilter = StyleSheet.create({
+  touchable: {
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    borderColor: colors.gray,
+    borderWidth: 1,
+    marginHorizontal: 5,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 5,
+  },
+  touchableFirst: {
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    borderColor: colors.gray,
+    borderWidth: 1,
+    marginLeft: 10,
+    marginRight: 5,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 5,
+  },
+  text: {
+    color: "black",
+    paddingVertical: 2,
+    fontSize: 14,
+  },
+  icon: {
+    color: "black",
+    paddingVertical: 2,
+    fontSize: 12,
+    marginRight: 4,
+  },
+});
 
 const ChooseTrip = ({ navigation, route }) => {
   const tailwind = useTailwind();
   const [Data, setData] = useState([1, 2, 3, 4, 5, 6]);
-  const [showChangeModal, setShowChangeModal] = useState(
-    route.params.showModal
-  );
+  const [showChangeModal, setShowChangeModal] = useState(false);
+  const [showModalFilter, setShowModalFilter] = useState(false);
   // useEffect(() => {
   //   setShowChangeModal(false)
   // }, [route.params.showModal])
   return (
-    <View style={styles.backgroundBottom}>
+    <View
+      style={[
+        styles.backgroundBottom,
+        {
+          backgroundColor: "rgb(245,245,245)",
+        },
+      ]}
+    >
       <View style={[styles.background]}>
         <Header
           whichScreen={"ChooseTrip"}
           navigation={navigation}
-          titleElement={route.params}
+          // titleElement={route.params}
           setShowChangeModal={setShowChangeModal}
           showChangeModal={showChangeModal}
         />
 
         {/* <CardTrip /> */}
-
-        {/* <View
-          style={[
-            tailwind(""),
-            {
-              height:
-                Dimensions.get("screen").height -
-                Dimensions.get("screen").height / 8.5,
-              width: Dimensions.get("screen").width,
-              // backgroundColor: "red",
-              // flex: 1,
-              // justifyContent: "center",
-              // alignItems: "center",
-              // flex: 1,
-              // flexGrow: 1,
-            },
-          ]}
-        >
-          <FlatList
-            data={Data}
-            horizontal={true}
-            showsVerticalScrollIndicator={true}
-            contentContainerStyle={
-              [
-                // tailwind("flex flex-col items-center justify-center"),
-                // {
-                //   backgroundColor: "red",
-                //   // flexGrow: 1,
-                // },
-              ]
-            }
-            // style={[tailwind("flex flex-row items-center justify-center"), {height: "100%", width: "100%"}]}
-            renderItem={({ item }) => {
-              return <CardTrip />;
-            }}
-          />
-        </View> */}
-
-        {/* <ScrollView
-          style={{
-            backgroundColor: "red",
-            height:
-              Dimensions.get("screen").height -
-              Dimensions.get("screen").height / 8.5,
-            width: Dimensions.get("screen").width,
-            display: "flex",
-            flexDirection: "column",
-          }}
-          contentContainerStyle={{
-            backgroundColor: "red",
-            // height:
-            //   Dimensions.get("screen").height -
-            //   Dimensions.get("screen").height / 8.5,
-            // width: Dimensions.get("screen").width,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {Data.map((item, index) => {
-            return <CardTrip key={index} />;
-          })}
-        </ScrollView> */}
       </View>
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={tailwind(
+          "flex flex-row justify-start items-center"
+        )}
+        style={[
+          // tailwind("flex flex-row justify-start items-center"),
+          {
+            // height: Dimensions.get("screen").height / 20,
+            width: Dimensions.get("screen").width,
+            height: 100,
+            backgroundColor: "white",
+            // paddingVertical: 5,
+          },
+        ]}
+      >
+        <TouchableOpacity style={stylesFilter.touchableFirst}>
+          <Ionicons name="filter" style={stylesFilter.icon}></Ionicons>
+          <Text style={stylesFilter.text}>Filter</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={stylesFilter.touchable}
+          onPress={() => {
+            // setShowModalFilter(true);
+          }}
+        >
+          <Ionicons name="time-outline" style={stylesFilter.icon}></Ionicons>
+          <Text style={stylesFilter.text}>Time</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={stylesFilter.touchable}>
+          <Ionicons
+            name="pricetag-outline"
+            style={stylesFilter.icon}
+          ></Ionicons>
+          <Text style={stylesFilter.text}>Price</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={stylesFilter.touchable}>
+          <Ionicons name="star-outline" style={stylesFilter.icon}></Ionicons>
+          <Text style={stylesFilter.text}>Rating</Text>
+        </TouchableOpacity>
+      </ScrollView>
       <View
         style={[
           tailwind("flex flex-col justify-start items-center"),
           {
             height:
               Dimensions.get("screen").height -
-              Dimensions.get("screen").height / 8.5,
+              Dimensions.get("screen").height / 8.5 -
+              50,
             width: Dimensions.get("screen").width,
           },
         ]}
@@ -126,6 +146,7 @@ const ChooseTrip = ({ navigation, route }) => {
           data={Data}
           horizontal={false}
           showsVerticalScrollIndicator={false}
+          // keyExtractor={1}
           contentContainerStyle={
             [
               // tailwind("flex flex-col items-center justify-center"),
@@ -137,7 +158,7 @@ const ChooseTrip = ({ navigation, route }) => {
           }
           // style={[tailwind("flex flex-row items-center justify-center"), {height: "100%", width: "100%"}]}
           renderItem={({ item }) => {
-            return <CardTrip item={item} />;
+            return <CardTrip item={item} navigation={navigation} />;
           }}
         ></FlatList>
       </View>
@@ -152,7 +173,7 @@ const ChooseTrip = ({ navigation, route }) => {
             position: "absolute",
             top: Dimensions.get("screen").height / 8.5,
             left: 0,
-            zIndex: 1,
+            zIndex: 2,
           }}
         >
           <View
@@ -203,6 +224,23 @@ const ChooseTrip = ({ navigation, route }) => {
       ) : (
         <></>
       )}
+      {/* {!showModalFilter ? (
+        <View
+          style={{
+            height: Dimensions.get("screen").height / 6,
+            width: Dimensions.get("screen").width,
+            backgroundColor: "white",
+            position: "absolute",
+            top:
+              Dimensions.get("screen").height / 8.5 +
+              Dimensions.get("screen").height / 20,
+            left: 0,
+            zIndex: 1,
+          }}
+        ></View>
+      ) : (
+        <></>
+      )} */}
     </View>
   );
 };

@@ -62,21 +62,22 @@ const ApiRegister = (
         } else {
           // console.warn(data.accessToken);
           dispatch(signupAction(data));
-          Alert.alert(
-            "Register succefully!!!",
-            "Enter Ok to navigate login screen",
-            [
-              {
-                text: "Ok",
-                onPress: () => {
-                  navigation.navigate("Login", {
-                    username: dataRegister.phoneNumber,
-                  });
-                },
-                style: "cancel",
-              },
-            ]
-          );
+          // Alert.alert(
+          //   "Register succefully!!!",
+          //   "Enter Ok to navigate login screen",
+          //   [
+          //     {
+          //       text: "Ok",
+          //       onPress: () => {
+          //         navigation.navigate("Login", {
+          //           username: dataRegister.phoneNumber,
+          //         });
+          //       },
+          //       style: "cancel",
+          //     },
+          //   ]
+          // );
+          navigation.navigate("Home");
         }
       } catch (e) {
         console.warn(e);
