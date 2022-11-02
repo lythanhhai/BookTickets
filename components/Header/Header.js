@@ -26,9 +26,12 @@ const Header = ({
 }) => {
   const tailwind = useTailwind();
   const User = useSelector((state) => state.authenReducer);
+  const location = useSelector(state => state.getLocationReducer)
   var title;
   var pl = 0;
   var loginOrEdit;
+
+  // Booking Tickets screen
   if (whichScreen === 1) {
     title = (
       <Text style={{ color: "white", fontSize: 16 }}>Booking Tickets</Text>
@@ -69,13 +72,19 @@ const Header = ({
     /> */}
       </TouchableOpacity>
     );
-  } else if (whichScreen === 2) {
+  }
+  // My ticket screen
+  else if (whichScreen === 2) {
     title = <Text style={{ color: "white", fontSize: 16 }}>My Tickets</Text>;
     pl = Dimensions.get("screen").width / 17;
-  } else if (whichScreen === 3) {
+  }
+  // Notification screen
+  else if (whichScreen === 3) {
     title = <Text style={{ color: "white", fontSize: 16 }}>Notifications</Text>;
     pl = Dimensions.get("screen").width / 17;
-  } else if (whichScreen === 4) {
+  }
+  // My account screen
+  else if (whichScreen === 4) {
     title = (
       <View
         style={{
@@ -134,7 +143,9 @@ const Header = ({
     /> */}
       </TouchableOpacity>
     );
-  } else if (whichScreen === "ChooseTrip") {
+  }
+  // ChooseTrip screen
+  else if (whichScreen === "ChooseTrip") {
     title = (
       <View
         style={tailwind(
@@ -166,7 +177,7 @@ const Header = ({
           <View style={[tailwind("flex flex-col items-start"), {}]}>
             <View style={[tailwind("flex flex-row items-center"), {}]}>
               <Text style={[tailwind("text-[color:white]"), {}]}>
-                {titleElement.departLocation}
+                {location.startPoint}
               </Text>
               <AntDesign
                 name="swapright"
@@ -179,11 +190,11 @@ const Header = ({
                 ]}
               />
               <Text style={[tailwind("text-[color:white]"), {}]}>
-                {titleElement.arrivalLocation}
+                {location.stopPoint}
               </Text>
             </View>
             <Text style={[tailwind("text-[color:white]"), {}]}>
-              {titleElement.date}
+              {location.date}
             </Text>
           </View>
         </View>
@@ -202,6 +213,53 @@ const Header = ({
             {!showChangeModal ? "Change" : "Close"}
           </Text>
         </TouchableOpacity>
+      </View>
+    );
+  } else if (whichScreen === "ChooseSeat") {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.replace("ChooseTrip");
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+          <Text style={{ color: "white", fontSize: 14, }}>Choose Seat</Text>
+        </View>
+        
+        {/* <TouchableOpacity
+          onPress={() => {
+            // close
+            if (showChangeModal) {
+              setShowChangeModal(false);
+            } else {
+              setShowChangeModal(true);
+            }
+          }}
+        >
+          <Text style={[tailwind("underline"), { color: "white" }]}>
+            {!showChangeModal ? "Change" : "Close"}
+          </Text>
+        </TouchableOpacity> */}
       </View>
     );
   }

@@ -246,27 +246,17 @@ const SearchLocation = ({ item, navigation, route }) => {
                   onPress={() => {
                     if (route.params.screenReturn === "ChooseTrip") {
                       if (route.params.screen === "startpoint") {
-                        navigation.navigate("ChooseTrip", {
-                          departLocation: item,
-                          arrivalLocation: location.stopPoint,
-                          date: route.params.date,
-                          showModal: false,
-                        });
                         dispatch(getLocationStart(item));
-                      } else {
-                        navigation.navigate("ChooseTrip", {
-                          departLocation: location.startPoint,
-                          arrivalLocation: item,
-                          date: route.params.date,
-                          showModal: false,
-                        });
+                        navigation.navigate("ChooseTrip");
                         // , {
-                        //   departLocation: location.startPoint,
+                        //   departLocation: item,
                         //   arrivalLocation: location.stopPoint,
-                        //   date: "date",
+                        //   date: location.date,
                         //   showModal: false,
                         // }
+                      } else {
                         dispatch(getLocationStop(item));
+                        navigation.navigate("ChooseTrip");
                       }
                     } else {
                       if (route.params.screen === "startpoint") {

@@ -66,11 +66,6 @@
   border-radius: 9999px
 }
 
-.px-5 {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem
-}
-
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem
@@ -89,12 +84,12 @@
   padding-left: 0.5rem
 }
 
-.pt-12 {
-  padding-top: 3rem
-}
-
 .pr-5 {
   padding-right: 1.25rem
+}
+
+.pt-12 {
+  padding-top: 3rem
 }
 
 .text-center {

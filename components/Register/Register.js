@@ -10,6 +10,8 @@ import {
   Image,
   BackHandler,
   Alert,
+  ScrollView,
+  Platform,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { useTailwind } from "tailwind-rn";
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Register = ({ navigation }) => {
+const Register = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const tailwind = useTailwind();
   const attemptInvisibleVerification = true;
@@ -285,7 +287,7 @@ const Register = ({ navigation }) => {
         //     },
         //   ]
         // );
-        // console.warn(err);
+        console.warn(err);
         refRBSheet.current.close();
         handleShowAlert();
       });
@@ -305,6 +307,7 @@ const Register = ({ navigation }) => {
           {
             username: dataRegister.phoneNumber,
             password: dataRegister.password,
+            role: 1
           },
           dataRegister,
           navigation,
@@ -328,13 +331,21 @@ const Register = ({ navigation }) => {
   };
 
   const dispatch = useDispatch();
-
+  const handleBackSignin = () => {
+    // navigation.navigate("Login");
+    try {
+      // console.warn(route);
+      navigation.goBack();
+    } catch (err) {
+      console.warn(err);
+    }
+  };
   return (
     <View>
       {isLoading ? (
         <Loading />
       ) : (
-        <View>
+        <ScrollView>
           <View
             style={{
               backgroundColor: "rgb(35,115,228)",
@@ -349,6 +360,7 @@ const Register = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("Home");
+                // console.warn("aa")
               }}
               style={{
                 position: "absolute",
@@ -384,9 +396,12 @@ const Register = ({ navigation }) => {
               //   justifyContent: "center",
               //   paddingLeft: 25,
               backgroundColor: "white",
-              height:
+              // height:
+              //   Dimensions.get("screen").height,
+              //   Dimensions.get("screen").height / 3,
+              minHeight:
                 Dimensions.get("screen").height -
-                Dimensions.get("screen").height / 3,
+                Dimensions.get("screen").height / 3 + 45,
               transform: [{ translateY: -45 }],
               borderTopRightRadius: 30,
               borderTopLeftRadius: 30,
@@ -927,7 +942,7 @@ const Register = ({ navigation }) => {
               firebaseConfig={firebaseConfig}
               // androidHardwareAccelerationDisabled={true}
               // androidLayerType="software"
-              attemptInvisibleVerification={true}
+              attemptInvisibleVerification={Platform.OS === "ios" ? true : false}
               // appVerificationDisabledForTesting={__DEV__}
             />
             {/* {attemptInvisibleVerification && <FirebaseRecaptchaBanner />} */}
@@ -965,19 +980,18 @@ const Register = ({ navigation }) => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("Login");
+                  handleBackSignin();
                 }}
               >
                 <Text style={{ color: "rgb(50,100,255)" }}>Sign In</Text>
               </TouchableOpacity>
             </View>
           </View>
-
           {/* <ModalCode
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
           /> */}
-        </View>
+        </ScrollView>
       )}
     </View>
 

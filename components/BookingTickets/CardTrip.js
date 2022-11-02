@@ -34,9 +34,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const CardTrip = ({ item }) => {
+const CardTrip = ({ item, navigation }) => {
   const tailwind = useTailwind();
   const heightDevice = Dimensions.get("screen").height;
+  const HandleChooseATrip = () => {
+    navigation.replace("ChooseSeat");
+  }
   return (
     <View
       style={{
@@ -46,7 +49,8 @@ const CardTrip = ({ item }) => {
         alignItems: "flex-start",
         marginTop: 10,
         width: Dimensions.get("screen").width / 1.05,
-        height: heightDevice / 3.3,
+        // height: heightDevice / 3.3,
+        height: 260,
         backgroundColor: "white",
         paddingVertical: 8,
 
@@ -60,7 +64,6 @@ const CardTrip = ({ item }) => {
         elevation: 4,
 
         borderRadius: 8,
-        // marginRight: 10,
         marginBottom: 8,
         paddingHorizontal: 10,
       }}
@@ -79,7 +82,7 @@ const CardTrip = ({ item }) => {
         <View
           style={[
             tailwind("flex flex-col justify-between items-center"),
-            { height: "100%", width: "15%" },
+            { height: "100%" },
           ]}
         >
           <Text style={[tailwind(), { fontSize: 14 }]}>23:00</Text>
@@ -94,46 +97,36 @@ const CardTrip = ({ item }) => {
             justifyContent: "center",
             alignItems: "center",
             height: "100%",
+            paddingHorizontal: 5,
+            // backgroundColor: "red"
           }}
         >
-          <View
+          <Text
             style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              alignItems: "flex-start",
+              color: "black",
               height: "100%",
+              fontSize: 14,
+              fontWeight: "600",
               width: "100%",
-              paddingRight: 10,
             }}
           >
-            <Text
+            Đà Nẵng{" "}
+            <AntDesign
+              name="swapright"
               style={{
                 color: "black",
-                height: "100%",
                 fontSize: 14,
                 fontWeight: "600",
                 width: "100%",
               }}
-            >
-              Đà Nẵng{" "}
-              <AntDesign
-                name="swapright"
-                style={{
-                  color: "black",
-                  fontSize: 14,
-                  fontWeight: "600",
-                  width: "100%",
-                }}
-              />{" "}
-              Quảng Trị
-            </Text>
-          </View>
+            />{" "}
+            Quảng Trị
+          </Text>
         </View>
         <View
           style={[
             tailwind("flex flex-col justify-start items-end"),
-            { height: "100%", width: "30%" },
+            { height: "100%" },
           ]}
         >
           <View
@@ -184,11 +177,11 @@ const CardTrip = ({ item }) => {
             style={{
               // height: 100,
               // width: 100,
-              height: "90%",
-              width: "35%",
+              height: "80%",
+              width: "30%",
               objectFit: "cover",
               // resizeMode: "contain",
-              borderRadius: 10,
+              borderRadius: 7,
               // backgroundColor: "red",
             }}
           />
@@ -213,7 +206,7 @@ const CardTrip = ({ item }) => {
             <Text
               style={{
                 fontSize: 13,
-                fontWeight: "500",
+                // fontWeight: "500",
                 marginBottom: 4,
               }}
             >
@@ -226,7 +219,7 @@ const CardTrip = ({ item }) => {
                 style={[
                   tailwind("flex flex-row justify-between items-center"),
                   {
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: "500",
                   },
                 ]}
@@ -240,7 +233,7 @@ const CardTrip = ({ item }) => {
                     fontWeight: "500",
                   }}
                 ></Entypo>{" "}
-                <Text style={{ fontSize: 9, color: colors.gray }}>
+                <Text style={{ fontSize: 10, color: colors.gray }}>
                   (1500 rating)
                 </Text>
               </Text>
@@ -269,6 +262,7 @@ const CardTrip = ({ item }) => {
                 {
                   width: "100%",
                   // backgroundColor: "red",
+                  marginBottom: 4,
                 },
               ]}
             >
@@ -289,7 +283,7 @@ const CardTrip = ({ item }) => {
                 Verify immediatelly ticket
               </Text>
             </View>
-            <View
+            {/* <View
               style={[
                 tailwind("flex flex-row justify-start items-center"),
                 {
@@ -314,21 +308,23 @@ const CardTrip = ({ item }) => {
               >
                 Verify immediatelly ticket
               </Text>
-            </View>
+            </View> */}
           </View>
           <TouchableOpacity
             style={{
               backgroundColor: "rgb(8,27,57)",
               borderRadius: 6,
             }}
-            onPress={() => {}}
+            onPress={() => {
+              HandleChooseATrip()
+            }}
           >
             <Text
               style={{
                 color: "white",
                 textAlign: "center",
                 paddingVertical: 12,
-                paddingHorizontal: 20,
+                paddingHorizontal: 24,
                 fontSize: 14,
                 fontWeight: "500",
               }}

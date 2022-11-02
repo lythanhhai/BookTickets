@@ -5,6 +5,7 @@ import {
   Dimensions,
   DatePickerIOS,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useState, useCallback, useEffect } from "react";
 import { useTailwind } from "tailwind-rn/dist";
@@ -18,7 +19,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import setTabStyleVisibility from "../../utils/setVisible";
 import { useDispatch, useSelector } from "react-redux";
 import { getLocationReducer } from "../../redux/reducers/getLocationReducer";
-import { swapLocation } from "../../redux/actions/getLocationAction";
+import { swapLocation, getDate } from "../../redux/actions/getLocationAction";
 import colors from "../../constants/colors";
 
 const styles = StyleSheet.create({
@@ -46,24 +47,6 @@ const styles = StyleSheet.create({
 });
 const heightSearchFrame = Dimensions.get("window").height / 3.5;
 const SearchFrame = ({ navigation, route, screen }) => {
-  registerTranslation("pl", {
-    save: "Save",
-    selectSingle: "Select date",
-    selectMultiple: "Select dates",
-    selectRange: "Select period",
-    notAccordingToDateFormat: (inputFormat) =>
-      `Date format must be ${inputFormat}`,
-    mustBeHigherThan: (date) => `Must be later then ${date}`,
-    mustBeLowerThan: (date) => `Must be earlier then ${date}`,
-    mustBeBetween: (startDate, endDate) =>
-      `Must be between ${startDate} - ${endDate}`,
-    dateIsDisabled: "Day is not allowed",
-    previous: "Previous",
-    next: "Next",
-    typeInDate: "Type in date",
-    pickDateFromCalendar: "Pick date from calendar",
-    close: "Close",
-  });
   const tailwind = useTailwind();
 
   var array = new Date().toString().split(" ");
@@ -81,12 +64,6 @@ const SearchFrame = ({ navigation, route, screen }) => {
   };
 
   const handleConfirm = (date) => {
-    // var date1 = date.split("")[0];
-    // console.warn("A date has been picked: ", typeof date);
-    // var currentDateChange = new Date(date1)
-    // setDate(currentDateChange);
-    // // console.warn("A date has been picked: ", currentDateChange);
-    // console.warn("A date has been picked: ", currentDateChange);
     var arrayDate = date.toString().split(" ");
     var dateChoosen =
       arrayDate[0] +
@@ -120,16 +97,45 @@ const SearchFrame = ({ navigation, route, screen }) => {
   const clickSwapLocation = () => {
     dispatch(swapLocation());
   };
-  const location = useSelector(state => state.getLocationReducer)
+  const location = useSelector((state) => state.getLocationReducer);
   const SearchTicket = () => {
-    navigation.navigate("ChooseTrip", {
-      departLocation: location.startPoint,
-      arrivalLocation: location.stopPoint,
-      date: date,
-      showModal: false,
-    })
+    if (location.date && location.startPoint && location.stopPoint) {
+      // navigation.navigate("ChooseTrip", {
+      //   departLocation: location.startPoint,
+      //   arrivalLocation: location.stopPoint,
+      //   date: location.date,
+      //   showModal: false,
+      // });
+      navigation.navigate("ChooseTrip");
+    } else {
+      Alert.alert("Cannot Search", "Please fill out information!");
+    }
     // console.warn("a")
-  }
+  };
+
+  // dispatch date in search
+  useEffect(() => {
+    var arrayComapre = new Date().toString().split(" ");
+    var currentDateCompare =
+      arrayComapre[0] +
+      " " +
+      arrayComapre[1] +
+      " " +
+      arrayComapre[2] +
+      " " +
+      arrayComapre[3];
+    if (
+      date !== location.date &&
+      date === currentDateCompare &&
+      location.date !== ""
+    ) {
+    } else {
+      dispatch(getDate(date));
+    }
+  }, [date]);
+  // useEffect(() => {
+  //   console.warn(location);
+  // }, [location.date]);
   return (
     <View>
       <View
@@ -210,13 +216,11 @@ const SearchFrame = ({ navigation, route, screen }) => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  // showDatePicker();
-                  // setOpen(true);
                   navigation.setOptions({
                     ...setTabStyleVisibility(false),
-                    headerTitle: "ok",
+                    headerTitle: "Back",
                   });
-                  // console.warn(...setTabStyleVisibility(true).tabBarStyle.display)
+
                   navigation.navigate("LocationStart", {
                     screen: "startpoint",
                     screenReturn: screen,
@@ -264,7 +268,7 @@ const SearchFrame = ({ navigation, route, screen }) => {
           <TouchableOpacity
             style={{
               position: "absolute",
-              top: (heightSearchFrame * (70 / 100) * (50 / 100) - 22),
+              top: heightSearchFrame * (70 / 100) * (50 / 100) - 22,
               right: 5,
               // borderWidth: 2,
               borderColor: "transparent",
@@ -328,10 +332,9 @@ const SearchFrame = ({ navigation, route, screen }) => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  // showDatePicker();
-                  // setOpen(true);
                   navigation.setOptions({
                     ...setTabStyleVisibility(false),
+                    headerTitle: "Back",
                   });
                   navigation.navigate("LocationStop", {
                     screen: "stoppoint",
@@ -399,7 +402,7 @@ const SearchFrame = ({ navigation, route, screen }) => {
             <TouchableOpacity
               onPress={() => {
                 showDatePicker();
-                setOpen(true);
+                // setOpen(true);
               }}
             >
               <Text
@@ -408,7 +411,7 @@ const SearchFrame = ({ navigation, route, screen }) => {
                   fontSize: 15,
                 }}
               >
-                {date}
+                {!location.date ? "Choose date" : location.date}
               </Text>
             </TouchableOpacity>
             {Platform.OS === "ios" ? (
@@ -450,7 +453,7 @@ const SearchFrame = ({ navigation, route, screen }) => {
           marginTop: 15,
         }}
         onPress={() => {
-          SearchTicket()
+          SearchTicket();
         }}
       >
         <Text

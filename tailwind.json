@@ -87,12 +87,6 @@
 			"borderBottomLeftRadius": 9999
 		}
 	},
-	"px-5": {
-		"style": {
-			"paddingLeft": 20,
-			"paddingRight": 20
-		}
-	},
 	"px-3": {
 		"style": {
 			"paddingLeft": 12,
@@ -115,14 +109,14 @@
 			"paddingLeft": 8
 		}
 	},
-	"pt-12": {
-		"style": {
-			"paddingTop": 48
-		}
-	},
 	"pr-5": {
 		"style": {
 			"paddingRight": 20
+		}
+	},
+	"pt-12": {
+		"style": {
+			"paddingTop": 48
 		}
 	},
 	"text-center": {
