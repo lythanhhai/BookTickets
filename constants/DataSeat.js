@@ -4,103 +4,127 @@
 // 3 reversed
 const floor1 = [
   {
-    name: 1,
+    name: "B11",
+    status: 2,
+    price: 120000,
+  },
+  {
+    name: "B12",
+    status: 3,
+    price: 120000,
+  },
+  {
+    name: "B13",
     status: 0,
+    price: 120000,
   },
   {
-    name: 2,
-    status: 1,
-  },
-  {
-    name: 3,
+    name: "B14",
     status: 2,
+    price: 120000,
   },
   {
-    name: 4,
+    name: "B15",
     status: 3,
+    price: 120000,
   },
   {
-    name: 5,
+    name: "B16",
     status: 0,
+    price: 120000,
   },
   {
-    name: 6,
-    status: 1,
+    name: "A11",
+    status: 0,
+    price: 120000,
   },
   {
-    name: 7,
+    name: "A12",
+    status: 0,
+    price: 120000,
+  },
+  {
+    name: "A13",
     status: 2,
+    price: 120000,
   },
   {
-    name: 8,
+    name: "A14",
     status: 3,
+    price: 120000,
   },
   {
-    name: 9,
-    status: 1,
+    name: "A15",
+    status: 0,
+    price: 120000,
   },
   {
-    name: 10,
-    status: 2,
-  },
-  {
-    name: 11,
-    status: 3,
-  },
-  {
-    name: 12,
-    status: 1,
+    name: "A16",
+    status: 0,
+    price: 120000,
   },
 ];
 const floor2 = [
-    {
-      name: 1,
-      status: 0,
-    },
-    {
-      name: 2,
-      status: 1,
-    },
-    {
-      name: 3,
-      status: 2,
-    },
-    {
-      name: 4,
-      status: 3,
-    },
-    {
-      name: 5,
-      status: 0,
-    },
-    {
-      name: 6,
-      status: 1,
-    },
-    {
-      name: 7,
-      status: 2,
-    },
-    {
-      name: 8,
-      status: 3,
-    },
-    {
-      name: 9,
-      status: 1,
-    },
-    {
-      name: 10,
-      status: 2,
-    },
-    {
-      name: 11,
-      status: 3,
-    },
-    {
-      name: 12,
-      status: 1,
-    },
-  ];
+  {
+    name: "B21",
+    status: 2,
+    price: 120000,
+  },
+  {
+    name: "B22",
+    status: 3,
+    price: 120000,
+  },
+  {
+    name: "B23",
+    status: 0,
+    price: 120000,
+  },
+  {
+    name: "B24",
+    status: 2,
+    price: 120000,
+  },
+  {
+    name: "B25",
+    status: 3,
+    price: 120000,
+  },
+  {
+    name: "B26",
+    status: 0,
+    price: 120000,
+  },
+  {
+    name: "A21",
+    status: 0,
+    price: 120000,
+  },
+  {
+    name: "A22",
+    status: 0,
+    price: 120000,
+  },
+  {
+    name: "A23",
+    status: 2,
+    price: 120000,
+  },
+  {
+    name: "A24",
+    status: 3,
+    price: 120000,
+  },
+  {
+    name: "A25",
+    status: 0,
+    price: 120000,
+  },
+  {
+    name: "A26",
+    status: 0,
+    price: 120000,
+  },
+];
 
-export { floor1, floor2 }
+export { floor1, floor2 };
