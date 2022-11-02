@@ -1,6 +1,6 @@
 // 0 empty
-// 1 others selected
-// 2 my selected
+// 1 my selected
+// 2 others selected
 // 3 reversed
 const floor1 = [
   {
