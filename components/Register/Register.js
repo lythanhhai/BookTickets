@@ -287,9 +287,9 @@ const Register = ({ navigation, route }) => {
         //     },
         //   ]
         // );
-        console.warn(err);
+        // console.warn(err);
         refRBSheet.current.close();
-        handleShowAlert();
+        handleShowAlert(err);
       });
   };
 
@@ -307,7 +307,7 @@ const Register = ({ navigation, route }) => {
           {
             username: dataRegister.phoneNumber,
             password: dataRegister.password,
-            role: 1
+            role: 1,
           },
           dataRegister,
           navigation,
@@ -322,7 +322,7 @@ const Register = ({ navigation, route }) => {
 
   // show alert
   const [showAlert, setShowAlert] = useState(false);
-  const handleShowAlert = () => {
+  const handleShowAlert = (err) => {
     setShowAlert(true);
   };
 
@@ -401,7 +401,8 @@ const Register = ({ navigation, route }) => {
               //   Dimensions.get("screen").height / 3,
               minHeight:
                 Dimensions.get("screen").height -
-                Dimensions.get("screen").height / 3 + 45,
+                Dimensions.get("screen").height / 3 +
+                45,
               transform: [{ translateY: -45 }],
               borderTopRightRadius: 30,
               borderTopLeftRadius: 30,
@@ -940,17 +941,19 @@ const Register = ({ navigation, route }) => {
             <FirebaseRecaptchaVerifierModal
               ref={recaptchaVerifier}
               firebaseConfig={firebaseConfig}
-              // androidHardwareAccelerationDisabled={true}
+              androidHardwareAccelerationDisabled={true}
               // androidLayerType="software"
-              attemptInvisibleVerification={Platform.OS === "ios" ? true : false}
-              // appVerificationDisabledForTesting={__DEV__}
+              attemptInvisibleVerification={
+                Platform.OS === "ios" ? true : true
+              }
+              // appVerificationDisabledForTesting={false}
             />
             {/* {attemptInvisibleVerification && <FirebaseRecaptchaBanner />} */}
             <AwesomeAlert
               show={showAlert}
               showProgress={false}
-              title="Invalid phone number"
-              message="Please enter your valid phone number!"
+              title="Verify Error"
+              message="Cannot verify phone number"
               closeOnTouchOutside={true}
               closeOnHardwareBackPress={false}
               showCancelButton={true}
@@ -986,6 +989,7 @@ const Register = ({ navigation, route }) => {
                 <Text style={{ color: "rgb(50,100,255)" }}>Sign In</Text>
               </TouchableOpacity>
             </View>
+          {/* {true && <FirebaseRecaptchaBanner />} */}
           </View>
           {/* <ModalCode
             modalVisible={modalVisible}

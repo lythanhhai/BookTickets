@@ -67,7 +67,7 @@ const floor1 = [
 const floor2 = [
   {
     name: "B21",
-    status: 2,
+    status: 0,
     price: 120000,
   },
   {
@@ -92,7 +92,7 @@ const floor2 = [
   },
   {
     name: "B26",
-    status: 0,
+    status: 2,
     price: 120000,
   },
   {
@@ -112,7 +112,7 @@ const floor2 = [
   },
   {
     name: "A24",
-    status: 3,
+    status: 0,
     price: 120000,
   },
   {
