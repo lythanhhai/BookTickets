@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 });
 const heightSearchFrame = Dimensions.get("window").height / 3.5;
-const SearchFrame = ({ navigation, route, screen }) => {
+const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
   const tailwind = useTailwind();
 
   var array = new Date().toString().split(" ");
@@ -107,6 +107,7 @@ const SearchFrame = ({ navigation, route, screen }) => {
       //   showModal: false,
       // });
       navigation.navigate("ChooseTrip");
+      setCheckClickSearch(true);
     } else {
       Alert.alert("Cannot Search", "Please fill out information!");
     }

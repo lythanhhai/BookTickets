@@ -8,6 +8,7 @@ import {
   Image,
   VirtualizedList,
   Animated,
+  Alert,
 } from "react-native";
 import React from "react";
 import styleGlobal from "../../constants/styleGlobal";
@@ -22,23 +23,29 @@ import { useState, useEffect } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useRef } from "react";
 import ModalSeatSelected from "../../components/Modal/ModalSeatSelected";
+import { number } from "yup";
 // import { ScrollView } from 'react-native-virtualized-view'
 
 const widthScreen = Dimensions.get("screen").width;
 const heightScreen = Dimensions.get("screen").height;
-const shapeSeat = 55;
+const shapeHeightSeat = 70;
+const shapeWidthSeat = 50;
 const shapeSeatTop = 35;
 const marginSeat = 10;
 const backgroundColorReversed = "rgb(210,210,210)";
 const heightBottomSheet = 200;
+const colorSelecting = "rgb(255, 173, 190)";
+const colorIcon = "rgb(250, 250, 250)";
 const styles = StyleSheet.create(styleGlobal);
 const stylesItem = StyleSheet.create({
   icon: {
-    fontSize: 30,
-    fontWeight: "300",
-    color: "white",
-    padding: 2,
-    // textAlign: "center"
+    fontSize: 32,
+    // fontWeight: "300",
+    color: colorIcon,
+    textAlign: "center",
+    marginBottom: 6,
+    // backgroundColor: "red",
+    width: "100%",
   },
 });
 const stylesAnimation = StyleSheet.create({
@@ -66,16 +73,33 @@ const stylesAnimation = StyleSheet.create({
     borderTopLeftRadius: 20,
   },
 });
+
 const ChooseSeat = ({ navigation, route }) => {
   const RBSheetRef = useRef();
+  // choose seat
+  const [showModalSeat, setShowModalSeat] = useState(false);
+  const [dataModalSeat, setDataModalSeat] = useState({
+    numberSeat: 0,
+    nameSeats: [],
+    price: 0,
+  });
+
   const hanldeClickSeat = (item) => {
-    // console.warn(item.name.slice(1, item.name.length - 1));
+    // console.warn("item: " + item.price);
+    // console.warn("item1: " + FirstFloor[1].price);
+    if (item.status === 2) {
+      Alert.alert(
+        "Invalid Seat!",
+        "This seat is being selected by other people"
+      );
+    }
     let arrayResult = [];
     if (item.status === 0 && item.name.slice(1, item.name.length - 1) === "1") {
       FirstFloor.forEach((seat, index) => {
         seat.name !== item.name
           ? arrayResult.push(seat)
           : arrayResult.push({
+              ...item,
               name: item.name,
               status: 1,
             });
@@ -94,6 +118,7 @@ const ChooseSeat = ({ navigation, route }) => {
         seat.name !== item.name
           ? arrayResult.push(seat)
           : arrayResult.push({
+              ...item,
               name: item.name,
               status: 0,
             });
@@ -104,7 +129,7 @@ const ChooseSeat = ({ navigation, route }) => {
         nameSeats: [...dataModalSeat.nameSeats].filter((itemInSeats, index) => {
           return item.name !== itemInSeats;
         }),
-        price: dataModalSeat.price * item.price,
+        price: parseInt(dataModalSeat.price - item.price),
       });
     } else if (
       item.status === 0 &&
@@ -114,6 +139,7 @@ const ChooseSeat = ({ navigation, route }) => {
         seat.name !== item.name
           ? arrayResult.push(seat)
           : arrayResult.push({
+              ...item,
               name: item.name,
               status: 1,
             });
@@ -132,6 +158,7 @@ const ChooseSeat = ({ navigation, route }) => {
         seat.name !== item.name
           ? arrayResult.push(seat)
           : arrayResult.push({
+              ...item,
               name: item.name,
               status: 0,
             });
@@ -168,7 +195,8 @@ const ChooseSeat = ({ navigation, route }) => {
       handleClose();
       setShowModalSeat(false);
     }
-    console.warn(dataModalSeat);
+    // console.warn(dataModalSeat);
+    // console.warn(typeof dataModalSeat.price);
   }, [FirstFloor, SecondFloor]);
 
   // animation
@@ -220,12 +248,6 @@ const ChooseSeat = ({ navigation, route }) => {
   //   console.warn(state.animation)
   // }, [state.animation])
 
-  const [showModalSeat, setShowModalSeat] = useState(false);
-  const [dataModalSeat, setDataModalSeat] = useState({
-    numberSeat: 0,
-    nameSeats: [],
-    price: 0,
-  });
   return (
     <View
       style={[
@@ -244,9 +266,11 @@ const ChooseSeat = ({ navigation, route }) => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          height: "auto",
+          // height:
+          //   Dimensions.get("screen").height -
+          //   Dimensions.get("screen").height / 8.5,
           // backgroundColor: "red",
-          marginBottom: heightBottomSheet,
+          // marginBottom: heightBottomSheet,
         }}
         horizontal={false}
         nestedScrollEnabled={true}
@@ -285,15 +309,30 @@ const ChooseSeat = ({ navigation, route }) => {
             >
               <View
                 style={{
-                  height: shapeSeatTop,
+                  height: shapeSeatTop + 15,
                   width: shapeSeatTop,
                   backgroundColor: "transparent",
                   marginRight: marginSeat,
                   borderWidth: 1.5,
                   borderColor: colors.blue,
                   borderRadius: 7,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
                 }}
-              ></View>
+              >
+                <View
+                  style={{
+                    height: 15,
+                    width: "70%",
+                    marginBottom: 6,
+                    borderWidth: 1,
+                    borderColor: colors.blue,
+                    borderRadius: 5,
+                  }}
+                ></View>
+              </View>
               <Text
                 style={{
                   fontSize: 17,
@@ -317,16 +356,34 @@ const ChooseSeat = ({ navigation, route }) => {
             >
               <View
                 style={{
-                  height: shapeSeatTop,
+                  height: shapeSeatTop + 15,
                   width: shapeSeatTop,
                   // backgroundColor: "rgb(0 ,0, 0)",
                   // opacity: 0.5,
-                  backgroundColor: backgroundColorReversed,
+                  backgroundColor: colors.blue,
                   marginRight: marginSeat,
                   textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  borderRadius: 7,
                 }}
               >
-                <MaterialIcons name="done" style={stylesItem.icon} />
+                <MaterialIcons
+                  name="done"
+                  style={[stylesItem.icon, { fontSize: 22, marginBottom: 5 }]}
+                />
+                <View
+                  style={{
+                    height: 15,
+                    width: "70%",
+                    marginBottom: 6,
+                    borderWidth: 1,
+                    borderColor: "white",
+                    borderRadius: 5,
+                  }}
+                ></View>
               </View>
               <Text
                 style={{
@@ -362,13 +419,30 @@ const ChooseSeat = ({ navigation, route }) => {
             >
               <View
                 style={{
-                  height: shapeSeatTop,
+                  height: shapeSeatTop + 15,
                   width: shapeSeatTop,
-                  backgroundColor: colors.blue,
+                  backgroundColor: "transparent",
                   marginRight: marginSeat,
                   borderRadius: 7,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  borderWidth: 1.5,
+                  borderColor: colorSelecting,
                 }}
-              ></View>
+              >
+                <View
+                  style={{
+                    height: 15,
+                    width: "70%",
+                    marginBottom: 6,
+                    borderWidth: 1,
+                    borderColor: colorSelecting,
+                    borderRadius: 5,
+                  }}
+                ></View>
+              </View>
               <Text
                 style={{
                   fontSize: 17,
@@ -392,13 +466,32 @@ const ChooseSeat = ({ navigation, route }) => {
             >
               <View
                 style={{
-                  height: shapeSeatTop,
+                  height: shapeSeatTop + 15,
                   width: shapeSeatTop,
                   backgroundColor: backgroundColorReversed,
                   marginRight: marginSeat,
+                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  borderRadius: 7,
                 }}
               >
-                <Ionicons name="ios-remove-outline" style={[stylesItem.icon]} />
+                <FontAwesome
+                  name="remove"
+                  style={[stylesItem.icon, { fontSize: 22, marginBottom: 5 }]}
+                />
+                <View
+                  style={{
+                    height: 15,
+                    width: "70%",
+                    marginBottom: 6,
+                    borderWidth: 1,
+                    borderColor: "white",
+                    borderRadius: 5,
+                  }}
+                ></View>
               </View>
               <Text
                 style={{
@@ -464,11 +557,11 @@ const ChooseSeat = ({ navigation, route }) => {
           <Image
             source={require("../../assets/Image/Seat/icons8-steering-wheel-96.png")}
             style={{
-              height: shapeSeat,
-              width: shapeSeat,
+              height: shapeWidthSeat,
+              width: shapeWidthSeat,
               objectFit: "cover",
               // alignSelf: "center",
-              marginLeft: marginSeat * 2.7,
+              marginLeft: marginSeat * 3,
             }}
           />
           <View
@@ -543,8 +636,8 @@ const ChooseSeat = ({ navigation, route }) => {
                 return (
                   <TouchableOpacity
                     style={{
-                      height: shapeSeat,
-                      width: shapeSeat,
+                      height: shapeHeightSeat,
+                      width: shapeWidthSeat,
                       // backgroundColor:
                       //   item.status === 0
                       //     ? "red"
@@ -555,11 +648,15 @@ const ChooseSeat = ({ navigation, route }) => {
                       //     : "yellow",
                       margin: marginSeat,
                       borderColor:
-                        item.status === 0 ? colors.blue : "transparent",
+                        item.status === 0
+                          ? colors.blue
+                          : item.status === 2
+                          ? colorSelecting
+                          : "transparent",
                       backgroundColor:
                         item.status === 1
                           ? colors.blue
-                          : item.status === 2 || item.status === 3
+                          : item.status === 3
                           ? backgroundColorReversed
                           : "transparent",
                       borderWidth: 1.5,
@@ -572,31 +669,30 @@ const ChooseSeat = ({ navigation, route }) => {
                     onPress={() => {
                       hanldeClickSeat(item);
                     }}
-                    disabled={
-                      item.status === 2
-                        ? true
-                        : item.status === 3
-                        ? true
-                        : false
-                    }
+                    disabled={item.status === 3 ? true : false}
                   >
-                    {item.status === 2 ? (
+                    {item.status === 3 ? (
+                      <FontAwesome name="remove" style={stylesItem.icon} />
+                    ) : item.status === 1 ? (
                       <MaterialIcons name="done" style={stylesItem.icon} />
-                    ) : item.status === 3 ? (
-                      <Ionicons
-                        name="ios-remove-outline"
-                        style={stylesItem.icon}
-                      />
                     ) : (
                       ""
                     )}
                     <View
                       style={{
-                        height: "30%",
+                        height: 15,
                         width: "70%",
                         marginBottom: 6,
                         borderWidth: 1,
-                        borderColor: colors.blue,
+                        borderColor:
+                          item.status === 0
+                            ? colors.blue
+                            : item.status === 2
+                            ? colorSelecting
+                            : item.status === 3 || item.status === 1
+                            ? "white"
+                            : "transparent",
+                        borderRadius: 5,
                       }}
                     ></View>
                   </TouchableOpacity>
@@ -606,7 +702,7 @@ const ChooseSeat = ({ navigation, route }) => {
             <View
               style={{
                 height:
-                  shapeSeat * (FirstFloor.length / 2) +
+                  shapeHeightSeat * (FirstFloor.length / 2) +
                   marginSeat * ((FirstFloor.length / 2 - 1) * 2),
                 width: 2,
                 backgroundColor: "rgb(0, 0, 0)",
@@ -624,8 +720,8 @@ const ChooseSeat = ({ navigation, route }) => {
                 return (
                   <TouchableOpacity
                     style={{
-                      height: shapeSeat,
-                      width: shapeSeat,
+                      height: shapeHeightSeat,
+                      width: shapeWidthSeat,
                       // backgroundColor:
                       //   item.status === 0
                       //     ? "red"
@@ -636,41 +732,53 @@ const ChooseSeat = ({ navigation, route }) => {
                       //     : "yellow",
                       margin: marginSeat,
                       borderColor:
-                        item.status === 0 ? colors.blue : "transparent",
+                        item.status === 0
+                          ? colors.blue
+                          : item.status === 2
+                          ? colorSelecting
+                          : "transparent",
                       backgroundColor:
                         item.status === 1
                           ? colors.blue
-                          : item.status === 2 || item.status === 3
+                          : item.status === 3
                           ? backgroundColorReversed
                           : "transparent",
                       borderWidth: 1.5,
                       borderRadius: 10,
                       display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "center",
+                      flexDirection: "column",
+                      justifyContent: "flex-end",
                       alignItems: "center",
                     }}
                     onPress={() => {
                       hanldeClickSeat(item);
                     }}
-                    disabled={
-                      item.status === 2
-                        ? true
-                        : item.status === 3
-                        ? true
-                        : false
-                    }
+                    disabled={item.status === 3 ? true : false}
                   >
-                    {item.status === 2 ? (
+                    {item.status === 3 ? (
+                      <FontAwesome name="remove" style={stylesItem.icon} />
+                    ) : item.status === 1 ? (
                       <MaterialIcons name="done" style={stylesItem.icon} />
-                    ) : item.status === 3 ? (
-                      <Ionicons
-                        name="ios-remove-outline"
-                        style={stylesItem.icon}
-                      />
                     ) : (
                       ""
                     )}
+                    <View
+                      style={{
+                        height: 15,
+                        width: "70%",
+                        marginBottom: 6,
+                        borderWidth: 1,
+                        borderColor:
+                          item.status === 0
+                            ? colors.blue
+                            : item.status === 2
+                            ? colorSelecting
+                            : item.status === 3 || item.status === 1
+                            ? "white"
+                            : "transparent",
+                        borderRadius: 5,
+                      }}
+                    ></View>
                   </TouchableOpacity>
                 );
               }}

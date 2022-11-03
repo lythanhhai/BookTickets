@@ -55,23 +55,26 @@ const SearchLocation = ({ item, navigation, route }) => {
   const getListLocation = () => {
     axios({
       method: "GET",
-      url: "https://provinces.open-api.vn/api/?depth=3",
+      url: "https://book-ticket-doan.herokuapp.com/api/station",
     })
       .then((res) => {
         let listResponse = res.data;
         // console.warn(res)
         let listAll = [];
+        // listResponse.forEach((item, index) => {
+        //   listAll.push(item.name);
+        //   item.districts.forEach((itemDist, indexDist) => {
+        //     listAll.push(itemDist.name + " - " + item.name);
+        //     // itemDist.wards.forEach((itemWard, indexWard) => {
+        //     //   listAll.push(itemWard.name + " - " + itemDist.name + " - " + item.name);
+        //     // })
+        //   });
+        // });
         listResponse.forEach((item, index) => {
-          listAll.push(item.name);
-          item.districts.forEach((itemDist, indexDist) => {
-            listAll.push(itemDist.name + " - " + item.name);
-            // itemDist.wards.forEach((itemWard, indexWard) => {
-            //   listAll.push(itemWard.name + " - " + itemDist.name + " - " + item.name);
-            // })
+            listAll.push(item.nameStation);
           });
-        });
         setListLocation(listAll);
-        // console.warn(listAll)
+        // console.warn(listResponse)
       })
       .catch((err) => console.warn(err));
   };
@@ -121,7 +124,7 @@ const SearchLocation = ({ item, navigation, route }) => {
         data: listSearchProvince,
       },
       {
-        title: "District",
+        title: "Municipal City",
         data: listSearchDistrict,
       },
     ]);
