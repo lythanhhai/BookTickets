@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import authenReducer from "../../redux/reducers/authenReducer";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import ExpoFastImage from "expo-fast-image";
 
 const styles = StyleSheet.create({});
 
@@ -26,7 +27,7 @@ const Header = ({
 }) => {
   const tailwind = useTailwind();
   const User = useSelector((state) => state.authenReducer);
-  const location = useSelector(state => state.getLocationReducer)
+  const location = useSelector((state) => state.getLocationReducer);
   var title;
   var pl = 0;
   var loginOrEdit;
@@ -104,6 +105,19 @@ const Header = ({
             marginRight: 10,
           }}
         ></Image>
+        {/* <ExpoFastImage
+          uri={require("../../assets/Image/account.png")} // image address
+          cacheKey={3} // could be a unque id
+          style={{
+            height: 30,
+            width: 30,
+            objectFit: "cover",
+            resizeMode: "contain",
+            marginRight: 10,
+          }} // your custom style object
+          // any supported props by Image
+          // source={require("../../assets/Image/account.png")}
+        /> */}
         <Text style={{ color: "white", fontSize: 16 }}>My account</Text>
       </View>
     );
@@ -243,9 +257,9 @@ const Header = ({
           >
             <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
           </TouchableOpacity>
-          <Text style={{ color: "white", fontSize: 14, }}>Choose Seat</Text>
+          <Text style={{ color: "white", fontSize: 14 }}>Choose Seat</Text>
         </View>
-        
+
         {/* <TouchableOpacity
           onPress={() => {
             // close
@@ -260,6 +274,85 @@ const Header = ({
             {!showChangeModal ? "Change" : "Close"}
           </Text>
         </TouchableOpacity> */}
+      </View>
+    );
+  } else if (whichScreen === "PickupPoint") {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.replace("ChooseSeat");
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+          <Text style={{ color: "white", fontSize: 14 }}>Pick-up point</Text>
+        </View>
+
+        {/* <TouchableOpacity
+          onPress={() => {
+            // close
+            if (showChangeModal) {
+              setShowChangeModal(false);
+            } else {
+              setShowChangeModal(true);
+            }
+          }}
+        >
+          <Text style={[tailwind("underline"), { color: "white" }]}>
+            {!showChangeModal ? "Change" : "Close"}
+          </Text>
+        </TouchableOpacity> */}
+      </View>
+    );
+  } else if (whichScreen === "DropoffPoint") {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.replace("PickupPoint");
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+          <Text style={{ color: "white", fontSize: 14 }}>Drop-off point</Text>
+        </View>
       </View>
     );
   }

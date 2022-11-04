@@ -1,0 +1,33 @@
+import axios from "axios";
+import { baseUrl } from "./config";
+
+const getListLocation = (setListLocation, setLoading) => {
+  setLoading(true)
+  axios({
+    method: "GET",
+    url: `${baseUrl}station`,
+  })
+    .then((res) => {
+      let listResponse = res.data;
+      // console.warn(res)
+      let listAll = [];
+      // listResponse.forEach((item, index) => {
+      //   listAll.push(item.name);
+      //   item.districts.forEach((itemDist, indexDist) => {
+      //     listAll.push(itemDist.name + " - " + item.name);
+      //     // itemDist.wards.forEach((itemWard, indexWard) => {
+      //     //   listAll.push(itemWard.name + " - " + itemDist.name + " - " + item.name);
+      //     // })
+      //   });
+      // });
+      listResponse.forEach((item, index) => {
+        listAll.push(item.nameStation);
+      });
+      setListLocation(listAll);
+      // console.warn(listResponse)
+      setLoading(false)
+    })
+    .catch((err) => console.warn(err));
+};
+
+export { getListLocation };

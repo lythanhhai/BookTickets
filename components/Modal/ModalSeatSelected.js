@@ -50,6 +50,9 @@ const ModalSeatSelected = ({
   heightBottomSheet,
   dataModalSeat
 }) => {
+  const handleClickChooseSeat = () => {
+    navigation.navigate("PickupPoint")
+  }
   return (
     <View
       style={{
@@ -122,7 +125,9 @@ const ModalSeatSelected = ({
           borderRadius: 6,
           // marginTop: 0,
         }}
-        onPress={() => {}}
+        onPress={() => {
+          handleClickChooseSeat()
+        }}
       >
         <Text
           style={{

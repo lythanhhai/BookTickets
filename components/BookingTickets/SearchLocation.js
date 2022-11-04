@@ -7,6 +7,7 @@ import {
   FlatList,
   ScrollView,
   SectionList,
+  ActivityIndicator,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import {
@@ -31,6 +32,8 @@ import {
   getLocationStart,
   getLocationStop,
 } from "../../redux/actions/getLocationAction";
+import { getListLocation } from "../../API/ApiGetStation";
+import Loading from "../Loading/Loading";
 
 const styles = StyleSheet.create({
   background: {
@@ -52,35 +55,9 @@ const SearchLocation = ({ item, navigation, route }) => {
   const [listSearchProvince, setListSearchProvince] = useState([]);
   const [listSearchDistrict, setListSearchDistrict] = useState([]);
   const [Data, setData] = useState([]);
-  const getListLocation = () => {
-    axios({
-      method: "GET",
-      url: "https://book-ticket-doan.herokuapp.com/api/station",
-    })
-      .then((res) => {
-        let listResponse = res.data;
-        // console.warn(res)
-        let listAll = [];
-        // listResponse.forEach((item, index) => {
-        //   listAll.push(item.name);
-        //   item.districts.forEach((itemDist, indexDist) => {
-        //     listAll.push(itemDist.name + " - " + item.name);
-        //     // itemDist.wards.forEach((itemWard, indexWard) => {
-        //     //   listAll.push(itemWard.name + " - " + itemDist.name + " - " + item.name);
-        //     // })
-        //   });
-        // });
-        listResponse.forEach((item, index) => {
-            listAll.push(item.nameStation);
-          });
-        setListLocation(listAll);
-        // console.warn(listResponse)
-      })
-      .catch((err) => console.warn(err));
-  };
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    getListLocation();
+    getListLocation(setListLocation, setLoading);
   }, []);
 
   const searchALocation = (value) => {
@@ -205,7 +182,15 @@ const SearchLocation = ({ item, navigation, route }) => {
             },
         ]}
       >
-        {listSearchDistrict.length === 0 && listSearchProvince.length === 0 ? (
+        {loading ? (
+          <View style={[{}]}>
+            {/* <ActivityIndicator />
+            <ActivityIndicator size="large" />
+            <ActivityIndicator size="small" color="#0000ff" /> */}
+            <ActivityIndicator size="large" color={colors.blue} />
+          </View>
+        ) : listSearchDistrict.length === 0 &&
+          listSearchProvince.length === 0 ? (
           <Text
             style={[
               tailwind("text-sm flex justify-center items-center text-center"),

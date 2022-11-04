@@ -37,6 +37,8 @@ import { getTokenAferAuthen } from "./utils/getJWT";
 import authenReducer from "./redux/reducers/authenReducer";
 import ChooseTrip from "./screens/BookingTickets/ChooseTrip";
 import ChooseSeat from "./screens/BookingTickets/ChooseSeat";
+import PickupPoint from "./screens/BookingTickets/PickupPoint";
+import DropoffPoint from "./screens/BookingTickets/DropoffPoint";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -248,6 +250,12 @@ export default function App() {
                 </Stack.Screen>
                 <Stack.Screen name="ChooseSeat">
                   {(props) => <ChooseSeat {...props} />}
+                </Stack.Screen>
+                <Stack.Screen name="PickupPoint">
+                  {(props) => <PickupPoint {...props} />}
+                </Stack.Screen>
+                <Stack.Screen name="DropoffPoint">
+                  {(props) => <DropoffPoint {...props} />}
                 </Stack.Screen>
               </Stack.Group>
               {false ? (

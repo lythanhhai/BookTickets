@@ -50,7 +50,17 @@ const styles = StyleSheet.create({
 const BookingTickets = ({ navigation, route }) => {
   const tailwind = useTailwind();
   // const [list, setList] = useState([...Data]);
-  const [list, setList] = useState([]);
+  const [list, setList] = useState([
+    {
+      image:
+        "https://storage.googleapis.com/vex-config/cms-tool/destination/images/25/img_hero.png",
+      departLocation: "Đà Nẵng",
+      arriveLocation: "Quảng Trị",
+      date: "19/10/2022",
+      price: "150.000vnd",
+      originalPrice: "300.000vnd",
+    },
+  ]);
   const [checkClickSearch, setCheckClickSearch] = useState(false);
   // useEffect(() => {
   //   console.warn(route.params);
@@ -60,7 +70,7 @@ const BookingTickets = ({ navigation, route }) => {
     // console.warn("aaaa");
     if (checkClickSearch) {
       if (list.length === 5) {
-        var fourItem = [...list].slice(0, [...list].length - 1)
+        var fourItem = [...list].slice(0, [...list].length - 1);
         setList([
           {
             departLocation: location.startPoint,
@@ -123,7 +133,11 @@ const BookingTickets = ({ navigation, route }) => {
         >
           Recent searches
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("PickupPoint");
+          }}
+        >
           <Text
             style={{
               fontSize: 13,
