@@ -11,14 +11,11 @@ import { useState, useCallback, useEffect } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import Icon from "react-native-vector-icons/AntDesign";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { DatePickerModal } from "react-native-paper-dates";
-import { registerTranslation } from "react-native-paper-dates";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import setTabStyleVisibility from "../../utils/setVisible";
 import { useDispatch, useSelector } from "react-redux";
-import { getLocationReducer } from "../../redux/reducers/getLocationReducer";
 import { swapLocation, getDate } from "../../redux/actions/getLocationAction";
 import colors from "../../constants/colors";
 

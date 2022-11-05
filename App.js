@@ -37,6 +37,9 @@ import { getTokenAferAuthen } from "./utils/getJWT";
 import authenReducer from "./redux/reducers/authenReducer";
 import ChooseTrip from "./screens/BookingTickets/ChooseTrip";
 import ChooseSeat from "./screens/BookingTickets/ChooseSeat";
+import PickupPoint from "./screens/BookingTickets/PickupPoint";
+import DropoffPoint from "./screens/BookingTickets/DropoffPoint";
+import InforDetail from "./screens/BookingTickets/InforDetail";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -237,17 +240,43 @@ export default function App() {
                   name="ChooseTrip"
                   options={{
                     gestureEnabled: false,
-                    // headerShown: false,
-                    // headerStyle: {
-                    //   backgroundColor: colors.blue,
-                    // },
-                    // headerTintColor: "#fff",
                   }}
                 >
                   {(props) => <ChooseTrip {...props} />}
                 </Stack.Screen>
-                <Stack.Screen name="ChooseSeat">
+                <Stack.Screen
+                  name="ChooseSeat"
+                  options={{
+                    gestureEnabled: false,
+                  }}
+                >
                   {(props) => <ChooseSeat {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name="PickupPoint"
+                  options={{
+                    gestureEnabled: false,
+                  }}
+                >
+                  {(props) => <PickupPoint {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name="DropoffPoint"
+                  options={{
+                    gestureEnabled: false,
+                  }}
+                >
+                  {(props) => <DropoffPoint {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name="InforDetail"
+                  options={
+                    {
+                      // gestureEnabled: false,
+                    }
+                  }
+                >
+                  {(props) => <InforDetail {...props} />}
                 </Stack.Screen>
               </Stack.Group>
               {false ? (

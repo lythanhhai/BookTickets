@@ -4,18 +4,14 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  Button,
   TouchableOpacity,
   TextInput,
   Image,
-  BackHandler,
-  Alert,
   ScrollView,
   Platform,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { useTailwind } from "tailwind-rn";
-import Icon from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import ModalCode from "../Modal/ModalCode";
 import colors from "../../constants/colors";
@@ -943,9 +939,7 @@ const Register = ({ navigation, route }) => {
               firebaseConfig={firebaseConfig}
               androidHardwareAccelerationDisabled={true}
               // androidLayerType="software"
-              attemptInvisibleVerification={
-                Platform.OS === "ios" ? true : true
-              }
+              attemptInvisibleVerification={Platform.OS === "ios" ? true : true}
               // appVerificationDisabledForTesting={false}
             />
             {/* {attemptInvisibleVerification && <FirebaseRecaptchaBanner />} */}
@@ -989,7 +983,7 @@ const Register = ({ navigation, route }) => {
                 <Text style={{ color: "rgb(50,100,255)" }}>Sign In</Text>
               </TouchableOpacity>
             </View>
-          {/* {true && <FirebaseRecaptchaBanner />} */}
+            {/* {true && <FirebaseRecaptchaBanner />} */}
           </View>
           {/* <ModalCode
             modalVisible={modalVisible}

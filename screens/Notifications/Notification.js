@@ -7,16 +7,10 @@ import {
   FlatList,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { useState } from "react";
 import Header from "../../components/Header/Header";
-import SearchFrame from "../../components/BookingTickets/SearchFrame";
-import { registerTranslation } from "react-native-paper-dates";
-import data from "../../constants/virtualDataRecent";
-import Icon from "react-native-vector-icons/AntDesign";
-import Entypo from "react-native-vector-icons/Entypo";
-import colors from "../../constants/colors";
 import styleGlobal from "../../constants/styleGlobal";
 import EmptyNotification from "../../components/Notification/EmptyNotification";
+import * as screenName from "../../constants/nameScreen";
 
 const styles = StyleSheet.create(styleGlobal);
 
@@ -26,7 +20,10 @@ const Notification = ({ item, navigation }) => {
   return (
     <View style={styles.backgroundBottom}>
       <View style={[styles.background]}>
-        <Header whichScreen={3} navigation={navigation} />
+        <Header
+          whichScreen={screenName.tabNotificationScreen}
+          navigation={navigation}
+        />
         <EmptyNotification />
       </View>
     </View>

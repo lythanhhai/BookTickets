@@ -8,8 +8,6 @@ import {
   Button,
   TextInput,
 } from "react-native";
-import { useState, useEffect, useRef } from "react";
-import RBSheet from "react-native-raw-bottom-sheet";
 
 import colors from "../../constants/colors";
 
@@ -48,8 +46,11 @@ const ModalSeatSelected = ({
   route,
   showModalSeat,
   heightBottomSheet,
-  dataModalSeat
+  dataModalSeat,
 }) => {
+  const handleClickChooseSeat = () => {
+    navigation.navigate("PickupPoint");
+  };
   return (
     <View
       style={{
@@ -100,11 +101,7 @@ const ModalSeatSelected = ({
           <Text>{dataModalSeat.numberSeat} seat selected</Text>
           <Text>
             {dataModalSeat.nameSeats.map((item, index) => {
-              if (
-                index ===
-                dataModalSeat.nameSeats.length -
-                  1
-              ) {
+              if (index === dataModalSeat.nameSeats.length - 1) {
                 return dataModalSeat.nameSeats[index];
               }
               return `${dataModalSeat.nameSeats[index]}, `;
@@ -122,7 +119,9 @@ const ModalSeatSelected = ({
           borderRadius: 6,
           // marginTop: 0,
         }}
-        onPress={() => {}}
+        onPress={() => {
+          handleClickChooseSeat();
+        }}
       >
         <Text
           style={{
