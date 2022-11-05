@@ -9,18 +9,7 @@ import {
   SectionList,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-} from "react";
-import Header from "../../components/Header/Header";
-import SearchFrame from "../../components/BookingTickets/SearchFrame";
-import { registerTranslation } from "react-native-paper-dates";
-import data from "../../constants/virtualDataRecent";
-import Icon from "react-native-vector-icons/AntDesign";
+import { useState } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
 import colors from "../../constants/colors";
 import { TextInput } from "react-native-paper";
@@ -217,11 +206,8 @@ const MenuFunction = ({ item, navigation, route }) => {
         horizontal={false}
         renderItem={({ item }) => {
           if (!User.accessToken && item.title === "Log out") {
-              return <></>
-          }
-          else 
-          {
-
+            return <></>;
+          } else {
             return (
               <TouchableOpacity
                 style={{

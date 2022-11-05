@@ -2,27 +2,16 @@ import {
   View,
   StyleSheet,
   Text,
-  ScrollView,
   Dimensions,
   TouchableOpacity,
-  Image,
-  VirtualizedList,
-  Animated,
-  Alert,
   FlatList,
 } from "react-native";
 import React from "react";
 import styleGlobal from "../../constants/styleGlobal";
 import Header from "../../components/Header/Header";
-import { floor1, floor2 } from "../../constants/DataSeat";
-import colors from "../../constants/colors";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState, useEffect } from "react";
-import RBSheet from "react-native-raw-bottom-sheet";
-import { useRef } from "react";
 import CardPoint from "../../components/BookingTickets/CardPoint";
+import * as screenName from "../../constants/nameScreen";
 
 const styles = StyleSheet.create(styleGlobal);
 const widthDevice = Dimensions.get("screen").width;
@@ -31,6 +20,9 @@ const heightModalBottom = 130;
 const DropoffPoint = ({ navigation, route }) => {
   const [data, setData] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
   const [itemChosen, setItemChosen] = useState(0);
+  const handleChooseDropoff = () => {
+    navigation.replace("InforDetail");
+  };
   return (
     <View
       style={{
@@ -40,7 +32,10 @@ const DropoffPoint = ({ navigation, route }) => {
       }}
     >
       <View style={[styles.background]}>
-        <Header whichScreen={"DropoffPoint"} navigation={navigation} />
+        <Header
+          whichScreen={screenName.dropoffPointScreen}
+          navigation={navigation}
+        />
       </View>
       <View
         style={{
@@ -108,7 +103,9 @@ const DropoffPoint = ({ navigation, route }) => {
             borderRadius: 6,
             // marginTop: 0,
           }}
-          onPress={() => {}}
+          onPress={() => {
+            handleChooseDropoff();
+          }}
         >
           <Text
             style={{

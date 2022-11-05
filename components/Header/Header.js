@@ -7,14 +7,22 @@ import {
   Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { getTokenAferAuthen } from "../../utils/getJWT";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import authenReducer from "../../redux/reducers/authenReducer";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import ExpoFastImage from "expo-fast-image";
+import {
+  tabBookTicketScreen,
+  tabMyAccountScreen,
+  tabMyTicketScreen,
+  tabNotificationScreen,
+  pickupPointScreen,
+  dropoffPointScreen,
+  chooseSeatScreen,
+  chooseTripScreen,
+  inforDetailScreen,
+} from "../../constants/nameScreen";
 
 const styles = StyleSheet.create({});
 
@@ -33,7 +41,7 @@ const Header = ({
   var loginOrEdit;
 
   // Booking Tickets screen
-  if (whichScreen === 1) {
+  if (whichScreen === tabBookTicketScreen) {
     title = (
       <Text style={{ color: "white", fontSize: 16 }}>Booking Tickets</Text>
     );
@@ -55,7 +63,7 @@ const Header = ({
           }
         }}
       >
-        {whichScreen === 3 ? (
+        {whichScreen === tabNotificationScreen ? (
           ""
         ) : (
           <Text style={[tailwind("underline"), { color: "white" }]}>
@@ -75,17 +83,17 @@ const Header = ({
     );
   }
   // My ticket screen
-  else if (whichScreen === 2) {
+  else if (whichScreen === tabMyTicketScreen) {
     title = <Text style={{ color: "white", fontSize: 16 }}>My Tickets</Text>;
     pl = Dimensions.get("screen").width / 17;
   }
   // Notification screen
-  else if (whichScreen === 3) {
+  else if (whichScreen === tabNotificationScreen) {
     title = <Text style={{ color: "white", fontSize: 16 }}>Notifications</Text>;
     pl = Dimensions.get("screen").width / 17;
   }
   // My account screen
-  else if (whichScreen === 4) {
+  else if (whichScreen === tabMyAccountScreen) {
     title = (
       <View
         style={{
@@ -139,7 +147,7 @@ const Header = ({
           }
         }}
       >
-        {whichScreen === 3 ? (
+        {whichScreen === tabNotificationScreen ? (
           ""
         ) : (
           <Text style={[tailwind("underline"), { color: "white" }]}>
@@ -159,7 +167,7 @@ const Header = ({
     );
   }
   // ChooseTrip screen
-  else if (whichScreen === "ChooseTrip") {
+  else if (whichScreen === chooseTripScreen) {
     title = (
       <View
         style={tailwind(
@@ -229,7 +237,7 @@ const Header = ({
         </TouchableOpacity>
       </View>
     );
-  } else if (whichScreen === "ChooseSeat") {
+  } else if (whichScreen === chooseSeatScreen) {
     title = (
       <View
         style={tailwind(
@@ -249,7 +257,7 @@ const Header = ({
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.replace("ChooseTrip");
+              navigation.replace(chooseTripScreen);
             }}
             style={{
               marginRight: 4,
@@ -276,7 +284,7 @@ const Header = ({
         </TouchableOpacity> */}
       </View>
     );
-  } else if (whichScreen === "PickupPoint") {
+  } else if (whichScreen === pickupPointScreen) {
     title = (
       <View
         style={tailwind(
@@ -296,7 +304,7 @@ const Header = ({
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.replace("ChooseSeat");
+              navigation.replace(chooseSeatScreen);
             }}
             style={{
               marginRight: 4,
@@ -323,7 +331,7 @@ const Header = ({
         </TouchableOpacity> */}
       </View>
     );
-  } else if (whichScreen === "DropoffPoint") {
+  } else if (whichScreen === dropoffPointScreen) {
     title = (
       <View
         style={tailwind(
@@ -343,7 +351,7 @@ const Header = ({
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.replace("PickupPoint");
+              navigation.replace(pickupPointScreen);
             }}
             style={{
               marginRight: 4,
@@ -352,6 +360,40 @@ const Header = ({
             <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
           </TouchableOpacity>
           <Text style={{ color: "white", fontSize: 14 }}>Drop-off point</Text>
+        </View>
+      </View>
+    );
+  } else if (whichScreen === inforDetailScreen) {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.replace(dropoffPointScreen);
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+          <Text style={{ color: "white", fontSize: 14 }}>
+            Passenger details
+          </Text>
         </View>
       </View>
     );

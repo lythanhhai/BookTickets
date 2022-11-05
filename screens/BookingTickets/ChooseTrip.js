@@ -12,13 +12,15 @@ import { useTailwind } from "tailwind-rn/dist";
 import { useState } from "react";
 import Header from "../../components/Header/Header";
 import SearchFrame from "../../components/BookingTickets/SearchFrame";
-import { registerTranslation } from "react-native-paper-dates";
 import colors from "../../constants/colors";
 
 import styleGlobal from "../../constants/styleGlobal";
 import CardTrip from "../../components/BookingTickets/CardTrip";
-import { useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import * as screenName from "../../constants/nameScreen";
+import RBSheet from "react-native-raw-bottom-sheet";
+import { useRef } from "react";
+import ModalTrip from "../../components/Modal/ModalTrip";
 
 const styles = StyleSheet.create(styleGlobal);
 const stylesFilter = StyleSheet.create({
@@ -65,6 +67,7 @@ const ChooseTrip = ({ navigation, route }) => {
   const [Data, setData] = useState([1, 2, 3, 4, 5, 6]);
   const [showChangeModal, setShowChangeModal] = useState(false);
   const [showModalFilter, setShowModalFilter] = useState(false);
+  const RBSheetRefTrip = useRef();
   // useEffect(() => {
   //   setShowChangeModal(false)
   // }, [route.params.showModal])
@@ -79,7 +82,7 @@ const ChooseTrip = ({ navigation, route }) => {
     >
       <View style={[styles.background]}>
         <Header
-          whichScreen={"ChooseTrip"}
+          whichScreen={screenName.chooseTripScreen}
           navigation={navigation}
           // titleElement={route.params}
           setShowChangeModal={setShowChangeModal}
@@ -158,10 +161,37 @@ const ChooseTrip = ({ navigation, route }) => {
           }
           // style={[tailwind("flex flex-row items-center justify-center"), {height: "100%", width: "100%"}]}
           renderItem={({ item }) => {
-            return <CardTrip item={item} navigation={navigation} />;
+            return (
+              <CardTrip
+                item={item}
+                navigation={navigation}
+                showModalDetailTrip={RBSheetRefTrip}
+              />
+            );
           }}
         ></FlatList>
       </View>
+      <RBSheet
+        ref={RBSheetRefTrip}
+        height={Dimensions.get("screen").height / 1.3}
+        openDuration={250}
+        closeOnDragDown={false}
+        closeOnPressMask={true}
+        customStyles={{
+          wrapper: {
+            // backgroundColor: "transparent"
+          },
+          draggableIcon: {
+            backgroundColor: "rgb(160, 160, 160)",
+          },
+          container: {
+            borderTopRightRadius: 25,
+            borderTopLeftRadius: 25,
+          },
+        }}
+      >
+        <ModalTrip navigation={navigation} route={route} RBSheetRefTrip={RBSheetRefTrip}/>
+      </RBSheet>
       {showChangeModal ? (
         <View
           style={{

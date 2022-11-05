@@ -7,12 +7,6 @@ import {
   Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { getTokenAferAuthen } from "../../utils/getJWT";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import authenReducer from "../../redux/reducers/authenReducer";
-import FastImage from "react-native-fast-image";
 import ImageLoading from "../../assets/Image/loading.gif";
 import ExpoFastImage from "expo-fast-image";
 

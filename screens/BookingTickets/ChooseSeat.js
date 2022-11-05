@@ -6,25 +6,23 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
-  VirtualizedList,
   Animated,
   Alert,
 } from "react-native";
 import React from "react";
 import styleGlobal from "../../constants/styleGlobal";
 import Header from "../../components/Header/Header";
-import { FlatList } from "react-native-gesture-handler";
 import { floor1, floor2 } from "../../constants/DataSeat";
 import colors from "../../constants/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import Entyto from "react-native-vector-icons/Entypo";
 import { useState, useEffect } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useRef } from "react";
 import ModalSeatSelected from "../../components/Modal/ModalSeatSelected";
 import { number } from "yup";
+import * as screenName from "../../constants/nameScreen";
 // import { ScrollView } from 'react-native-virtualized-view'
 
 const widthScreen = Dimensions.get("screen").width;
@@ -326,14 +324,17 @@ const ChooseSeat = ({ navigation, route }) => {
       ]}
     >
       <View style={[styles.background]}>
-        <Header whichScreen={"ChooseSeat"} navigation={navigation} />
+        <Header
+          whichScreen={screenName.chooseSeatScreen}
+          navigation={navigation}
+        />
       </View>
       <ScrollView
         contentContainerStyle={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          alignItems: "flex-start",
+          alignItems: "center",
           // height:
           //   Dimensions.get("screen").height -
           //   Dimensions.get("screen").height / 5,
@@ -346,7 +347,7 @@ const ChooseSeat = ({ navigation, route }) => {
         <View
           style={{
             height: 150,
-            width: widthScreen,
+            width: (widthScreen * 85) / 100,
             display: "flex",
             flexDirection: "row",
             justifyContent: "flex-start",
@@ -362,7 +363,6 @@ const ChooseSeat = ({ navigation, route }) => {
               flexDirection: "column",
               justifyContent: "flex-start",
               alignItems: "center",
-              paddingLeft: marginSeat * 2,
             }}
           >
             <View
@@ -829,7 +829,7 @@ const ChooseSeat = ({ navigation, route }) => {
                 // transform: [{ rotate: "90deg" }],
                 backgroundColor: colors.blue,
                 borderRadius: 20,
-                paddingHorizontal: 15,
+                paddingHorizontal: 25,
                 paddingVertical: 10,
               }}
             >
@@ -839,7 +839,7 @@ const ChooseSeat = ({ navigation, route }) => {
                   fontSize: 16,
                 }}
               >
-                {currentStair !== 1 ? "DOWNSTAIR" : "UPSTAIR"}
+                {currentStair === 1 ? "DOWNSTAIR" : "UPSTAIR"}
               </Text>
             </View>
             <TouchableOpacity

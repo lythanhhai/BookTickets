@@ -2,27 +2,16 @@ import {
   View,
   StyleSheet,
   Text,
-  ScrollView,
   Dimensions,
   TouchableOpacity,
-  Image,
-  VirtualizedList,
-  Animated,
-  Alert,
   FlatList,
 } from "react-native";
 import React from "react";
 import styleGlobal from "../../constants/styleGlobal";
 import Header from "../../components/Header/Header";
-import { floor1, floor2 } from "../../constants/DataSeat";
-import colors from "../../constants/colors";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState, useEffect } from "react";
-import RBSheet from "react-native-raw-bottom-sheet";
-import { useRef } from "react";
 import CardPoint from "../../components/BookingTickets/CardPoint";
+import * as screenName from "../../constants/nameScreen";
 
 const styles = StyleSheet.create(styleGlobal);
 const widthDevice = Dimensions.get("screen").width;
@@ -43,7 +32,10 @@ const PickupPoint = ({ navigation, route }) => {
       }}
     >
       <View style={[styles.background]}>
-        <Header whichScreen={"PickupPoint"} navigation={navigation} />
+        <Header
+          whichScreen={screenName.pickupPointScreen}
+          navigation={navigation}
+        />
       </View>
       <View
         style={{

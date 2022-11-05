@@ -1,11 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import React from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import colors from "../../constants/colors";
 
@@ -62,9 +56,15 @@ const CardPoint = ({ item, isChosen, setItemChosen }) => {
         }}
       >
         {isChosen === item ? (
-          <Feather name="check-circle" style={[styles.iconStart, {
-            color: colors.blue,
-          }]} />
+          <Feather
+            name="check-circle"
+            style={[
+              styles.iconStart,
+              {
+                color: colors.blue,
+              },
+            ]}
+          />
         ) : (
           <Feather name="circle" style={styles.iconStart} />
         )}

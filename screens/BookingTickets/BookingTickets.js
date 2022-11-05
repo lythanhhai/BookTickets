@@ -11,12 +11,12 @@ import { useTailwind } from "tailwind-rn/dist";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import SearchFrame from "../../components/BookingTickets/SearchFrame";
-import { registerTranslation } from "react-native-paper-dates";
 import CardRecent from "../../components/BookingTickets/CardRecent";
 import Data from "../../constants/virtualDataRecent";
 import colors from "../../constants/colors";
 import CardRoute from "../../components/BookingTickets/CardRoute";
 import { useSelector } from "react-redux";
+import * as screenName from "../../constants/nameScreen";
 
 const styles = StyleSheet.create({
   background: {
@@ -102,7 +102,10 @@ const BookingTickets = ({ navigation, route }) => {
       }}
     >
       <View style={[styles.background]}></View>
-      <Header whichScreen={1} navigation={navigation} />
+      <Header
+        whichScreen={screenName.tabBookTicketScreen}
+        navigation={navigation}
+      />
       <View style={[{ paddingTop: 10 }]}>
         <Text style={[{ color: "white", fontSize: 25, fontWeight: "500" }]}>
           Hi you,
@@ -135,7 +138,7 @@ const BookingTickets = ({ navigation, route }) => {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("PickupPoint");
+            navigation.navigate(screenName.inforDetailScreen);
           }}
         >
           <Text
