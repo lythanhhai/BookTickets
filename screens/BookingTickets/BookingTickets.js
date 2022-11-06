@@ -138,7 +138,7 @@ const BookingTickets = ({ navigation, route }) => {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate(screenName.inforDetailScreen);
+            navigation.navigate(screenName.inforTicketScreen);
           }}
         >
           <Text

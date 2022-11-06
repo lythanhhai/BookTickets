@@ -39,8 +39,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const CELL_COUNT = 6;
-
 const ModalSeatSelected = ({
   navigation,
   route,
@@ -54,17 +52,10 @@ const ModalSeatSelected = ({
   return (
     <View
       style={{
-        // position: "absolute",
-        // bottom: 0,
-        // left: 0,
-        // marginTop: 20,
-        height: heightBottomSheet,
         width: "100%",
         backgroundColor: "white",
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
-        // transform: [{ translateY: 0 }],
-        marginBottom: showModalSeat ? 0 : -heightBottomSheet,
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
@@ -75,6 +66,7 @@ const ModalSeatSelected = ({
         borderEndWidth: 1,
         borderStartColor: "rgb(220, 220, 220)",
         borderStartWidth: 1,
+        // backgroundColor: "red"
       }}
     >
       <View
@@ -85,13 +77,14 @@ const ModalSeatSelected = ({
           justifyContent: "space-between",
           alignItems: "center",
           paddingHorizontal: 20,
-          height: "40%",
+          paddingTop: 10,
+          paddingBottom: 30,
         }}
       >
         <View
           style={{
             width: "60%",
-            height: "100%",
+
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -110,31 +103,40 @@ const ModalSeatSelected = ({
         </View>
         <Text>{dataModalSeat.price}VND</Text>
       </View>
-      <TouchableOpacity
-        //   color="#841584"
-        //   accessibilityLabel="Learn more about this purple button"
+      <View
         style={{
-          backgroundColor: "rgb(254,210,61)",
-          width: Dimensions.get("screen").width / 1.1,
-          borderRadius: 6,
-          // marginTop: 0,
-        }}
-        onPress={() => {
-          handleClickChooseSeat();
+          paddingBottom: 30,
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
         }}
       >
-        <Text
+        <TouchableOpacity
+          //   color="#841584"
+          //   accessibilityLabel="Learn more about this purple button"
           style={{
-            color: "black",
-            textAlign: "center",
-            paddingVertical: 15,
-            fontSize: 16,
-            fontWeight: "500",
+            backgroundColor: "rgb(254,210,61)",
+            width: Dimensions.get("screen").width / 1.1,
+            borderRadius: 6,
+          }}
+          onPress={() => {
+            handleClickChooseSeat();
           }}
         >
-          Continue
-        </Text>
-      </TouchableOpacity>
+          <Text
+            style={{
+              color: "black",
+              textAlign: "center",
+              paddingVertical: 15,
+              fontSize: 16,
+              fontWeight: "500",
+            }}
+          >
+            Continue
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

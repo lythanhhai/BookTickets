@@ -40,6 +40,7 @@ import ChooseSeat from "./screens/BookingTickets/ChooseSeat";
 import PickupPoint from "./screens/BookingTickets/PickupPoint";
 import DropoffPoint from "./screens/BookingTickets/DropoffPoint";
 import InforDetail from "./screens/BookingTickets/InforDetail";
+import InforTicket from "./screens/BookingTickets/InforTicket";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -272,11 +273,23 @@ export default function App() {
                   name="InforDetail"
                   options={
                     {
-                      // gestureEnabled: false,
+                      gestureEnabled: false,
                     }
                   }
                 >
                   {(props) => <InforDetail {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name="InforTicket"
+                  options={
+                    {
+                      // gestureEnabled: false,
+                      // headerShown: true,
+                      // backgroundColor: colors.blue
+                    }
+                  }
+                >
+                  {(props) => <InforTicket {...props} />}
                 </Stack.Screen>
               </Stack.Group>
               {false ? (

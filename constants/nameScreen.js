@@ -7,6 +7,7 @@ const chooseSeatScreen = "ChooseSeat";
 const pickupPointScreen = "PickupPoint";
 const dropoffPointScreen = "DropoffPoint";
 const inforDetailScreen = "InforDetail";
+const inforTicketScreen = "InforTicket";
 
 export {
   tabBookTicketScreen,
@@ -18,4 +19,5 @@ export {
   pickupPointScreen,
   dropoffPointScreen,
   inforDetailScreen,
+  inforTicketScreen
 };
