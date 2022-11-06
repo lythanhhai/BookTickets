@@ -60,13 +60,13 @@ const SearchLocation = ({ item, navigation, route }) => {
     listLocation.forEach((item, index) => {
       var itemAfterRemoveAccented = item
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\u0300-\u036f]/gu, "")
         .toLowerCase();
       if (
         itemAfterRemoveAccented.includes(
           value
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[\u0300-\u036f]/gu, "")
             .toLowerCase()
         ) &&
         !itemAfterRemoveAccented.includes("-")
@@ -76,7 +76,7 @@ const SearchLocation = ({ item, navigation, route }) => {
         itemAfterRemoveAccented.includes(
           value
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[\u0300-\u036f]/gu, "")
             .toLowerCase()
         ) &&
         itemAfterRemoveAccented.includes("-")
