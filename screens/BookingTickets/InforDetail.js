@@ -65,7 +65,7 @@ const InforDetail = ({ navigation, route }) => {
               justifyContent: "flex-start",
               alignItems: "center",
               paddingTop: 20,
-              paddingBottom: 30,
+              paddingBottom: Platform.OS === "ios" ? 30 : 70,
             }}
           >
             <TouchableOpacity
@@ -74,7 +74,9 @@ const InforDetail = ({ navigation, route }) => {
                 width: Dimensions.get("screen").width / 1.1,
                 borderRadius: 6,
               }}
-              onPress={() => {}}
+              onPress={() => {
+                navigation.replace(screenName.inforTicketScreen)
+              }}
             >
               <Text
                 style={{

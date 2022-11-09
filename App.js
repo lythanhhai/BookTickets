@@ -41,6 +41,8 @@ import PickupPoint from "./screens/BookingTickets/PickupPoint";
 import DropoffPoint from "./screens/BookingTickets/DropoffPoint";
 import InforDetail from "./screens/BookingTickets/InforDetail";
 import InforTicket from "./screens/BookingTickets/InforTicket";
+import Payment from "./screens/BookingTickets/Payment";
+import * as screenName from "./constants/nameScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -238,7 +240,7 @@ export default function App() {
               </Stack.Group>
               <Stack.Group>
                 <Stack.Screen
-                  name="ChooseTrip"
+                  name={screenName.chooseTripScreen}
                   options={{
                     gestureEnabled: false,
                   }}
@@ -246,7 +248,7 @@ export default function App() {
                   {(props) => <ChooseTrip {...props} />}
                 </Stack.Screen>
                 <Stack.Screen
-                  name="ChooseSeat"
+                  name={screenName.chooseSeatScreen}
                   options={{
                     gestureEnabled: false,
                   }}
@@ -254,15 +256,31 @@ export default function App() {
                   {(props) => <ChooseSeat {...props} />}
                 </Stack.Screen>
                 <Stack.Screen
-                  name="PickupPoint"
+                  name={screenName.pickupPointScreen}
                   options={{
                     gestureEnabled: false,
+                    // title: (
+                    //   <View
+                    //     style={{
+                    //       width: Dimensions.get("screen").width / 1.1,
+                    //       backgroundColor: "red",
+                    //     }}
+                    //   >
+                    //     <Text>aaa</Text>
+                    //   </View>
+                    // ),
+                    // headerShown: true,
+                    // headerStyle: {
+                    //   backgroundColor: colors.blue,
+                    // },
+                    // headerTintColor: "#fff",
+                    // headerBackTitleVisible: false,
                   }}
                 >
                   {(props) => <PickupPoint {...props} />}
                 </Stack.Screen>
                 <Stack.Screen
-                  name="DropoffPoint"
+                  name={screenName.dropoffPointScreen}
                   options={{
                     gestureEnabled: false,
                   }}
@@ -270,26 +288,30 @@ export default function App() {
                   {(props) => <DropoffPoint {...props} />}
                 </Stack.Screen>
                 <Stack.Screen
-                  name="InforDetail"
-                  options={
-                    {
-                      gestureEnabled: false,
-                    }
-                  }
+                  name={screenName.inforDetailScreen}
+                  options={{
+                    gestureEnabled: false,
+                  }}
                 >
                   {(props) => <InforDetail {...props} />}
                 </Stack.Screen>
                 <Stack.Screen
-                  name="InforTicket"
+                  name={screenName.inforTicketScreen}
+                  options={{
+                    gestureEnabled: false,
+                  }}
+                >
+                  {(props) => <InforTicket {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name={screenName.paymentScreen}
                   options={
                     {
                       // gestureEnabled: false,
-                      // headerShown: true,
-                      // backgroundColor: colors.blue
                     }
                   }
                 >
-                  {(props) => <InforTicket {...props} />}
+                  {(props) => <Payment {...props} />}
                 </Stack.Screen>
               </Stack.Group>
               {false ? (

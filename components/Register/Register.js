@@ -124,17 +124,7 @@ const Register = ({ navigation, route }) => {
           !inValidData.errPassword &&
           !inValidData.errRe_password
         ) {
-          // getConfirmMethod("+84"+dataRegister.phoneNumber.slice(1, dataRegister.phoneNumber.length))
           sendVerification(dataRegister.phoneNumber);
-          // ApiRegister(
-          //   {
-          //     username: dataRegister.phoneNumber,
-          //     password: dataRegister.password,
-          //   },
-          //   dataRegister,
-          //   navigation,
-          //   dispatch
-          // );
           refRBSheet.current.open();
         }
       }
@@ -158,16 +148,6 @@ const Register = ({ navigation, route }) => {
         errPhoneNumber: "Phone number no more than 11 number!",
       });
     }
-    //  else if (
-    //   !/^(\+{0,})(\d{0,})([(]{1}\d{1,3}[)]{0,}){0,}(\s?\d+|\+\d{2,3}\s{1}\d+|\d+){1}[\s|-]?\d+([\s|-]?\d+){1,2}(\s){0,}$/gm.test(
-    //     val
-    //   )
-    // ) {
-    //   setInValidData({
-    //     ...inValidData,
-    //     errPhoneNumber: "You have entered an invalid phone number!",
-    //   });
-    // }
     else if (!val) {
       setInValidData({
         ...inValidData,
@@ -271,22 +251,6 @@ const Register = ({ navigation, route }) => {
       .verifyPhoneNumber("+84" + handlePhone, recaptchaVerifier.current)
       .then(setVerificationId)
       .catch((err) => {
-        // Alert.alert(
-        //   "Invalid phone number",
-        //   "Please enter your valid phone number!",
-        //   [
-        //     {
-        //       text: "Cancel",
-        //       onPress: () => Alert.alert("Cancel Pressed"),
-        //       style: "cancel",
-        //     },
-        //     {
-        //       text: "Ok",
-        //       onPress: () => Alert.alert("Cancel Pressed"),
-        //       style: "cancel",
-        //     },
-        //   ]
-        // );
         // console.warn(err);
         refRBSheet.current.close();
         handleShowAlert(err);

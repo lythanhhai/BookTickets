@@ -46,8 +46,9 @@ const ModalSeatSelected = ({
   heightBottomSheet,
   dataModalSeat,
 }) => {
+  // console.warn(route.params)
   const handleClickChooseSeat = () => {
-    navigation.navigate("PickupPoint");
+    navigation.navigate("PickupPoint", route.params);
   };
   return (
     <View
@@ -105,7 +106,7 @@ const ModalSeatSelected = ({
       </View>
       <View
         style={{
-          paddingBottom: 30,
+          paddingBottom: Platform.OS === "ios" ? 30 : 70,
           width: "100%",
           display: "flex",
           flexDirection: "row",

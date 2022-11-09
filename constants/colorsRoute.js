@@ -1,5 +1,5 @@
 const colorRoute = {
-    red: "rgb(198,50,78)",
+    red: "rgb(237,88,90)",
     silver_less: "rgb(158,148,124)",
     blue1: "rgb(138,155,180)",
     blue2: "rgb(76,108,140)",

@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   ScrollView,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "../../components/Header/Header";
 import SearchFrame from "../../components/BookingTickets/SearchFrame";
 import colors from "../../constants/colors";
@@ -21,6 +22,9 @@ import * as screenName from "../../constants/nameScreen";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useRef } from "react";
 import ModalTrip from "../../components/Modal/ModalTrip";
+import { getTrips } from "../../API/ApiGetTrips";
+import { useSelector } from "react-redux";
+import { formatDate } from "../../utils/formatDate";
 
 const styles = StyleSheet.create(styleGlobal);
 const stylesFilter = StyleSheet.create({
@@ -64,13 +68,24 @@ const stylesFilter = StyleSheet.create({
 
 const ChooseTrip = ({ navigation, route }) => {
   const tailwind = useTailwind();
-  const [Data, setData] = useState([1, 2, 3, 4, 5, 6]);
+  const [Data, setData] = useState([]);
   const [showChangeModal, setShowChangeModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showModalFilter, setShowModalFilter] = useState(false);
   const RBSheetRefTrip = useRef();
-  // useEffect(() => {
-  //   setShowChangeModal(false)
-  // }, [route.params.showModal])
+  const location = useSelector((state) => state.getLocationReducer);
+  useEffect(() => {
+    // setShowChangeModal(false)
+    getTrips(
+      {
+        date: formatDate(location.date),
+        dep: parseInt(location.startPoint.split("-")[1]),
+        des: parseInt(location.stopPoint.split("-")[1]),
+      },
+      setData,
+      setLoading
+    );
+  }, []);
   return (
     <View
       style={[
@@ -133,44 +148,64 @@ const ChooseTrip = ({ navigation, route }) => {
           <Text style={stylesFilter.text}>Rating</Text>
         </TouchableOpacity>
       </ScrollView>
-      <View
-        style={[
-          tailwind("flex flex-col justify-start items-center"),
-          {
-            height:
-              Dimensions.get("screen").height -
-              Dimensions.get("screen").height / 8.5 -
-              50,
-            width: Dimensions.get("screen").width,
-          },
-        ]}
-      >
-        <FlatList
-          data={Data}
-          horizontal={false}
-          showsVerticalScrollIndicator={false}
-          // keyExtractor={1}
-          contentContainerStyle={
-            [
-              // tailwind("flex flex-col items-center justify-center"),
-              // {
-              //   backgroundColor: "red",
-              //   // flexGrow: 1,
-              // },
-            ]
-          }
-          // style={[tailwind("flex flex-row items-center justify-center"), {height: "100%", width: "100%"}]}
-          renderItem={({ item }) => {
-            return (
-              <CardTrip
-                item={item}
-                navigation={navigation}
-                showModalDetailTrip={RBSheetRefTrip}
-              />
-            );
-          }}
-        ></FlatList>
-      </View>
+      {loading ? (
+        <View
+          style={[
+            tailwind("flex flex-col justify-start items-center"),
+            {
+              height:
+                Dimensions.get("screen").height -
+                Dimensions.get("screen").height / 8.5 -
+                50,
+              width: Dimensions.get("screen").width,
+              // paddingTop: 50,
+              paddingTop: 30,
+            },
+          ]}
+        >
+          <ActivityIndicator size="large" color={colors.blue} />
+        </View>
+      ) : (
+        <View
+          style={[
+            tailwind("flex flex-col justify-start items-center"),
+            {
+              height:
+                Dimensions.get("screen").height -
+                Dimensions.get("screen").height / 8.5 -
+                50,
+              width: Dimensions.get("screen").width,
+            },
+          ]}
+        >
+          <FlatList
+            data={Data}
+            horizontal={false}
+            showsVerticalScrollIndicator={false}
+            // keyExtractor={1}
+            contentContainerStyle={
+              [
+                // tailwind("flex flex-col items-center justify-center"),
+                // {
+                //   backgroundColor: "red",
+                //   // flexGrow: 1,
+                // },
+              ]
+            }
+            // style={[tailwind("flex flex-row items-center justify-center"), {height: "100%", width: "100%"}]}
+            renderItem={({ item }) => {
+              return (
+                <CardTrip
+                  item={item}
+                  navigation={navigation}
+                  showModalDetailTrip={RBSheetRefTrip}
+                />
+              );
+            }}
+          ></FlatList>
+        </View>
+      )}
+
       <RBSheet
         ref={RBSheetRefTrip}
         height={Dimensions.get("screen").height / 1.3}
@@ -190,7 +225,11 @@ const ChooseTrip = ({ navigation, route }) => {
           },
         }}
       >
-        <ModalTrip navigation={navigation} route={route} RBSheetRefTrip={RBSheetRefTrip}/>
+        <ModalTrip
+          navigation={navigation}
+          route={route}
+          RBSheetRefTrip={RBSheetRefTrip}
+        />
       </RBSheet>
       {showChangeModal ? (
         <View

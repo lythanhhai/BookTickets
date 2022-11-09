@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import colors from "../../constants/colors";
+import { calculateSumHour } from "../../utils/calculateSumHour";
 
 const styles = StyleSheet.create({
   container: {
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // height: 100,
 
-    width: "90%",
+    width: "95%",
     borderColor: "rgb(215, 215, 215)",
     borderBottomWidth: 1,
     // borderTopWidth: 1,
@@ -34,12 +35,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-const CardPoint = ({ item, isChosen, setItemChosen }) => {
+const CardPoint = ({
+  item,
+  isChosen,
+  setItemChosen,
+  route,
+  index,
+  dropScreen,
+}) => {
   // const [itemChosen, setItemChosen] = useState(-1);
   const choosePickupPoint = () => {
     setItemChosen(item);
-    // console.warn(item + " " + itemChosen)
   };
+  // console.warn(index);
   return (
     <View
       style={{
@@ -76,7 +84,15 @@ const CardPoint = ({ item, isChosen, setItemChosen }) => {
               fontWeight: "600",
             }}
           >
-            23:00
+            {dropScreen
+              ? calculateSumHour(
+                  route.params.timeStart,
+                  route.params.timeStations.slice(0, index + 1)
+                ).endTime
+              : calculateSumHour(
+                  route.params.timeStart,
+                  route.params.timeStations.slice(0, index)
+                ).endTime}
           </Text>
           <Text
             style={{
@@ -85,7 +101,7 @@ const CardPoint = ({ item, isChosen, setItemChosen }) => {
               paddingTop: 5,
             }}
           >
-            35 Nguyen Khuyen
+            {item}
           </Text>
           <Text
             style={{
@@ -93,7 +109,7 @@ const CardPoint = ({ item, isChosen, setItemChosen }) => {
               paddingTop: 5,
             }}
           >
-            35 Nguyen Khuyen, Hoa Khanh Nam, Lien Chieu, Da Nang
+            {item}
           </Text>
         </View>
         <TouchableOpacity style={[styles.containerEnd]}>
