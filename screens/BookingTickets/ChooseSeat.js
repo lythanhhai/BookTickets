@@ -857,7 +857,7 @@ const ChooseSeat = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <RBSheet
+        {/* <RBSheet
           ref={RBSheetRef}
           height={250}
           openDuration={200}
@@ -873,16 +873,19 @@ const ChooseSeat = ({ navigation, route }) => {
           }}
         >
           <ModalSeatSelected />
-        </RBSheet>
+        </RBSheet> */}
       </ScrollView>
-
-      <ModalSeatSelected
-        showModalSeat={showModalSeat}
-        heightBottomSheet={heightBottomSheet}
-        dataModalSeat={dataModalSeat}
-        navigation={navigation}
-        route={route}
-      />
+      {dataModalSeat.nameSeats.length > 0 ? (
+        <ModalSeatSelected
+          showModalSeat={showModalSeat}
+          heightBottomSheet={heightBottomSheet}
+          dataModalSeat={dataModalSeat}
+          navigation={navigation}
+          route={route}
+        />
+      ) : (
+        <></>
+      )}
 
       {/* <Animated.View
         style={[StyleSheet.absoluteFill, stylesAnimation.cover, backdrop]}

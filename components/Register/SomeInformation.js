@@ -6,6 +6,8 @@ import {
   TextInput,
   Image,
   BackHandler,
+  KeyboardAvoidingView,
+  Platform
 } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useState, useEffect } from "react";
@@ -13,7 +15,7 @@ import colors from "../../constants/colors";
 import * as screenName from "../../constants/nameScreen";
 
 const radiusInput = 10;
-const verticalPadding = 20;
+const verticalPadding = 15;
 const marginTop = 20;
 
 const SomeInformation = ({ navigation, remind, whichScreen }) => {
@@ -26,7 +28,7 @@ const SomeInformation = ({ navigation, remind, whichScreen }) => {
     return () => backHandler.remove();
   }, []);
   return (
-    <View
+    <KeyboardAvoidingView
       style={{
         display: "flex",
         flexDirection: "column",
@@ -37,17 +39,18 @@ const SomeInformation = ({ navigation, remind, whichScreen }) => {
           Dimensions.get("screen").height -
           Dimensions.get("screen").height / 8.5,
       }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View
         style={{
-          borderRadius: 10,
+          borderRadius: 7,
           backgroundColor: colors.backgroundCardPoint,
           marginTop: marginTop,
         }}
       >
         <Text
           style={{
-            textAlign: "start",
+            textAlign: "left",
             paddingVertical: 10,
             paddingHorizontal: 15,
             fontSize: 15,
@@ -118,7 +121,7 @@ const SomeInformation = ({ navigation, remind, whichScreen }) => {
             borderRadius: radiusInput,
             width: Dimensions.get("screen").width / 5,
             // paddingVertical: verticalPadding,
-            height: 50,
+            height: 45,
           }}
         >
           <Image
@@ -155,7 +158,7 @@ const SomeInformation = ({ navigation, remind, whichScreen }) => {
           fontSize: 13,
           borderWidth: 1,
           borderColor: "gray",
-          borderRadius: 6,
+          borderRadius: radiusInput,
           width: Dimensions.get("screen").width / 1.1,
           paddingVertical: verticalPadding,
           marginTop: marginTop,
@@ -173,7 +176,7 @@ const SomeInformation = ({ navigation, remind, whichScreen }) => {
           width: Dimensions.get("screen").width / 1.1,
           paddingVertical: verticalPadding,
           marginTop: marginTop,
-          height: Dimensions.get("screen").height / 5,
+          height: Dimensions.get("screen").height / 7,
         }}
       ></TextInput>
       {/* <View
@@ -260,7 +263,7 @@ const SomeInformation = ({ navigation, remind, whichScreen }) => {
           </TouchableOpacity>
         </View>
       </View> */}
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

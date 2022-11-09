@@ -16,6 +16,7 @@ import * as screenName from "../../constants/nameScreen";
 const styles = StyleSheet.create(styleGlobal);
 const widthDevice = Dimensions.get("screen").width;
 const heightDevice = Dimensions.get("screen").height;
+const heightModal = (20 * heightDevice) / 100;
 const heightModalBottom = 130;
 const PickupPoint = ({ navigation, route }) => {
   const [data, setData] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
@@ -44,8 +45,8 @@ const PickupPoint = ({ navigation, route }) => {
           justifyContent: "center",
           alignItems: "center",
           height: itemChosen
-            ? heightDevice - heightDevice / 8.5 - heightModalBottom
-            : heightDevice - heightDevice / 8.5,
+            ? heightDevice - heightDevice / 8.5 - 110
+            : heightDevice - heightDevice / 8.5 ,
           width: widthDevice,
           backgroundColor: "white",
         }}
@@ -74,52 +75,57 @@ const PickupPoint = ({ navigation, route }) => {
           contentContainerStyle={{}}
         />
       </View>
-      <View
-        style={{
-          width: widthDevice,
-          height: heightModalBottom,
-          backgroundColor: "white",
-          position: "position",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          // justifyContent: "center",
-          alignItems: "center",
-          paddingTop: 15,
-          borderWidth: 1,
-          borderColor: "rgb(220, 220, 220)",
-        }}
-      >
-        <TouchableOpacity
-          //   color="#841584"
-          //   accessibilityLabel="Learn more about this purple button"
+      {itemChosen ? (
+        <View
           style={{
-            backgroundColor: "rgb(254,210,61)",
-            width: widthDevice / 1.1,
-            borderRadius: 6,
-            // marginTop: 0,
-          }}
-          onPress={() => {
-            handleChoosePickup();
+            width: widthDevice,
+            // height: heightModal,
+            backgroundColor: "white",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            // justifyContent: "center",
+            alignItems: "center",
+            // paddingTop: 15,
+            borderWidth: 1,
+            borderColor: "rgb(220, 220, 220)",
+            paddingTop: 20,
+            paddingBottom: 30,
           }}
         >
-          <Text
+          <TouchableOpacity
+            //   color="#841584"
+            //   accessibilityLabel="Learn more about this purple button"
             style={{
-              color: "black",
-              textAlign: "center",
-              paddingVertical: 20,
-              fontSize: 16,
-              fontWeight: "500",
+              backgroundColor: "rgb(254,210,61)",
+              width: widthDevice / 1.1,
+              borderRadius: 6,
+            }}
+            onPress={() => {
+              handleChoosePickup();
             }}
           >
-            Continue
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <Text
+              style={{
+                color: "black",
+                textAlign: "center",
+                paddingVertical: 20,
+                fontSize: 16,
+                fontWeight: "500",
+              }}
+            >
+              Continue
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <></>
+      )}
     </View>
   );
 };
