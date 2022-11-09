@@ -19,11 +19,19 @@ const heightDevice = Dimensions.get("screen").height;
 const heightModal = (20 * heightDevice) / 100;
 const heightModalBottom = 130;
 const PickupPoint = ({ navigation, route }) => {
-  const [data, setData] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+  const [data, setData] = useState([]);
   const [itemChosen, setItemChosen] = useState(0);
   const handleChoosePickup = () => {
-    navigation.replace("DropoffPoint");
+    navigation.replace("DropoffPoint", route.params);
   };
+  useEffect(() => {
+    // console.warn(route.params.routeStations)
+    let arrayRes = [];
+    route.params.routeStations.forEach((item, index) => {
+      arrayRes.push(item[0]);
+    });
+    setData(arrayRes);
+  }, []);
   return (
     <View
       style={{
@@ -36,6 +44,7 @@ const PickupPoint = ({ navigation, route }) => {
         <Header
           whichScreen={screenName.pickupPointScreen}
           navigation={navigation}
+          item={route.params}
         />
       </View>
       <View
@@ -46,7 +55,7 @@ const PickupPoint = ({ navigation, route }) => {
           alignItems: "center",
           height: itemChosen
             ? heightDevice - heightDevice / 8.5 - 110
-            : heightDevice - heightDevice / 8.5 ,
+            : heightDevice - heightDevice / 8.5,
           width: widthDevice,
           backgroundColor: "white",
         }}
@@ -55,17 +64,28 @@ const PickupPoint = ({ navigation, route }) => {
           data={data}
           horizontal={false}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             if (item === itemChosen) {
               return (
                 <CardPoint
                   item={item}
                   isChosen={itemChosen}
                   setItemChosen={setItemChosen}
+                  route={route}
+                  index={index}
+                  dropScreen={false}
                 />
               );
             } else {
-              return <CardPoint item={item} setItemChosen={setItemChosen} />;
+              return (
+                <CardPoint
+                  item={item}
+                  setItemChosen={setItemChosen}
+                  route={route}
+                  index={index}
+                  dropScreen={false}
+                />
+              );
             }
           }}
           style={{
@@ -95,7 +115,7 @@ const PickupPoint = ({ navigation, route }) => {
             borderWidth: 1,
             borderColor: "rgb(220, 220, 220)",
             paddingTop: 20,
-            paddingBottom: 30,
+            paddingBottom: Platform.OS === "ios" ? 30 : 70,
           }}
         >
           <TouchableOpacity

@@ -24,6 +24,14 @@ const DropoffPoint = ({ navigation, route }) => {
   const handleChooseDropoff = () => {
     navigation.replace("InforDetail");
   };
+  useEffect(() => {
+    // console.warn(route.params.routeStations)
+    let arrayRes = [];
+    route.params.routeStations.forEach((item, index) => {
+      arrayRes.push(item[1]);
+    });
+    setData(arrayRes);
+  }, []);
   return (
     <View
       style={{
@@ -36,6 +44,7 @@ const DropoffPoint = ({ navigation, route }) => {
         <Header
           whichScreen={screenName.dropoffPointScreen}
           navigation={navigation}
+          item={route.params}
         />
       </View>
       <View
@@ -46,7 +55,7 @@ const DropoffPoint = ({ navigation, route }) => {
           alignItems: "center",
           height: itemChosen
             ? heightDevice - heightDevice / 8.5 - 110
-            : heightDevice - heightDevice / 8.5 ,
+            : heightDevice - heightDevice / 8.5,
           width: widthDevice,
           backgroundColor: "white",
         }}
@@ -55,17 +64,28 @@ const DropoffPoint = ({ navigation, route }) => {
           data={data}
           horizontal={false}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             if (item === itemChosen) {
               return (
                 <CardPoint
                   item={item}
                   isChosen={itemChosen}
                   setItemChosen={setItemChosen}
+                  route={route}
+                  index={index}
+                  dropScreen={true}
                 />
               );
             } else {
-              return <CardPoint item={item} setItemChosen={setItemChosen} />;
+              return (
+                <CardPoint
+                  item={item}
+                  setItemChosen={setItemChosen}
+                  route={route}
+                  index={index}
+                  dropScreen={true}
+                />
+              );
             }
           }}
           style={{
@@ -93,7 +113,7 @@ const DropoffPoint = ({ navigation, route }) => {
             borderWidth: 1,
             borderColor: "rgb(220, 220, 220)",
             paddingTop: 20,
-            paddingBottom: 30
+            paddingBottom: Platform.OS === "ios" ? 30 : 70,
           }}
         >
           <TouchableOpacity

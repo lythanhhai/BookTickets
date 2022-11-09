@@ -5,6 +5,7 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import React from "react";
 import styleGlobal from "../../constants/styleGlobal";
@@ -28,23 +29,26 @@ const stylesInfor = StyleSheet.create({
     fontSize: 16,
     width: "65%",
     textAlign: "right",
+    fontWeight: "600",
   },
   textLeft: {
     fontSize: 16,
-    width: "25%",
+    width: "35%",
     textAlign: "left",
-    color: "rgb(100, 100, 100)",
+    color: "rgb(50, 50, 50)",
+    fontWeight: "500",
   },
   textRightPassenger: {
     fontSize: 16,
     width: "60%",
     textAlign: "right",
+    fontWeight: "500",
   },
   textLeftPassenger: {
     fontSize: 16,
     width: "35%",
     textAlign: "left",
-    color: "rgb(100, 100, 100)",
+    color: "rgb(50, 50, 50)",
   },
   touchable: {
     fontSize: 16,
@@ -58,13 +62,22 @@ const stylesInfor = StyleSheet.create({
     // backgroundColor: "red",
   },
   textDetailPoint: {
-    fontSize: 14,
+    fontSize: 16,
+    color: "rgb(60, 60, 60)",
     paddingVertical: 5,
   },
 });
 const InforTicket = ({ navigation, route }) => {
   return (
-    <View>
+    <View
+      style={[
+        styles.backgroundBottom,
+        {
+          backgroundColor: "white",
+          height: height,
+        },
+      ]}
+    >
       <View style={[styles.background]}>
         <Header
           whichScreen={screenName.inforTicketScreen}
@@ -74,23 +87,27 @@ const InforTicket = ({ navigation, route }) => {
       <ScrollView
         style={{
           width: width,
-          marginTop: 10,
         }}
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          // height: height - height / 8,
+          // backgroundColor: "yellow",
         }}
+        nestedScrollEnabled={true}
       >
         <View
           style={{
-            // height: 400,
             width: "100%",
-            paddingBottom: 10,
+            paddingVertical: 20,
             borderBottomColor: "rgb(210, 210, 210)",
             borderBottomWidth: 1,
             paddingHorizontal: 10,
+            height: 500,
           }}
         >
           <View style={[stylesInfor.flex]}>
@@ -126,8 +143,20 @@ const InforTicket = ({ navigation, route }) => {
                 style={{
                   width: "65%",
                 }}
+                onPress={() => {
+                  navigation.replace(screenName.pickupPointScreen);
+                }}
               >
-                <Text style={[stylesInfor.touchable]}>Change</Text>
+                <Text
+                  style={[
+                    stylesInfor.touchable,
+                    {
+                      fontWeight: "600",
+                    },
+                  ]}
+                >
+                  Change
+                </Text>
               </TouchableOpacity>
             </View>
             <View style={[stylesInfor.detailPoint]}>
@@ -151,8 +180,20 @@ const InforTicket = ({ navigation, route }) => {
                 style={{
                   width: "65%",
                 }}
+                onPress={() => {
+                  navigation.replace(screenName.dropoffPointScreen);
+                }}
               >
-                <Text style={[stylesInfor.touchable]}>Change</Text>
+                <Text
+                  style={[
+                    stylesInfor.touchable,
+                    {
+                      fontWeight: "600",
+                    },
+                  ]}
+                >
+                  Change
+                </Text>
               </TouchableOpacity>
             </View>
             <View style={[stylesInfor.detailPoint]}>
@@ -172,22 +213,44 @@ const InforTicket = ({ navigation, route }) => {
           style={{
             // height: 400,
             width: "100%",
-            paddingBottom: 10,
+            paddingVertical: 20,
             borderBottomColor: "rgb(210, 210, 210)",
             borderBottomWidth: 1,
             paddingHorizontal: 10,
           }}
         >
           <View style={[stylesInfor.flex]}>
-            <Text style={[stylesInfor.textLeftPassenger]}>
+            <Text
+              style={[
+                stylesInfor.textLeftPassenger,
+                {
+                  fontWeight: "600",
+                  fontSize: 20,
+                  color: "black",
+                  width: "50%",
+                },
+              ]}
+            >
               Passenger details
             </Text>
             <TouchableOpacity
               style={{
-                width: "65%",
+                width: "50%",
+              }}
+              onPress={() => {
+                navigation.replace(screenName.inforDetailScreen);
               }}
             >
-              <Text style={[stylesInfor.touchable]}>Edit</Text>
+              <Text
+                style={[
+                  stylesInfor.touchable,
+                  {
+                    fontWeight: "600",
+                  },
+                ]}
+              >
+                Edit
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={[stylesInfor.flex]}>
@@ -205,8 +268,81 @@ const InforTicket = ({ navigation, route }) => {
             </Text>
           </View>
         </View>
+        <View
+          style={{
+            marginBottom: 150,
+            // backgroundColor: "red"
+          }}
+        >
+          <TouchableOpacity
+            //   color="#841584"
+            //   accessibilityLabel="Learn more about this purple button"
+            style={{
+              backgroundColor: "rgb(237,88,90)",
+              width: width / 1.1,
+              borderRadius: 6,
+              marginTop: 30,
+            }}
+            onPress={() => {}}
+          >
+            <Text
+              style={{
+                color: "white",
+                textAlign: "center",
+                paddingVertical: 20,
+                fontSize: 16,
+                fontWeight: "500",
+              }}
+            >
+              Cancel booking
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
+      <View
+        style={{
+          width: width,
+          backgroundColor: "white",
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          borderWidth: 1,
+          borderColor: "rgb(220, 220, 220)",
+          paddingTop: 20,
+          paddingBottom: Platform.OS === "ios" ? 30 : 70,
+        }}
+      >
+        <TouchableOpacity
+          //   color="#841584"
+          //   accessibilityLabel="Learn more about this purple button"
+          style={{
+            backgroundColor: "rgb(254,210,61)",
+            width: width / 1.1,
+            borderRadius: 6,
+          }}
+          onPress={() => {navigation.replace(screenName.paymentScreen)}}
+        >
+          <Text
+            style={{
+              color: "black",
+              textAlign: "center",
+              paddingVertical: 20,
+              fontSize: 16,
+              fontWeight: "500",
+            }}
+          >
+            Pay
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
+    // </View>
   );
 };
 

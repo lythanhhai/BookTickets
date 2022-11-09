@@ -2,7 +2,7 @@ import axios from "axios";
 import { baseUrl } from "./config";
 
 const getListLocation = (setListLocation, setLoading) => {
-  setLoading(true)
+  setLoading(true);
   axios({
     method: "GET",
     url: `${baseUrl}station`,
@@ -21,11 +21,14 @@ const getListLocation = (setListLocation, setLoading) => {
       //   });
       // });
       listResponse.forEach((item, index) => {
-        listAll.push(item.nameStation);
+        listAll.push({
+          id: item.id,
+          nameStation: item.nameStation,
+        });
       });
       setListLocation(listAll);
       // console.warn(listResponse)
-      setLoading(false)
+      setLoading(false);
     })
     .catch((err) => console.warn(err));
 };

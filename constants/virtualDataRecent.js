@@ -5,8 +5,8 @@ const Data = [
     departLocation: "Cao Lãnh - Đồng Tháp",
     arriveLocation: "Hồ Chí Minh",
     date: "19/10/2022",
-    price: "150.000vnd",
-    originalPrice: "300.000vnd",
+    price: "150,000vnd",
+    originalPrice: "300,000vnd",
   },
   {
     image:
@@ -14,8 +14,8 @@ const Data = [
     departLocation: "Đà Nẵng",
     arriveLocation: "Quảng Trị",
     date: "19/10/2022",
-    price: "150.000vnd",
-    originalPrice: "300.000vnd",
+    price: "150,000vnd",
+    originalPrice: "300,000vnd",
   },
   {
     image:
@@ -23,8 +23,8 @@ const Data = [
     departLocation: "Đà Nẵng",
     arriveLocation: "Quảng Trị",
     date: "19/10/2022",
-    price: "150.000vnd",
-    originalPrice: "300.000vnd",
+    price: "150,000vnd",
+    originalPrice: "300,000vnd",
   },
   {
     image:
@@ -32,8 +32,8 @@ const Data = [
     departLocation: "Đà Nẵng",
     arriveLocation: "Quảng Trị",
     date: "19/10/2022",
-    price: "150.000vnd",
-    originalPrice: "300.000vnd",
+    price: "150,000vnd",
+    originalPrice: "300,000vnd",
   },
   {
     image:
@@ -41,8 +41,8 @@ const Data = [
     departLocation: "Đà Nẵng",
     arriveLocation: "Quảng Trị",
     date: "19/10/2022",
-    price: "150.000vnd",
-    originalPrice: "300.000vnd",
+    price: "150,000vnd",
+    originalPrice: "300,000vnd",
   },
 ];
 

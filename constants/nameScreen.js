@@ -8,6 +8,7 @@ const pickupPointScreen = "PickupPoint";
 const dropoffPointScreen = "DropoffPoint";
 const inforDetailScreen = "InforDetail";
 const inforTicketScreen = "InforTicket";
+const paymentScreen = "Payment"
 
 export {
   tabBookTicketScreen,
@@ -19,5 +20,6 @@ export {
   pickupPointScreen,
   dropoffPointScreen,
   inforDetailScreen,
-  inforTicketScreen
+  inforTicketScreen,
+  paymentScreen
 };

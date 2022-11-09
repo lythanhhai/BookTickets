@@ -15,6 +15,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import colors from "../../constants/colors";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Octicons from "react-native-vector-icons/Octicons";
+import { calculateSumHour } from "../../utils/calculateSumHour";
 
 const styles = StyleSheet.create({
   background: {
@@ -34,11 +35,12 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
   const tailwind = useTailwind();
   const heightDevice = Dimensions.get("screen").height;
   const HandleChooseATrip = () => {
-    navigation.replace("ChooseSeat");
+    navigation.replace("ChooseSeat", item);
   };
   const handleClickDetailTrip = () => {
     showModalDetailTrip.current.open();
   };
+  // console.warn(item);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -89,9 +91,17 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
               { height: "100%" },
             ]}
           >
-            <Text style={[tailwind(), { fontSize: 14 }]}>23:00</Text>
-            <Text style={[tailwind("text-sm"), { fontSize: 9 }]}>3h</Text>
-            <Text style={[tailwind(), { fontSize: 14 }]}>02:00</Text>
+            <Text style={[tailwind(), { fontSize: 14 }]}>
+              {item.timeStart.split(":")[0] +
+                ":" +
+                item.timeStart.split(":")[1]}
+            </Text>
+            <Text style={[tailwind("text-sm"), { fontSize: 9 }]}>
+              {calculateSumHour(item.timeStart, item.timeStations).duration}
+            </Text>
+            <Text style={[tailwind(), { fontSize: 14 }]}>
+              {calculateSumHour(item.timeStart, item.timeStations).endTime}
+            </Text>
           </View>
           <View
             style={{
@@ -114,7 +124,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
                 width: "100%",
               }}
             >
-              Đà Nẵng{" "}
+              {item.dep}{" "}
               <AntDesign
                 name="swapright"
                 style={{
@@ -124,7 +134,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
                   width: "100%",
                 }}
               />{" "}
-              Quảng Trị
+              {item.des}
             </Text>
           </View>
           <View
@@ -146,18 +156,19 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
                   fontSize: 11,
                 }}
               >
-                From{" "}
+                {/* From{" "} */}
                 <Text
                   style={{
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: "700",
                   }}
                 >
-                  120000d
+                  {item.price}
+                  {"VND"}
                 </Text>
               </Text>
             </View>
-            <Text>24 empty seats</Text>
+            <Text>{item.numberSeat - item.numberSeatSelect} empty seats</Text>
             {/* <Text>350000vnd</Text> */}
           </View>
         </View>
@@ -205,7 +216,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
                   marginBottom: 1,
                 }}
               >
-                An Anh Limousine
+                {item.nameVehicle}
               </Text>
               <Text
                 style={{
@@ -214,7 +225,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
                   marginBottom: 4,
                 }}
               >
-                Limousine 24 seats
+                Sleeper {item.numberSeat} beds
               </Text>
               <View
                 style={tailwind("flex flex-row justify-between items-center")}

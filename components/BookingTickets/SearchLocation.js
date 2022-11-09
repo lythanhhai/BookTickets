@@ -58,7 +58,7 @@ const SearchLocation = ({ item, navigation, route }) => {
     var listDistrict = [];
     // console.warn("Hà nội".normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
     listLocation.forEach((item, index) => {
-      var itemAfterRemoveAccented = item
+      var itemAfterRemoveAccented = item.nameStation
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/gu, "")
         .toLowerCase();
@@ -71,7 +71,10 @@ const SearchLocation = ({ item, navigation, route }) => {
         ) &&
         !itemAfterRemoveAccented.includes("-")
       ) {
-        listProvince.push(item);
+        listProvince.push({
+          id: item.id,
+          nameStation: item.nameStation,
+        });
       } else if (
         itemAfterRemoveAccented.includes(
           value
@@ -81,7 +84,10 @@ const SearchLocation = ({ item, navigation, route }) => {
         ) &&
         itemAfterRemoveAccented.includes("-")
       ) {
-        listDistrict.push(item);
+        listDistrict.push({
+          id: item.id,
+          nameStation: item.nameStation,
+        });
       }
     });
     setListSearchProvince(listProvince);
@@ -205,8 +211,9 @@ const SearchLocation = ({ item, navigation, route }) => {
             //   // overflowY: "scroll",
             //   // overflowX: "hidden",
             // }}
-            keyExtractor={(item, index) => item + index}
+            keyExtractor={(item, index) => item.id + index}
             renderItem={({ item }) => {
+              // console.warn(item)
               return (
                 <TouchableOpacity
                   style={{
@@ -227,7 +234,9 @@ const SearchLocation = ({ item, navigation, route }) => {
                   onPress={() => {
                     if (route.params.screenReturn === "ChooseTrip") {
                       if (route.params.screen === "startpoint") {
-                        dispatch(getLocationStart(item));
+                        dispatch(
+                          getLocationStart(item.nameStation + "-" + item.id)
+                        );
                         navigation.navigate("ChooseTrip");
                         // , {
                         //   departLocation: item,
@@ -236,16 +245,22 @@ const SearchLocation = ({ item, navigation, route }) => {
                         //   showModal: false,
                         // }
                       } else {
-                        dispatch(getLocationStop(item));
+                        dispatch(
+                          getLocationStop(item.nameStation + "-" + item.id)
+                        );
                         navigation.navigate("ChooseTrip");
                       }
                     } else {
                       if (route.params.screen === "startpoint") {
                         navigation.navigate("Search");
-                        dispatch(getLocationStart(item));
+                        dispatch(
+                          getLocationStart(item.nameStation + "-" + item.id)
+                        );
                       } else {
                         navigation.navigate("Search");
-                        dispatch(getLocationStop(item));
+                        dispatch(
+                          getLocationStop(item.nameStation + "-" + item.id)
+                        );
                       }
                     }
                   }}
@@ -265,7 +280,7 @@ const SearchLocation = ({ item, navigation, route }) => {
                       paddingRight: 10,
                     }}
                   >
-                    {item}
+                    {item.nameStation}
                   </Text>
                 </TouchableOpacity>
               );
@@ -290,6 +305,7 @@ const SearchLocation = ({ item, navigation, route }) => {
               return elem;
             }}
           />
+          // <></>
         )}
       </View>
     </View>

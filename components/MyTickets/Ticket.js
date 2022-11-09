@@ -25,19 +25,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const Ticket = ({ item }) => {
+const Ticket = ({ item, setCurrentTab }) => {
   const tailwind = useTailwind();
   const [isChoosing, setIsChoosing] = useState("Upcomming");
 
   const chooseTabUpcomming = () => {
+    setCurrentTab("Upcomming");
     setIsChoosing("Upcomming");
   };
 
   const chooseTabCompleted = () => {
+    setCurrentTab("Completed");
     setIsChoosing("Completed");
   };
 
   const chooseTabCanceled = () => {
+    setCurrentTab("Canceled");
     setIsChoosing("Canceled");
   };
   return (

@@ -8,6 +8,7 @@ import {
   Image,
   Animated,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import styleGlobal from "../../constants/styleGlobal";
@@ -23,6 +24,9 @@ import { useRef } from "react";
 import ModalSeatSelected from "../../components/Modal/ModalSeatSelected";
 import { number } from "yup";
 import * as screenName from "../../constants/nameScreen";
+import { useSelector } from "react-redux";
+import { getTrips } from "../../API/ApiGetTrips";
+import { formatDate } from "../../utils/formatDate";
 // import { ScrollView } from 'react-native-virtualized-view'
 
 const widthScreen = Dimensions.get("screen").width;
@@ -152,32 +156,29 @@ const ChooseSeat = ({ navigation, route }) => {
       );
     }
     let arrayResult = [];
-    if (item.status === 0 && item.name.slice(1, item.name.length - 1) === "1") {
+    if (item.status === 0 && item.nameSeat.includes("A")) {
       FirstFloor.forEach((seat, index) => {
-        seat.name !== item.name
+        seat.nameSeat !== item.nameSeat
           ? arrayResult.push(seat)
           : arrayResult.push({
               ...item,
-              name: item.name,
+              nameSeat: item.nameSeat,
               status: 1,
             });
       });
       setFirstFloor(arrayResult);
       setDataModalSeat({
         numberSeat: dataModalSeat.numberSeat + 1,
-        nameSeats: [...dataModalSeat.nameSeats, item.name],
-        price: dataModalSeat.price + item.price,
+        nameSeats: [...dataModalSeat.nameSeats, item.nameSeat],
+        price: route.params.price * (dataModalSeat.numberSeat + 1),
       });
-    } else if (
-      item.status === 1 &&
-      item.name.slice(1, item.name.length - 1) === "1"
-    ) {
+    } else if (item.status === 1 && item.nameSeat.includes("A")) {
       FirstFloor.forEach((seat, index) => {
-        seat.name !== item.name
+        seat.nameSeat !== item.nameSeat
           ? arrayResult.push(seat)
           : arrayResult.push({
               ...item,
-              name: item.name,
+              nameSeat: item.nameSeat,
               status: 0,
             });
       });
@@ -185,39 +186,33 @@ const ChooseSeat = ({ navigation, route }) => {
       setDataModalSeat({
         numberSeat: dataModalSeat.numberSeat - 1,
         nameSeats: [...dataModalSeat.nameSeats].filter((itemInSeats, index) => {
-          return item.name !== itemInSeats;
+          return item.nameSeat !== itemInSeats;
         }),
-        price: parseInt(dataModalSeat.price - item.price),
+        price: route.params.price * (dataModalSeat.numberSeat - 1),
       });
-    } else if (
-      item.status === 0 &&
-      item.name.slice(1, item.name.length - 1) === "2"
-    ) {
+    } else if (item.status === 0 && item.nameSeat.includes("B")) {
       SecondFloor.forEach((seat, index) => {
-        seat.name !== item.name
+        seat.nameSeat !== item.nameSeat
           ? arrayResult.push(seat)
           : arrayResult.push({
               ...item,
-              name: item.name,
+              name: item.nameSeat,
               status: 1,
             });
       });
       setSecondFloor(arrayResult);
       setDataModalSeat({
         numberSeat: dataModalSeat.numberSeat + 1,
-        nameSeats: [...dataModalSeat.nameSeats, item.name],
-        price: dataModalSeat.price + item.price,
+        nameSeats: [...dataModalSeat.nameSeats, item.nameSeat],
+        price: route.params.price * (dataModalSeat.numberSeat + 1),
       });
-    } else if (
-      item.status === 1 &&
-      item.name.slice(1, item.name.length - 1) === "2"
-    ) {
+    } else if (item.status === 1 && item.nameSeat.includes("B")) {
       SecondFloor.forEach((seat, index) => {
-        seat.name !== item.name
+        seat.nameSeat !== item.nameSeat
           ? arrayResult.push(seat)
           : arrayResult.push({
               ...item,
-              name: item.name,
+              name: item.nameSeat,
               status: 0,
             });
       });
@@ -225,15 +220,15 @@ const ChooseSeat = ({ navigation, route }) => {
       setDataModalSeat({
         numberSeat: dataModalSeat.numberSeat - 1,
         nameSeats: [...dataModalSeat.nameSeats].filter((itemInSeats, index) => {
-          return item.name !== itemInSeats;
+          return item.nameSeat !== itemInSeats;
         }),
-        price: dataModalSeat.price - item.price,
+        price: route.params.price * (dataModalSeat.numberSeat - 1),
       });
     } else {
     }
   };
-  const [FirstFloor, setFirstFloor] = useState(floor1);
-  const [SecondFloor, setSecondFloor] = useState(floor2);
+  const [FirstFloor, setFirstFloor] = useState([]);
+  const [SecondFloor, setSecondFloor] = useState([]);
   // useEffect set open raw modal sheet
   useEffect(() => {
     let array,
@@ -245,17 +240,73 @@ const ChooseSeat = ({ navigation, route }) => {
       return item.status === 1;
     });
     if (array || array1) {
-      // RBSheetRef.current.open();
       handleOpen();
       setShowModalSeat(true);
     } else {
-      // RBSheetRef.current.close();
       handleClose();
       setShowModalSeat(false);
     }
-    // console.warn(dataModalSeat);
-    // console.warn(typeof dataModalSeat.price);
   }, [FirstFloor, SecondFloor]);
+
+  const [Data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const location = useSelector((state) => state.getLocationReducer);
+  useEffect(() => {
+    // getTrips(
+    //   {
+    //     date: formatDate(location.date),
+    //     dep: parseInt(location.startPoint.split("-")[1]),
+    //     des: parseInt(location.stopPoint.split("-")[1]),
+    //   },
+    //   setData,
+    //   setLoading
+    // );
+    let arrayFirst = route.params.seatStatuses.slice(0, 23);
+    let arraySecond = route.params.seatStatuses.slice(23, 46);
+    arrayFirst.forEach((item, index) => {
+      if (!arrayFirst[index].status) {
+        arrayFirst[index].status = 0;
+      } else {
+        arrayFirst[index].status = 3;
+      }
+    });
+    arraySecond.forEach((item, index) => {
+      if (!arraySecond[index].status) {
+        arraySecond[index].status = 0;
+      } else {
+        arraySecond[index].status = 3;
+      }
+    });
+    // console.warn(arrayFirst);
+    setFirstFloor(arrayFirst);
+    setSecondFloor(arraySecond);
+  }, []);
+
+  // useEffect(() => {
+  //   if (Data.length > 0) {
+  //     // convert status true/false into number
+  //     let arrayFirst = Data[0].seatStatuses.slice(0, 23);
+  //     let arraySecond = Data[0].seatStatuses.slice(23, 46);
+  //     arrayFirst.forEach((item, index) => {
+  //       if (!arrayFirst[index].status) {
+  //         arrayFirst[index].status = 0;
+  //       } else {
+  //         arrayFirst[index].status = 3;
+  //       }
+  //     });
+  //     arraySecond.forEach((item, index) => {
+  //       if (!arraySecond[index].status) {
+  //         arraySecond[index].status = 0;
+  //       } else {
+  //         arraySecond[index].status = 3;
+  //       }
+  //     });
+  //     // console.warn(arrayFirst);
+  //     setFirstFloor(arrayFirst);
+  //     setSecondFloor(arraySecond);
+  //   }
+  //   // console.warn(Data)
+  // }, [Data]);
 
   // animation
   const state = {
@@ -275,22 +326,7 @@ const ChooseSeat = ({ navigation, route }) => {
       useNativeDriver: true,
     }).start();
   };
-  // const backdrop = {
-  //   transform: [
-  //     {
-  //       translateY: state.animation.interpolate({
-  //         inputRange: [0, 0.01],
-  //         outputRange: [Dimensions.get("screen").height, 0],
-  //         extrapolate: "clamp",
-  //       }),
-  //     },
-  //   ],
-  //   opacity: state.animation.interpolate({
-  //     inputRange: [0.01, 0.5],
-  //     outputRange: [0, 1],
-  //     extrapolate: "clamp",
-  //   }),
-  // };
+
   const slideUp = {
     transform: [
       {
@@ -327,300 +363,310 @@ const ChooseSeat = ({ navigation, route }) => {
         <Header
           whichScreen={screenName.chooseSeatScreen}
           navigation={navigation}
+          item={route.params}
         />
       </View>
-      <ScrollView
-        contentContainerStyle={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          // height:
-          //   Dimensions.get("screen").height -
-          //   Dimensions.get("screen").height / 5,
-          // backgroundColor: "red",
-          // marginBottom: heightBottomSheet,
-        }}
-        horizontal={false}
-        nestedScrollEnabled={true}
-      >
+      {loading ? (
         <View
           style={{
-            height: 150,
-            width: (widthScreen * 85) / 100,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            marginVertical: 10,
+            marginTop: 30,
           }}
         >
-          <View
-            style={{
-              width: "50%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={{
-                width: "100%",
-                height: "50%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  height: shapeSeatTop + 15,
-                  width: shapeSeatTop,
-                  backgroundColor: "transparent",
-                  marginRight: marginSeat,
-                  borderWidth: 1.5,
-                  borderColor: colors.blue,
-                  borderRadius: 6,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                }}
-              >
-                <View
-                  style={{
-                    height: 15,
-                    width: "70%",
-                    marginBottom: 6,
-                    borderWidth: 1,
-                    borderColor: colors.blue,
-                    borderRadius: 3,
-                  }}
-                ></View>
-              </View>
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: "500",
-                  color: "black",
-                  opacity: 0.5,
-                }}
-              >
-                Empty
-              </Text>
-            </View>
-            <View
-              style={{
-                width: "100%",
-                height: "50%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  height: shapeSeatTop + 15,
-                  width: shapeSeatTop,
-                  // backgroundColor: "rgb(0 ,0, 0)",
-                  // opacity: 0.5,
-                  backgroundColor: colors.blue,
-                  marginRight: marginSeat,
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  borderRadius: 6,
-                }}
-              >
-                <MaterialIcons
-                  name="done"
-                  style={[stylesItem.icon, { fontSize: 20, marginBottom: 3 }]}
-                />
-                <View
-                  style={{
-                    height: 15,
-                    width: "70%",
-                    marginBottom: 6,
-                    borderWidth: 1,
-                    borderColor: "white",
-                    borderRadius: 3,
-                  }}
-                ></View>
-              </View>
-              <Text
-                style={{
-                  fontSize: 17,
-                  fontWeight: "500",
-                  color: "black",
-                  opacity: 0.5,
-                }}
-              >
-                Selected
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              width: "50%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={{
-                width: "100%",
-                height: "50%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  height: shapeSeatTop + 15,
-                  width: shapeSeatTop,
-                  backgroundColor: "transparent",
-                  marginRight: marginSeat,
-                  borderRadius: 6,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  borderWidth: 1.5,
-                  borderColor: colorSelecting,
-                }}
-              >
-                <View
-                  style={{
-                    height: 15,
-                    width: "70%",
-                    marginBottom: 6,
-                    borderWidth: 1,
-                    borderColor: colorSelecting,
-                    borderRadius: 4,
-                  }}
-                ></View>
-              </View>
-              <Text
-                style={{
-                  fontSize: 17,
-                  fontWeight: "500",
-                  color: "black",
-                  opacity: 0.5,
-                }}
-              >
-                Selecting
-              </Text>
-            </View>
-            <View
-              style={{
-                width: "100%",
-                height: "50%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  height: shapeSeatTop + 15,
-                  width: shapeSeatTop,
-                  backgroundColor: backgroundColorReversed,
-                  marginRight: marginSeat,
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  borderRadius: 6,
-                }}
-              >
-                <FontAwesome
-                  name="remove"
-                  style={[stylesItem.icon, { fontSize: 20, marginBottom: 3 }]}
-                />
-                <View
-                  style={{
-                    height: 15,
-                    width: "70%",
-                    marginBottom: 6,
-                    borderWidth: 1,
-                    borderColor: "white",
-                    borderRadius: 3,
-                  }}
-                ></View>
-              </View>
-              <Text
-                style={{
-                  fontSize: 17,
-                  fontWeight: "500",
-                  color: "black",
-                  opacity: 0.5,
-                }}
-              >
-                Booked
-              </Text>
-            </View>
-          </View>
+          <ActivityIndicator size="large" color={colors.blue} />
         </View>
-        <View
-          style={{
+      ) : (
+        <ScrollView
+          contentContainerStyle={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: "center",
+            // height:
+            //   Dimensions.get("screen").height -
+            //   Dimensions.get("screen").height / 5,
             // backgroundColor: "red",
-            width: widthScreen,
+            // marginBottom: heightBottomSheet,
           }}
+          horizontal={false}
+          nestedScrollEnabled={true}
         >
           <View
             style={{
-              backgroundColor: "rgb(255, 255, 255)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "flex-start",
-              borderRadius: 20,
+              height: 150,
               width: (widthScreen * 85) / 100,
-              // marginLeft: 20,
-              // backgroundColor: "red",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              marginVertical: 10,
             }}
           >
             <View
               style={{
+                width: "50%",
+                height: "100%",
                 display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
+                flexDirection: "column",
+                justifyContent: "flex-start",
                 alignItems: "center",
-                width: "100%",
-                marginVertical: 20,
               }}
             >
-              <Text
+              <View
                 style={{
-                  textAlign: "center",
-                  fontSize: 15,
-                  fontWeight: "600",
-                  color: "black",
-                  opacity: 0.5,
-                  // backgroundColor: "red",
-                  width: "50%",
+                  width: "100%",
+                  height: "50%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
                 }}
               >
-                {currentStair === 1 ? "DOWNSTAIR" : "UPSTAIR"}
-              </Text>
-              {/* <Text
+                <View
+                  style={{
+                    height: shapeSeatTop + 15,
+                    width: shapeSeatTop,
+                    backgroundColor: "transparent",
+                    marginRight: marginSeat,
+                    borderWidth: 1.5,
+                    borderColor: colors.blue,
+                    borderRadius: 6,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 15,
+                      width: "70%",
+                      marginBottom: 6,
+                      borderWidth: 1,
+                      borderColor: colors.blue,
+                      borderRadius: 3,
+                    }}
+                  ></View>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "500",
+                    color: "black",
+                    opacity: 0.5,
+                  }}
+                >
+                  Empty
+                </Text>
+              </View>
+              <View
+                style={{
+                  width: "100%",
+                  height: "50%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    height: shapeSeatTop + 15,
+                    width: shapeSeatTop,
+                    // backgroundColor: "rgb(0 ,0, 0)",
+                    // opacity: 0.5,
+                    backgroundColor: colors.blue,
+                    marginRight: marginSeat,
+                    textAlign: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    borderRadius: 6,
+                  }}
+                >
+                  <MaterialIcons
+                    name="done"
+                    style={[stylesItem.icon, { fontSize: 20, marginBottom: 3 }]}
+                  />
+                  <View
+                    style={{
+                      height: 15,
+                      width: "70%",
+                      marginBottom: 6,
+                      borderWidth: 1,
+                      borderColor: "white",
+                      borderRadius: 3,
+                    }}
+                  ></View>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "500",
+                    color: "black",
+                    opacity: 0.5,
+                  }}
+                >
+                  Selected
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: "50%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  width: "100%",
+                  height: "50%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    height: shapeSeatTop + 15,
+                    width: shapeSeatTop,
+                    backgroundColor: "transparent",
+                    marginRight: marginSeat,
+                    borderRadius: 6,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    borderWidth: 1.5,
+                    borderColor: colorSelecting,
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 15,
+                      width: "70%",
+                      marginBottom: 6,
+                      borderWidth: 1,
+                      borderColor: colorSelecting,
+                      borderRadius: 4,
+                    }}
+                  ></View>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "500",
+                    color: "black",
+                    opacity: 0.5,
+                  }}
+                >
+                  Selecting
+                </Text>
+              </View>
+              <View
+                style={{
+                  width: "100%",
+                  height: "50%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    height: shapeSeatTop + 15,
+                    width: shapeSeatTop,
+                    backgroundColor: backgroundColorReversed,
+                    marginRight: marginSeat,
+                    textAlign: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    borderRadius: 6,
+                  }}
+                >
+                  <FontAwesome
+                    name="remove"
+                    style={[stylesItem.icon, { fontSize: 20, marginBottom: 3 }]}
+                  />
+                  <View
+                    style={{
+                      height: 15,
+                      width: "70%",
+                      marginBottom: 6,
+                      borderWidth: 1,
+                      borderColor: "white",
+                      borderRadius: 3,
+                    }}
+                  ></View>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "500",
+                    color: "black",
+                    opacity: 0.5,
+                  }}
+                >
+                  Booked
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+              // backgroundColor: "red",
+              width: widthScreen,
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "rgb(255, 255, 255)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                borderRadius: 20,
+                width: (widthScreen * 85) / 100,
+                // marginLeft: 20,
+                // backgroundColor: "red",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  marginVertical: 20,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 15,
+                    fontWeight: "600",
+                    color: "black",
+                    opacity: 0.5,
+                    // backgroundColor: "red",
+                    width: "50%",
+                  }}
+                >
+                  {currentStair === 1 ? "DOWNSTAIR" : "UPSTAIR"}
+                </Text>
+                {/* <Text
               style={{
                 textAlign: "center",
                 fontSize: 15,
@@ -633,248 +679,253 @@ const ChooseSeat = ({ navigation, route }) => {
             >
               UPSTAIR
             </Text> */}
+              </View>
+
+              {currentStair === 1 ? (
+                <View
+                  style={{
+                    // height: 500,
+                    width: "100%",
+                    borderRadius: 20,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "flex-end",
+                    paddingVertical: 20,
+                    flexWrap: "wrap",
+                    // backgroundColor: "red",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image
+                      source={require("../../assets/Image/Seat/icons8-steering-wheel-96.png")}
+                      style={{
+                        height: shapeWidthSeat + 5,
+                        width: shapeWidthSeat + 5,
+                        objectFit: "cover",
+                        marginBottom: 20,
+                      }}
+                    />
+                    {FirstFloor.slice(0, 7).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                  <View>
+                    {FirstFloor.slice(7, 8).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                  <View>
+                    {FirstFloor.slice(8, 15).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                  <View>
+                    {FirstFloor.slice(15, 16).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                  <View>
+                    {FirstFloor.slice(16, 23).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    // height: 500,
+                    width: "100%",
+                    borderRadius: 20,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "flex-end",
+                    paddingVertical: 20,
+                    flexWrap: "wrap",
+                    // backgroundColor: "red",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View
+                      style={{
+                        height: shapeWidthSeat,
+                        width: shapeWidthSeat,
+                        marginBottom: 20,
+                      }}
+                    ></View>
+                    {SecondFloor.slice(0, 7).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                  <View>
+                    {SecondFloor.slice(7, 8).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                  <View>
+                    {SecondFloor.slice(8, 15).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                  <View>
+                    {SecondFloor.slice(15, 16).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                  <View>
+                    {SecondFloor.slice(16, 23).map((item, index) => {
+                      return (
+                        <SeatItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          hanldeClickSeat={hanldeClickSeat}
+                        />
+                      );
+                    })}
+                  </View>
+                </View>
+              )}
             </View>
-            <Image
-              source={require("../../assets/Image/Seat/icons8-steering-wheel-96.png")}
-              style={{
-                height: shapeWidthSeat,
-                width: shapeWidthSeat,
-                objectFit: "cover",
-                // alignSelf: "center",
-                marginLeft: marginSeat * 3,
-              }}
-            />
-            {currentStair === 1 ? (
-              <View
-                style={{
-                  // height: 500,
-                  width: "100%",
-                  borderRadius: 20,
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                  paddingVertical: 20,
-                  flexWrap: "wrap",
-                  // backgroundColor: "red",
-                }}
-              >
-                <View>
-                  {FirstFloor.slice(0, 7).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-                <View>
-                  {FirstFloor.slice(7, 8).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-                <View>
-                  {FirstFloor.slice(8, 15).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-                <View>
-                  {FirstFloor.slice(15, 16).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-                <View>
-                  {FirstFloor.slice(16, 23).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-              </View>
-            ) : (
-              <View
-                style={{
-                  // height: 500,
-                  width: "100%",
-                  borderRadius: 20,
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                  paddingVertical: 20,
-                  flexWrap: "wrap",
-                  // backgroundColor: "red",
-                }}
-              >
-                <View>
-                  {SecondFloor.slice(0, 7).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-                <View>
-                  {SecondFloor.slice(7, 8).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-                <View>
-                  {SecondFloor.slice(8, 15).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-                <View>
-                  {SecondFloor.slice(15, 16).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-                <View>
-                  {SecondFloor.slice(16, 23).map((item, index) => {
-                    return (
-                      <SeatItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        hanldeClickSeat={hanldeClickSeat}
-                      />
-                    );
-                  })}
-                </View>
-              </View>
-            )}
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              // backgroundColor: "red",
-              width: "100%",
-              height: 50,
-              marginBottom: 100,
-              marginTop: 10,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                hanldeClickNextOrPrev();
-              }}
-            >
-              <Entyto
-                name="chevron-small-up"
-                style={{
-                  fontSize: 40,
-                  transform: [{ rotate: "270deg" }],
-                }}
-              />
-            </TouchableOpacity>
             <View
               style={{
-                // transform: [{ rotate: "90deg" }],
-                backgroundColor: colors.blue,
-                borderRadius: 20,
-                paddingHorizontal: 25,
-                paddingVertical: 10,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                // backgroundColor: "red",
+                width: "100%",
+                height: 50,
+                marginBottom: 100,
+                marginTop: 10,
               }}
             >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 16,
+              <TouchableOpacity
+                onPress={() => {
+                  hanldeClickNextOrPrev();
                 }}
               >
-                {currentStair === 1 ? "DOWNSTAIR" : "UPSTAIR"}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                hanldeClickNextOrPrev();
-              }}
-            >
-              <Entyto
-                name="chevron-small-down"
+                <Entyto
+                  name="chevron-small-up"
+                  style={{
+                    fontSize: 40,
+                    transform: [{ rotate: "270deg" }],
+                  }}
+                />
+              </TouchableOpacity>
+              <View
                 style={{
-                  fontSize: 40,
-                  transform: [{ rotate: "270deg" }],
+                  // transform: [{ rotate: "90deg" }],
+                  backgroundColor: colors.blue,
+                  borderRadius: 20,
+                  paddingHorizontal: 25,
+                  paddingVertical: 10,
                 }}
-              />
-            </TouchableOpacity>
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 16,
+                  }}
+                >
+                  {currentStair === 1 ? "DOWNSTAIR" : "UPSTAIR"}
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  hanldeClickNextOrPrev();
+                }}
+              >
+                <Entyto
+                  name="chevron-small-down"
+                  style={{
+                    fontSize: 40,
+                    transform: [{ rotate: "270deg" }],
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        {/* <RBSheet
-          ref={RBSheetRef}
-          height={250}
-          openDuration={200}
-          closeOnDragDown={true}
-          closeOnPressMask={false}
-          customStyles={{
-            wrapper: {
-              // backgroundColor: "transparent"
-            },
-            draggableIcon: {
-              backgroundColor: "#000",
-            },
-          }}
-        >
-          <ModalSeatSelected />
-        </RBSheet> */}
-      </ScrollView>
+        </ScrollView>
+      )}
       {dataModalSeat.nameSeats.length > 0 ? (
         <ModalSeatSelected
           showModalSeat={showModalSeat}
@@ -886,17 +937,6 @@ const ChooseSeat = ({ navigation, route }) => {
       ) : (
         <></>
       )}
-
-      {/* <Animated.View
-        style={[StyleSheet.absoluteFill, stylesAnimation.cover, backdrop]}
-      /> */}
-      {/* <View style={[stylesAnimation.sheet]}>
-      </View> */}
-      {/* <Animated.View style={[stylesAnimation.popup, slideUp]}>
-        <TouchableOpacity onPress={handleClose}>
-          <Text>Close</Text>
-        </TouchableOpacity>
-      </Animated.View> */}
     </View>
   );
 };
