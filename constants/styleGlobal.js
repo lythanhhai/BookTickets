@@ -3,7 +3,7 @@ import { Dimensions } from "react-native";
 const styleGlobal = {
   background: {
     backgroundColor: colors.blue,
-    height: Dimensions.get("screen").height / 8.5,
+    height: Dimensions.get("screen").height / 8,
     width: Dimensions.get("screen").width,
     display: "flex",
     // paddingLeft: Dimensions.get("screen").width / 21,

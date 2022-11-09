@@ -11,11 +11,12 @@ import { useTailwind } from "tailwind-rn/dist";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import SearchFrame from "../../components/BookingTickets/SearchFrame";
-import { registerTranslation } from "react-native-paper-dates";
 import CardRecent from "../../components/BookingTickets/CardRecent";
 import Data from "../../constants/virtualDataRecent";
 import colors from "../../constants/colors";
 import CardRoute from "../../components/BookingTickets/CardRoute";
+import { useSelector } from "react-redux";
+import * as screenName from "../../constants/nameScreen";
 
 const styles = StyleSheet.create({
   background: {
@@ -48,36 +49,49 @@ const styles = StyleSheet.create({
 
 const BookingTickets = ({ navigation, route }) => {
   const tailwind = useTailwind();
+  // const [list, setList] = useState([...Data]);
   const [list, setList] = useState([
     {
-      departLocation: "Da Nang",
-      arriveLocation: "Quang Tri",
+      image:
+        "https://storage.googleapis.com/vex-config/cms-tool/destination/images/25/img_hero.png",
+      departLocation: "Đà Nẵng",
+      arriveLocation: "Quảng Trị",
       date: "19/10/2022",
-    },
-    {
-      departLocation: "Da Nang",
-      arriveLocation: "Quang Tri",
-      date: "19/10/2022",
-    },
-    {
-      departLocation: "Da Nang",
-      arriveLocation: "Quang Tri",
-      date: "19/10/2022",
-    },
-    {
-      departLocation: "Da Nang",
-      arriveLocation: "Quang Tri",
-      date: "19/10/2022",
-    },
-    {
-      departLocation: "Da Nang",
-      arriveLocation: "Quang Tri",
-      date: "19/10/2022",
+      price: "150.000vnd",
+      originalPrice: "300.000vnd",
     },
   ]);
+  const [checkClickSearch, setCheckClickSearch] = useState(false);
   // useEffect(() => {
   //   console.warn(route.params);
   // });
+  const location = useSelector((state) => state.getLocationReducer);
+  useEffect(() => {
+    // console.warn("aaaa");
+    if (checkClickSearch) {
+      if (list.length === 5) {
+        var fourItem = [...list].slice(0, [...list].length - 1);
+        setList([
+          {
+            departLocation: location.startPoint,
+            arriveLocation: location.stopPoint,
+            date: location.date,
+          },
+          ...fourItem,
+        ]);
+      } else {
+        setList([
+          {
+            departLocation: location.startPoint,
+            arriveLocation: location.stopPoint,
+            date: location.date,
+          },
+          ...list,
+        ]);
+      }
+    }
+    return setCheckClickSearch(false);
+  }, [checkClickSearch]);
   return (
     <ScrollView
       style={styles.backgroundBottom}
@@ -88,7 +102,10 @@ const BookingTickets = ({ navigation, route }) => {
       }}
     >
       <View style={[styles.background]}></View>
-      <Header whichScreen={1} navigation={navigation} />
+      <Header
+        whichScreen={screenName.tabBookTicketScreen}
+        navigation={navigation}
+      />
       <View style={[{ paddingTop: 10 }]}>
         <Text style={[{ color: "white", fontSize: 25, fontWeight: "500" }]}>
           Hi you,
@@ -97,7 +114,11 @@ const BookingTickets = ({ navigation, route }) => {
           Where do you want to go today?
         </Text>
       </View>
-      <SearchFrame navigation={navigation} route={route} />
+      <SearchFrame
+        navigation={navigation}
+        route={route}
+        setCheckClickSearch={setCheckClickSearch}
+      />
       <View
         style={{
           marginTop: 20,
@@ -115,7 +136,11 @@ const BookingTickets = ({ navigation, route }) => {
         >
           Recent searches
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(screenName.paymentScreen);
+          }}
+        >
           <Text
             style={{
               fontSize: 13,
@@ -137,7 +162,7 @@ const BookingTickets = ({ navigation, route }) => {
         }}
       >
         <FlatList
-          data={Data}
+          data={list}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => <CardRecent item={item} />}

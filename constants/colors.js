@@ -4,6 +4,9 @@ const colors = {
   gray: "rgb(150, 150, 150)",
   colorButton: "rgb(8,27,57)",
   borderGray: "rgb(210, 210, 210)",
+  starColor: "rgb(246,180,58)",
+  greenVerify: "rgb(87,193,76)",
+  backgroundCardPoint: "rgb(239,241,255)",
 };
 
 export default colors;

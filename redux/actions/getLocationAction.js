@@ -11,6 +11,13 @@ const getLocationStop = (item) => {
     }
 }
 
+const getDate = (item) => {
+    return {
+        type: "getDate",
+        payload: item
+    }
+}
+
 const swapLocation = () => {
     return {
         type: "swapLocation",
@@ -18,4 +25,4 @@ const swapLocation = () => {
 }
 
 
-export { getLocationStart, getLocationStop, swapLocation }
+export { getLocationStart, getLocationStop, swapLocation, getDate }

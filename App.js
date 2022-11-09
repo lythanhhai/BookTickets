@@ -28,10 +28,21 @@ import SomeInformation from "./components/Register/SomeInformation";
 
 // import redux
 import { legacy_createStore as createStore } from "redux";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./redux/store/store";
 import ModalCode from "./components/Modal/ModalCode";
+import { getTokenAferAuthen } from "./utils/getJWT";
+
+import authenReducer from "./redux/reducers/authenReducer";
+import ChooseTrip from "./screens/BookingTickets/ChooseTrip";
+import ChooseSeat from "./screens/BookingTickets/ChooseSeat";
+import PickupPoint from "./screens/BookingTickets/PickupPoint";
+import DropoffPoint from "./screens/BookingTickets/DropoffPoint";
+import InforDetail from "./screens/BookingTickets/InforDetail";
+import InforTicket from "./screens/BookingTickets/InforTicket";
+import Payment from "./screens/BookingTickets/Payment";
+import * as screenName from "./constants/nameScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -49,14 +60,16 @@ const Home = () => {
 
     return false;
   };
+  //
   const tabBarStyleForAndroid = {
-    paddingBottom: 10, height: 53,
-  }
+    paddingBottom: 10,
+    height: 53,
+  };
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: Platform.OS === 'android' ? tabBarStyleForAndroid : {},
+        tabBarStyle: Platform.OS === "android" ? tabBarStyleForAndroid : {},
       }}
       // tabBarOptions={{ showIcon: true }}
 
@@ -168,6 +181,22 @@ export default function App() {
     inactiveTintColor: "gray",
     // style: { backgroundColor: "white" },
   };
+
+  // useEffect(() => {
+  //   getTokenAferAuthen()
+  //     .then((data) => {
+  //       console.warn(data)
+  //       setUser(data);
+
+  //     })
+  //     .catch((err) => {
+  //       console.warn(err);
+  //     });
+  //   (async () => {
+  //     const user = await getTokenAferAuthen(setUser)
+  //   })();
+  // }, []);
+  // const User = useSelector(state => state.authenReducer)
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
@@ -210,16 +239,98 @@ export default function App() {
                 />
               </Stack.Group>
               <Stack.Group>
-                <Stack.Screen name="Login" options={{ gestureEnabled: false }}>
-                  {(props) => <Login {...props} />}
+                <Stack.Screen
+                  name={screenName.chooseTripScreen}
+                  options={{
+                    gestureEnabled: false,
+                  }}
+                >
+                  {(props) => <ChooseTrip {...props} />}
                 </Stack.Screen>
                 <Stack.Screen
-                  name="Register"
-                  options={{ gestureEnabled: false }}
+                  name={screenName.chooseSeatScreen}
+                  options={{
+                    gestureEnabled: false,
+                  }}
                 >
-                  {(props) => <Register {...props} />}
+                  {(props) => <ChooseSeat {...props} />}
                 </Stack.Screen>
-                {/* <Stack.Screen
+                <Stack.Screen
+                  name={screenName.pickupPointScreen}
+                  options={{
+                    gestureEnabled: false,
+                    // title: (
+                    //   <View
+                    //     style={{
+                    //       width: Dimensions.get("screen").width / 1.1,
+                    //       backgroundColor: "red",
+                    //     }}
+                    //   >
+                    //     <Text>aaa</Text>
+                    //   </View>
+                    // ),
+                    // headerShown: true,
+                    // headerStyle: {
+                    //   backgroundColor: colors.blue,
+                    // },
+                    // headerTintColor: "#fff",
+                    // headerBackTitleVisible: false,
+                  }}
+                >
+                  {(props) => <PickupPoint {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name={screenName.dropoffPointScreen}
+                  options={{
+                    gestureEnabled: false,
+                  }}
+                >
+                  {(props) => <DropoffPoint {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name={screenName.inforDetailScreen}
+                  options={{
+                    gestureEnabled: false,
+                  }}
+                >
+                  {(props) => <InforDetail {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name={screenName.inforTicketScreen}
+                  options={{
+                    gestureEnabled: false,
+                  }}
+                >
+                  {(props) => <InforTicket {...props} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name={screenName.paymentScreen}
+                  options={
+                    {
+                      // gestureEnabled: false,
+                    }
+                  }
+                >
+                  {(props) => <Payment {...props} />}
+                </Stack.Screen>
+              </Stack.Group>
+              {false ? (
+                <></>
+              ) : (
+                <Stack.Group>
+                  <Stack.Screen
+                    name="Login"
+                    options={{ gestureEnabled: false }}
+                  >
+                    {(props) => <Login {...props} />}
+                  </Stack.Screen>
+                  <Stack.Screen
+                    name="Register"
+                    options={{ gestureEnabled: false }}
+                  >
+                    {(props) => <Register {...props} />}
+                  </Stack.Screen>
+                  {/* <Stack.Screen
                   name="Information"
                   options={{
                     title: "Account Information",
@@ -233,7 +344,8 @@ export default function App() {
                 >
                   {(props) => <SomeInformation {...props} />}
                 </Stack.Screen> */}
-              </Stack.Group>
+                </Stack.Group>
+              )}
             </Stack.Navigator>
             {/* <Text> aaa</Text> */}
             {/* </View> */}

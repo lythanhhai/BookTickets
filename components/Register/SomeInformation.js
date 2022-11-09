@@ -1,22 +1,24 @@
 import {
-  ImageBackground,
   View,
   Text,
   StyleSheets,
   Dimensions,
-  Button,
-  TouchableOpacity,
   TextInput,
   Image,
   BackHandler,
+  KeyboardAvoidingView,
+  Platform
 } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useState, useEffect } from "react";
-import Icon from "react-native-vector-icons/AntDesign";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import colors from "../../constants/colors";
+import * as screenName from "../../constants/nameScreen";
 
-const SomeInformation = ({ navigation }) => {
+const radiusInput = 10;
+const verticalPadding = 15;
+const marginTop = 20;
+
+const SomeInformation = ({ navigation, remind, whichScreen }) => {
   const tailwind = useTailwind();
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -26,61 +28,75 @@ const SomeInformation = ({ navigation }) => {
     return () => backHandler.remove();
   }, []);
   return (
-    <View
+    <KeyboardAvoidingView
       style={{
-        // display: "flex",
-        // flexDirection: "column",
-        // height: Dimensions.get("window").height / 1.1,
-        flex: 1,
+        display: "flex",
+        flexDirection: "column",
         justifyContent: "flex-start",
         alignItems: "center",
-        backgroundColor: "transparent",
+        backgroundColor: "white",
+        height:
+          Dimensions.get("screen").height -
+          Dimensions.get("screen").height / 8.5,
       }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View
         style={{
-          
-          paddingVertical: 40,
-          width: Dimensions.get("screen").width / 1.1,
+          borderRadius: 7,
+          backgroundColor: colors.backgroundCardPoint,
+          marginTop: marginTop,
         }}
       >
         <Text
           style={{
-            textAlign: "justify",
-            paddingVertical: 5,
-            paddingHorizontal: 8,
-            backgroundColor: colors.blueLess,
-            fontSize: 13,
-            // fontWeight: "500",
+            textAlign: "left",
+            paddingVertical: 10,
+            paddingHorizontal: 15,
+            fontSize: 15,
             borderRadius: 6,
-            color: "rgb(40, 40, 40)"
+            color: "rgb(40, 40, 40)",
           }}
         >
-          Add extra information in order that we can support you better when
-          booking tickets
+          {remind}
         </Text>
       </View>
-      <Image
-        source={require("../../assets/Image/account.png")}
-        style={{
-          height: 80,
-          width: 80,
-          objectFit: "cover",
-          resizeMode: "contain",
-          marginBottom: 20,
-        }}
-      ></Image>
+
+      {screenName.inforDetailScreen === whichScreen ? (
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "600",
+            alignSelf: "flex-start",
+            marginLeft: 20,
+            marginTop: marginTop,
+          }}
+        >
+          Passenger details
+        </Text>
+      ) : (
+        <Image
+          source={require("../../assets/Image/account.png")}
+          style={{
+            height: 80,
+            width: 80,
+            objectFit: "cover",
+            resizeMode: "contain",
+            marginTop: 20,
+          }}
+        ></Image>
+      )}
       <TextInput
         placeholder="Enter your fullname"
         style={{
           paddingLeft: 15,
-          height: 40,
           fontSize: 13,
           borderWidth: 1,
           borderColor: colors.gray,
-          borderRadius: 6,
+          borderRadius: 10,
           width: Dimensions.get("screen").width / 1.1,
-          height: 40,
+          paddingVertical: verticalPadding,
+          marginTop: marginTop,
         }}
       ></TextInput>
       <View
@@ -89,8 +105,7 @@ const SomeInformation = ({ navigation }) => {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          marginTop: 20,
-          marginBottom: 20,
+          marginTop: marginTop,
           width: Dimensions.get("screen").width / 1.1,
         }}
       >
@@ -100,13 +115,13 @@ const SomeInformation = ({ navigation }) => {
             flexDirection: "row",
             justifyContent: "space-evenly",
             alignItems: "center",
-            // paddingLeft: 10,
-            height: 40,
             fontSize: 13,
             borderWidth: 1,
             borderColor: "gray",
-            borderRadius: 6,
+            borderRadius: radiusInput,
             width: Dimensions.get("screen").width / 5,
+            // paddingVertical: verticalPadding,
+            height: 45,
           }}
         >
           <Image
@@ -127,32 +142,44 @@ const SomeInformation = ({ navigation }) => {
           placeholder="Phone Number"
           style={{
             paddingLeft: 15,
-            height: 40,
             fontSize: 13,
             borderWidth: 1,
             borderColor: "gray",
-            borderRadius: 6,
+            borderRadius: radiusInput,
             width: Dimensions.get("screen").width / 1.5,
-            height: 40,
-            paddingVertical: 10,
+            paddingVertical: verticalPadding,
           }}
         ></TextInput>
       </View>
       <TextInput
-        placeholder="Enter your fullname"
+        placeholder="Email to receive E-ticket"
         style={{
           paddingLeft: 15,
-          height: 40,
           fontSize: 13,
           borderWidth: 1,
           borderColor: "gray",
-          borderRadius: 6,
+          borderRadius: radiusInput,
           width: Dimensions.get("screen").width / 1.1,
-          height: 40,
-          paddingVertical: 0,
+          paddingVertical: verticalPadding,
+          marginTop: marginTop,
         }}
       ></TextInput>
-      <View
+      <TextInput
+        placeholder="Other requests or contact information"
+        multiline={true}
+        style={{
+          paddingLeft: 15,
+          fontSize: 13,
+          borderWidth: 1,
+          borderColor: "gray",
+          borderRadius: radiusInput,
+          width: Dimensions.get("screen").width / 1.1,
+          paddingVertical: verticalPadding,
+          marginTop: marginTop,
+          height: Dimensions.get("screen").height / 7,
+        }}
+      ></TextInput>
+      {/* <View
         style={{
           display: "flex",
           flexDirection: "column",
@@ -235,61 +262,8 @@ const SomeInformation = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
-      <View
-        style={{
-          position: "absolute",
-          bottom: 30,
-          left: 0,
-          borderTopWidth: 1,
-          borderTopColor: "rgb(200, 200, 200)",
-          width: Dimensions.get("screen").width,
-          height: 60,
-          backgroundColor: "transparent",
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          //   shadowColor: "#000",
-          //   shadowOffset: {
-          //     width: 0,
-          //     height: 4,
-          //   },
-          //   shadowOpacity: 0.32,
-          //   shadowRadius: 5.46,
-
-          //   elevation: 9,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: "rgb(170, 170, 170)",
-            width: Dimensions.get("screen").width / 1.1,
-            borderRadius: 6,
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-              textAlign: "center",
-              paddingVertical: 10,
-              fontSize: 14,
-              fontWeight: "600",
-            }}
-          >
-            Sign up
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-
-    // <View style={tailwind("pt-12 items-center")}>
-    //   <View style={tailwind("bg-blue-200 px-3 py-1 rounded-full")}>
-    //     <Text style={tailwind("text-blue-800 font-semibold")}>
-    //       Hello Tailwind
-    //     </Text>
-    //   </View>
-    // </View>
+      </View> */}
+    </KeyboardAvoidingView>
   );
 };
 

@@ -7,33 +7,89 @@ import {
   Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useSelector } from "react-redux";
+import authenReducer from "../../redux/reducers/authenReducer";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import ExpoFastImage from "expo-fast-image";
+import {
+  tabBookTicketScreen,
+  tabMyAccountScreen,
+  tabMyTicketScreen,
+  tabNotificationScreen,
+  pickupPointScreen,
+  dropoffPointScreen,
+  chooseSeatScreen,
+  chooseTripScreen,
+  inforDetailScreen,
+  inforTicketScreen,
+  paymentScreen,
+} from "../../constants/nameScreen";
+import colors from "../../constants/colors";
 
 const styles = StyleSheet.create({});
 
-const Header = ({ whichScreen, navigation }) => {
+const Header = ({
+  whichScreen,
+  navigation,
+  titleElement,
+  setShowChangeModal,
+  showChangeModal,
+  item,
+}) => {
   const tailwind = useTailwind();
+  const User = useSelector((state) => state.authenReducer);
+  const location = useSelector((state) => state.getLocationReducer);
   var title;
   var pl = 0;
-  if (whichScreen === 1) {
-    title = "Booking Tickets";
+  var loginOrEdit;
+
+  // Booking Tickets screen
+  if (whichScreen === tabBookTicketScreen) {
     title = (
       <Text style={{ color: "white", fontSize: 16 }}>Booking Tickets</Text>
     );
     pl = Dimensions.get("screen").width / 90;
-  } else if (whichScreen === 2) {
+    loginOrEdit = (
+      <TouchableOpacity
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          backgroundColor: "transparent",
+          paddingRight: 27,
+        }}
+        onPress={() => {
+          if (User.accessToken) {
+          } else {
+            navigation.navigate("Login");
+          }
+        }}
+      >
+        {whichScreen === tabNotificationScreen ? (
+          ""
+        ) : (
+          <Text style={[tailwind("underline"), { color: "white" }]}>
+            {/* Hello, Hai */}
+            {User.accessToken ? "Profile" : "Log in"}
+          </Text>
+        )}
+      </TouchableOpacity>
+    );
+  }
+  // My ticket screen
+  else if (whichScreen === tabMyTicketScreen) {
     title = <Text style={{ color: "white", fontSize: 16 }}>My Tickets</Text>;
     pl = Dimensions.get("screen").width / 17;
-  } else if (whichScreen === 3) {
+  }
+  // Notification screen
+  else if (whichScreen === tabNotificationScreen) {
     title = <Text style={{ color: "white", fontSize: 16 }}>Notifications</Text>;
     pl = Dimensions.get("screen").width / 17;
-  } else if (whichScreen === "StartPoint") {
-    // title = "Start point";
-    title = (
-      <Text style={{ color: "white", fontSize: 16 }}>Booking Tickets</Text>
-    );
-    pl = Dimensions.get("screen").width / 17;
-  } else if (whichScreen === 4) {
+  }
+  // My account screen
+  else if (whichScreen === tabMyAccountScreen) {
     title = (
       <View
         style={{
@@ -57,6 +113,459 @@ const Header = ({ whichScreen, navigation }) => {
       </View>
     );
     pl = Dimensions.get("screen").width / 17;
+    loginOrEdit = (
+      <TouchableOpacity
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          backgroundColor: "transparent",
+          paddingRight: 27,
+        }}
+        onPress={() => {
+          if (User.accessToken) {
+          } else {
+            navigation.navigate("Login");
+          }
+        }}
+      >
+        {whichScreen === tabNotificationScreen ? (
+          ""
+        ) : (
+          <Text style={[tailwind("underline"), { color: "white" }]}>
+            {/* Hello, Hai */}
+            {User.accessToken ? "Profile" : "Log in"}
+          </Text>
+        )}
+      </TouchableOpacity>
+    );
+  }
+  // ChooseTrip screen
+  else if (whichScreen === chooseTripScreen) {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Home");
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+
+          <View style={[tailwind("flex flex-col items-start"), {}]}>
+            <View style={[tailwind("flex flex-row items-center"), {}]}>
+              <Text style={[tailwind("text-[color:white]"), {}]}>
+                {location.startPoint.split("-")[0]}
+              </Text>
+              <AntDesign
+                name="swapright"
+                // size={30}
+                style={[
+                  tailwind("text-[color:white]"),
+                  {
+                    fontSize: 25,
+                  },
+                ]}
+              />
+              <Text style={[tailwind("text-[color:white]"), {}]}>
+                {location.stopPoint.split("-")[0]}
+              </Text>
+            </View>
+            <Text style={[tailwind("text-[color:white]"), {}]}>
+              {location.date}
+            </Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            // close
+            if (showChangeModal) {
+              setShowChangeModal(false);
+            } else {
+              setShowChangeModal(true);
+            }
+          }}
+        >
+          <Text style={[tailwind("underline"), { color: "white" }]}>
+            {/* Hello, Hai */}
+            {!showChangeModal ? "Change" : "Close"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  } else if (whichScreen === chooseSeatScreen) {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(chooseTripScreen);
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+
+          <View style={[tailwind("flex flex-col items-start"), {}]}>
+            <Text style={[tailwind("text-[color:white]"), { fontSize: 18 }]}>
+              {item.nameVehicle}
+            </Text>
+            <View style={[tailwind("flex flex-row items-center"), {}]}>
+              <Text
+                style={[
+                  tailwind("text-[color:white]"),
+                  { fontSize: 14, color: "rgb(245, 245, 245)" },
+                ]}
+              >
+                {item.timeStart.split(":").slice(0, 2).join(":")}
+              </Text>
+              <View
+                style={{
+                  height: 4,
+                  width: 4,
+                  marginHorizontal: 4,
+                  borderRadius: 10,
+                  backgroundColor: "white",
+                }}
+              ></View>
+              <Text
+                style={[
+                  tailwind("text-[color:white]"),
+                  { fontSize: 14, color: "rgb(245, 245, 245)" },
+                ]}
+              >
+                {location.date}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <Text style={{ color: "white", fontSize: 13 }}>Seat selection</Text>
+      </View>
+    );
+  } else if (whichScreen === pickupPointScreen) {
+    title = (
+      // <View
+      //   style={tailwind(
+      //     "flex flex-row justify-between items-center w-full pr-5 pl-2"
+      //   )}
+      // >
+      //   <View
+      //     style={
+      //       ([tailwind("flex")],
+      //       {
+      //         display: "flex",
+      //         flexDirection: "row",
+      //         alignItems: "center",
+      //         justifyContent: "flex-start",
+      //       })
+      //     }
+      //   >
+      //     <TouchableOpacity
+      //       onPress={() => {
+      //         navigation.navigate(chooseSeatScreen, item);
+      //         // chooseSeatScreen
+      //       }}
+      //       style={{
+      //         marginRight: 4,
+      //       }}
+      //     >
+      //       <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+      //     </TouchableOpacity>
+      //     <Text style={{ color: "white", fontSize: 15 }}>Pick-up point</Text>
+      //   </View>
+      // </View>
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(chooseSeatScreen, item);
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+
+          <View style={[tailwind("flex flex-col items-start"), {}]}>
+            <Text style={[tailwind("text-[color:white]"), { fontSize: 18 }]}>
+              {item.nameVehicle}
+            </Text>
+            <View style={[tailwind("flex flex-row items-center"), {}]}>
+              <Text
+                style={[
+                  tailwind("text-[color:white]"),
+                  { fontSize: 14, color: "rgb(245, 245, 245)" },
+                ]}
+              >
+                {item.timeStart.split(":").slice(0, 2).join(":")}
+              </Text>
+              <View
+                style={{
+                  height: 4,
+                  width: 4,
+                  marginHorizontal: 4,
+                  borderRadius: 10,
+                  backgroundColor: "white",
+                }}
+              ></View>
+              <Text
+                style={[
+                  tailwind("text-[color:white]"),
+                  { fontSize: 14, color: "rgb(245, 245, 245)" },
+                ]}
+              >
+                {location.date}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <Text style={{ color: "white", fontSize: 13 }}>Pick-up point</Text>
+      </View>
+    );
+  } else if (whichScreen === dropoffPointScreen) {
+    title = (
+      // <View
+      //   style={tailwind(
+      //     "flex flex-row justify-between items-center w-full pr-5 pl-2"
+      //   )}
+      // >
+      //   <View
+      //     style={
+      //       ([tailwind("flex")],
+      //       {
+      //         display: "flex",
+      //         flexDirection: "row",
+      //         alignItems: "center",
+      //         justifyContent: "flex-start",
+      //       })
+      //     }
+      //   >
+      //     <TouchableOpacity
+      //       onPress={() => {
+      //         navigation.navigate(pickupPointScreen, item);
+      //       }}
+      //       style={{
+      //         marginRight: 4,
+      //       }}
+      //     >
+      //       <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+      //     </TouchableOpacity>
+      //     <Text style={{ color: "white", fontSize: 15 }}>Drop-off point</Text>
+      //   </View>
+      // </View>
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(pickupPointScreen, item);
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+
+          <View style={[tailwind("flex flex-col items-start"), {}]}>
+            <Text style={[tailwind("text-[color:white]"), { fontSize: 18 }]}>
+              {item.nameVehicle}
+            </Text>
+            <View style={[tailwind("flex flex-row items-center"), {}]}>
+              <Text
+                style={[
+                  tailwind("text-[color:white]"),
+                  { fontSize: 14, color: "rgb(245, 245, 245)" },
+                ]}
+              >
+                {item.timeStart.split(":").slice(0, 2).join(":")}
+              </Text>
+              <View
+                style={{
+                  height: 4,
+                  width: 4,
+                  marginHorizontal: 4,
+                  borderRadius: 10,
+                  backgroundColor: "white",
+                }}
+              ></View>
+              <Text
+                style={[
+                  tailwind("text-[color:white]"),
+                  { fontSize: 14, color: "rgb(245, 245, 245)" },
+                ]}
+              >
+                {location.date}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <Text style={{ color: "white", fontSize: 13 }}>Drop-off point</Text>
+      </View>
+    );
+  } else if (whichScreen === inforDetailScreen) {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack(dropoffPointScreen);
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+          <Text style={{ color: "white", fontSize: 15 }}>
+            Passenger details
+          </Text>
+        </View>
+      </View>
+    );
+  } else if (whichScreen === inforTicketScreen) {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack(inforDetailScreen);
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+          <Text style={{ color: "white", fontSize: 15 }}>
+            Ticket information
+          </Text>
+        </View>
+      </View>
+    );
+  } else if (whichScreen === paymentScreen) {
+    title = (
+      <View
+        style={tailwind(
+          "flex flex-row justify-between items-center w-full pr-5 pl-2"
+        )}
+      >
+        <View
+          style={
+            ([tailwind("flex")],
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            })
+          }
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack(inforTicketScreen);
+            }}
+            style={{
+              marginRight: 4,
+            }}
+          >
+            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
+          </TouchableOpacity>
+          <Text style={{ color: "white", fontSize: 15 }}>Payment</Text>
+        </View>
+      </View>
+    );
   }
 
   return (
@@ -76,38 +585,7 @@ const Header = ({ whichScreen, navigation }) => {
       ]}
     >
       {title}
-      <TouchableOpacity
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          backgroundColor: "transparent",
-          paddingRight: 27,
-        }}
-        onPress={() => {
-          navigation.navigate("Login", {
-            username: "",
-          });
-        }}
-      >
-        {whichScreen === 3 ? (
-          ""
-        ) : (
-          <Text style={[tailwind("underline"), { color: "white" }]}>
-            {/* Hello, Hai */}
-            Log in
-          </Text>
-        )}
-
-        {/* <MaterialIcons
-          name="navigate-next"
-          style={{
-            fontSize: 20,
-            color: "white",
-          }}
-        /> */}
-      </TouchableOpacity>
+      {loginOrEdit}
     </View>
   );
 };
