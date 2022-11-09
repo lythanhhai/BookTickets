@@ -4,18 +4,18 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  Button,
   TouchableOpacity,
   TextInput,
   Image,
-  BackHandler,
-  Alert,
   ScrollView,
   Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Button,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { useTailwind } from "tailwind-rn";
-import Icon from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import ModalCode from "../Modal/ModalCode";
 import colors from "../../constants/colors";
@@ -124,17 +124,7 @@ const Register = ({ navigation, route }) => {
           !inValidData.errPassword &&
           !inValidData.errRe_password
         ) {
-          // getConfirmMethod("+84"+dataRegister.phoneNumber.slice(1, dataRegister.phoneNumber.length))
           sendVerification(dataRegister.phoneNumber);
-          // ApiRegister(
-          //   {
-          //     username: dataRegister.phoneNumber,
-          //     password: dataRegister.password,
-          //   },
-          //   dataRegister,
-          //   navigation,
-          //   dispatch
-          // );
           refRBSheet.current.open();
         }
       }
@@ -158,16 +148,6 @@ const Register = ({ navigation, route }) => {
         errPhoneNumber: "Phone number no more than 11 number!",
       });
     }
-    //  else if (
-    //   !/^(\+{0,})(\d{0,})([(]{1}\d{1,3}[)]{0,}){0,}(\s?\d+|\+\d{2,3}\s{1}\d+|\d+){1}[\s|-]?\d+([\s|-]?\d+){1,2}(\s){0,}$/gm.test(
-    //     val
-    //   )
-    // ) {
-    //   setInValidData({
-    //     ...inValidData,
-    //     errPhoneNumber: "You have entered an invalid phone number!",
-    //   });
-    // }
     else if (!val) {
       setInValidData({
         ...inValidData,
@@ -271,22 +251,6 @@ const Register = ({ navigation, route }) => {
       .verifyPhoneNumber("+84" + handlePhone, recaptchaVerifier.current)
       .then(setVerificationId)
       .catch((err) => {
-        // Alert.alert(
-        //   "Invalid phone number",
-        //   "Please enter your valid phone number!",
-        //   [
-        //     {
-        //       text: "Cancel",
-        //       onPress: () => Alert.alert("Cancel Pressed"),
-        //       style: "cancel",
-        //     },
-        //     {
-        //       text: "Ok",
-        //       onPress: () => Alert.alert("Cancel Pressed"),
-        //       style: "cancel",
-        //     },
-        //   ]
-        // );
         // console.warn(err);
         refRBSheet.current.close();
         handleShowAlert(err);
@@ -341,276 +305,354 @@ const Register = ({ navigation, route }) => {
     }
   };
   return (
-    <View>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <ScrollView>
-          <View
-            style={{
-              backgroundColor: "rgb(35,115,228)",
-              height: Dimensions.get("screen").height / 3,
-              width: Dimensions.get("screen").width,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              paddingLeft: 25,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("Home");
-                // console.warn("aa")
-              }}
-              style={{
-                position: "absolute",
-                top: 45,
-                left: 13,
-                color: "white",
-              }}
-            >
-              <Ionicons
-                name="arrow-back"
-                size={30}
-                style={{ color: "white" }}
-              />
-            </TouchableOpacity>
-            <Text
-              style={{
-                color: "white",
-                fontSize: 30,
-                fontWeight: "bold",
-              }}
-            >
-              Welcome!
-            </Text>
-            <Text style={{ color: "white", fontSize: 15 }}>
-              Sign up to receive more multiple benefits
-            </Text>
-          </View>
-
-          <View
-            style={{
-              //   display: "flex",
-              //   flexDirection: "column",
-              //   justifyContent: "center",
-              //   paddingLeft: 25,
-              backgroundColor: "white",
-              // height:
-              //   Dimensions.get("screen").height,
-              //   Dimensions.get("screen").height / 3,
-              minHeight:
-                Dimensions.get("screen").height -
-                Dimensions.get("screen").height / 3 +
-                45,
-              transform: [{ translateY: -45 }],
-              borderTopRightRadius: 30,
-              borderTopLeftRadius: 30,
-            }}
-          >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                marginTop: 30,
-                marginLeft: 20,
-                // marginBottom: 12,
-                // width: Dimensions.get('screen').width / 1.1,
-              }}
-            >
-              <Text
-                style={{
-                  color: "black",
-                  textAlign: "center",
-                  fontSize: 14,
-                }}
-              >
-                Sign up by:
-              </Text>
-
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <ScrollView>
               <View
                 style={{
+                  backgroundColor: "rgb(35,115,228)",
+                  height: Dimensions.get("screen").height / 3,
+                  width: Dimensions.get("screen").width,
                   display: "flex",
-                  flexDirection: "row",
+                  flexDirection: "column",
                   justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 15,
+                  paddingLeft: 25,
                 }}
               >
                 <TouchableOpacity
-                  //   color="#841584"
-                  //   accessibilityLabel="Learn more about this purple button"
-                  style={{
-                    backgroundColor: isPhoneNumber
-                      ? colors.blue
-                      : "transparent",
-                    borderRadius: 15,
-                    height: 13,
-                    width: 13,
-                    borderWidth: 1,
-                    borderColor: colors.gray,
-                  }}
                   onPress={() => {
-                    setIsPhoneNumber(true);
+                    navigation.navigate("Home");
+                    // console.warn("aa")
                   }}
-                ></TouchableOpacity>
-                <Text
                   style={{
-                    color: "black",
-                    textAlign: "center",
-                    fontSize: 14,
-                    paddingLeft: 8,
-                  }}
-                  onPress={() => {
-                    setIsPhoneNumber(true);
+                    position: "absolute",
+                    top: 45,
+                    left: 13,
+                    color: "white",
                   }}
                 >
-                  Phone number
+                  <Ionicons
+                    name="arrow-back"
+                    size={30}
+                    style={{ color: "white" }}
+                  />
+                </TouchableOpacity>
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 30,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Welcome!
+                </Text>
+                <Text style={{ color: "white", fontSize: 15 }}>
+                  Sign up to receive more multiple benefits
                 </Text>
               </View>
+
               <View
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 10,
+                  //   display: "flex",
+                  //   flexDirection: "column",
+                  //   justifyContent: "center",
+                  //   paddingLeft: 25,
+                  backgroundColor: "white",
+                  // height:
+                  //   Dimensions.get("screen").height,
+                  //   Dimensions.get("screen").height / 3,
+                  // minHeight:
+                  //   Dimensions.get("screen").height -
+                  //   Dimensions.get("screen").height / 3 +
+                  //   45,
+                  height:
+                    Dimensions.get("screen").height -
+                    Dimensions.get("screen").height / 3 +
+                    45,
+                  transform: [{ translateY: -45 }],
+                  borderTopRightRadius: 30,
+                  borderTopLeftRadius: 30,
                 }}
               >
-                <TouchableOpacity
-                  //   color="#841584"
-                  //   accessibilityLabel="Learn more about this purple button"
-                  style={{
-                    backgroundColor: !isPhoneNumber
-                      ? colors.blue
-                      : "transparent",
-                    borderRadius: 15,
-                    height: 13,
-                    width: 13,
-                    borderWidth: 1,
-                    borderColor: colors.gray,
-                  }}
-                  onPress={() => {
-                    setIsPhoneNumber(false);
-                  }}
-                ></TouchableOpacity>
-                <Text
-                  style={{
-                    color: "black",
-                    textAlign: "center",
-                    fontSize: 14,
-                    paddingLeft: 8,
-                  }}
-                  onPress={() => {
-                    setIsPhoneNumber(false);
-                  }}
-                >
-                  Email
-                </Text>
-              </View>
-            </View>
-            {/* divide method sign up */}
-            {isPhoneNumber ? (
-              <>
-                <Text
-                  style={[
-                    tailwind("text-sm"),
-                    {
-                      marginLeft: 20,
-                      fontWeight: "500",
-                      fontSize: 13,
-                      marginTop: 10,
-                    },
-                  ]}
-                >
-                  Phone number{""}
-                  <Text
-                    style={{
-                      color: "red",
-                    }}
-                  >
-                    *
-                  </Text>
-                </Text>
                 <View
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "space-evenly",
+                    justifyContent: "flex-start",
                     alignItems: "center",
-                    marginTop: 10,
+                    marginTop: 30,
+                    marginLeft: 20,
                     // marginBottom: 12,
+                    // width: Dimensions.get('screen').width / 1.1,
                   }}
                 >
+                  <Text
+                    style={{
+                      color: "black",
+                      textAlign: "center",
+                      fontSize: 14,
+                    }}
+                  >
+                    Sign up by:
+                  </Text>
+
                   <View
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      justifyContent: "space-evenly",
+                      justifyContent: "center",
                       alignItems: "center",
-                      // paddingLeft: 10,
-                      height: 40,
-                      fontSize: 13,
-                      borderWidth: 1,
-                      borderColor: "gray",
-                      borderRadius: 6,
-                      width: Dimensions.get("screen").width / 5,
+                      marginLeft: 15,
                     }}
                   >
-                    <Image
-                      source={require("../../assets/Image/adaptive-icon.png")}
+                    <TouchableOpacity
+                      //   color="#841584"
+                      //   accessibilityLabel="Learn more about this purple button"
                       style={{
-                        height: "80%",
-                        width: "30%",
-                        borderRadius: 10,
-                        objectFit: "cover",
-                        resizeMode: "contain",
-                      }}
-                    />
-                    <Text style={{}}>+84</Text>
-                  </View>
-                  <TextInput
-                    keyboardType="numeric"
-                    label="Your phone number"
-                    placeholder="Enter phone Number"
-                    value={dataRegister.phoneNumber}
-                    onChangeText={(value) => {
-                      setDataRegister({
-                        ...dataRegister,
-                        phoneNumber: value,
-                      });
-                      handleValidPhoneNumber(value);
-                    }}
-                    onEndEditing={(e) => {
-                      // handleValidPhoneNumber(e.nativeEvent.text);
-                    }}
-                    style={[
-                      {
-                        paddingLeft: 15,
-                        height: 40,
-                        fontSize: 13,
+                        backgroundColor: isPhoneNumber
+                          ? colors.blue
+                          : "transparent",
+                        borderRadius: 15,
+                        height: 13,
+                        width: 13,
                         borderWidth: 1,
-                        borderColor: "gray",
-                        borderRadius: 6,
-                        width: Dimensions.get("screen").width / 1.5,
-                        height: 40,
-                      },
-                      inValidData.errPhoneNumber && styles.errBorder,
-                    ]}
-                  ></TextInput>
+                        borderColor: colors.gray,
+                      }}
+                      onPress={() => {
+                        setIsPhoneNumber(true);
+                      }}
+                    ></TouchableOpacity>
+                    <Text
+                      style={{
+                        color: "black",
+                        textAlign: "center",
+                        fontSize: 14,
+                        paddingLeft: 8,
+                      }}
+                      onPress={() => {
+                        setIsPhoneNumber(true);
+                      }}
+                    >
+                      Phone number
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginLeft: 10,
+                    }}
+                  >
+                    <TouchableOpacity
+                      //   color="#841584"
+                      //   accessibilityLabel="Learn more about this purple button"
+                      style={{
+                        backgroundColor: !isPhoneNumber
+                          ? colors.blue
+                          : "transparent",
+                        borderRadius: 15,
+                        height: 13,
+                        width: 13,
+                        borderWidth: 1,
+                        borderColor: colors.gray,
+                      }}
+                      onPress={() => {
+                        setIsPhoneNumber(false);
+                      }}
+                    ></TouchableOpacity>
+                    <Text
+                      style={{
+                        color: "black",
+                        textAlign: "center",
+                        fontSize: 14,
+                        paddingLeft: 8,
+                      }}
+                      onPress={() => {
+                        setIsPhoneNumber(false);
+                      }}
+                    >
+                      Email
+                    </Text>
+                  </View>
                 </View>
-                {inValidData.errPhoneNumber ? (
-                  <Text style={styles.errMsg}>
-                    {inValidData.errPhoneNumber}
-                  </Text>
+                {/* divide method sign up */}
+                {isPhoneNumber ? (
+                  <>
+                    <Text
+                      style={[
+                        tailwind("text-sm"),
+                        {
+                          marginLeft: 20,
+                          fontWeight: "500",
+                          fontSize: 13,
+                          marginTop: 10,
+                        },
+                      ]}
+                    >
+                      Phone number{""}
+                      <Text
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Text>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-evenly",
+                        alignItems: "center",
+                        marginTop: 10,
+                        // marginBottom: 12,
+                      }}
+                    >
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-evenly",
+                          alignItems: "center",
+                          // paddingLeft: 10,
+                          height: 40,
+                          fontSize: 13,
+                          borderWidth: 1,
+                          borderColor: "gray",
+                          borderRadius: 6,
+                          width: Dimensions.get("screen").width / 5,
+                        }}
+                      >
+                        <Image
+                          source={require("../../assets/Image/adaptive-icon.png")}
+                          style={{
+                            height: "80%",
+                            width: "30%",
+                            borderRadius: 10,
+                            objectFit: "cover",
+                            resizeMode: "contain",
+                          }}
+                        />
+                        <Text style={{}}>+84</Text>
+                      </View>
+                      <TextInput
+                        keyboardType="numeric"
+                        label="Your phone number"
+                        placeholder="Enter phone Number"
+                        value={dataRegister.phoneNumber}
+                        onChangeText={(value) => {
+                          setDataRegister({
+                            ...dataRegister,
+                            phoneNumber: value,
+                          });
+                          handleValidPhoneNumber(value);
+                        }}
+                        onEndEditing={(e) => {
+                          // handleValidPhoneNumber(e.nativeEvent.text);
+                        }}
+                        style={[
+                          {
+                            paddingLeft: 15,
+                            height: 40,
+                            fontSize: 13,
+                            borderWidth: 1,
+                            borderColor: "gray",
+                            borderRadius: 6,
+                            width: Dimensions.get("screen").width / 1.5,
+                            height: 40,
+                          },
+                          inValidData.errPhoneNumber && styles.errBorder,
+                        ]}
+                      ></TextInput>
+                    </View>
+                    {inValidData.errPhoneNumber ? (
+                      <Text style={styles.errMsg}>
+                        {inValidData.errPhoneNumber}
+                      </Text>
+                    ) : (
+                      ""
+                    )}
+                  </>
                 ) : (
-                  ""
+                  <>
+                    <Text
+                      style={[
+                        tailwind("text-sm"),
+                        {
+                          marginLeft: 20,
+                          fontWeight: "500",
+                          fontSize: 13,
+                          marginTop: 10,
+                        },
+                      ]}
+                    >
+                      Email{""}
+                      <Text
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Text>
+                    <View
+                      style={[
+                        {
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "flex-end",
+                          alignItems: "center",
+                          marginLeft: 18,
+                          marginTop: 3,
+                          // marginBottom: 8,
+                          width: Dimensions.get("screen").width / 1.1,
+                          height: 40,
+                          borderWidth: 1,
+                          borderColor: "gray",
+                          borderRadius: 6,
+                          marginTop: 10,
+                        },
+                        inValidData.errEmail && styles.errBorder,
+                      ]}
+                    >
+                      <TextInput
+                        autoComplete="email"
+                        placeholder="Enter your email"
+                        value={dataRegister.email}
+                        onChangeText={(value) => {
+                          setDataRegister({
+                            ...dataRegister,
+                            email: value,
+                          });
+                          handleValidEmail(value);
+                        }}
+                        style={{
+                          paddingLeft: 15,
+                          fontSize: 13,
+                          width: "100%",
+                          height: "100%",
+                          // width: Dimensions.get("screen").width / 1.1,
+                          // height: 40,
+                        }}
+                      ></TextInput>
+                    </View>
+                    {inValidData.errEmail ? (
+                      <Text style={styles.errMsg}>{inValidData.errEmail}</Text>
+                    ) : (
+                      ""
+                    )}
+                  </>
                 )}
-              </>
-            ) : (
-              <>
+                {/*  */}
                 <Text
                   style={[
                     tailwind("text-sm"),
@@ -622,7 +664,7 @@ const Register = ({ navigation, route }) => {
                     },
                   ]}
                 >
-                  Email{""}
+                  Password{""}
                   <Text
                     style={{
                       color: "red",
@@ -648,19 +690,119 @@ const Register = ({ navigation, route }) => {
                       borderRadius: 6,
                       marginTop: 10,
                     },
-                    inValidData.errEmail && styles.errBorder,
+                    inValidData.errPassword && styles.errBorder,
                   ]}
                 >
                   <TextInput
-                    autoComplete="email"
-                    placeholder="Enter your email"
-                    value={dataRegister.email}
+                    autoComplete="password"
+                    placeholder="Enter password"
+                    secureTextEntry={showPassword ? false : true}
+                    value={dataRegister.password}
                     onChangeText={(value) => {
                       setDataRegister({
                         ...dataRegister,
-                        email: value,
+                        password: value,
                       });
-                      handleValidEmail(value);
+                      handleValidPassword(value);
+                    }}
+                    style={{
+                      paddingLeft: 15,
+                      fontSize: 13,
+                      width: "100%",
+                      height: "100%",
+                      // width: Dimensions.get("screen").width / 1.1,
+                      // height: 40,
+                    }}
+                    onEndEditing={(e) => {
+                      // handleValidPassword(e.nativeEvent.text);
+                    }}
+                  ></TextInput>
+                  {showPassword ? (
+                    <Entypo
+                      name="eye"
+                      size={18}
+                      color={colors.gray}
+                      style={{
+                        position: "absolute",
+                        top: 10,
+                        right: 10,
+                      }}
+                      onPress={() => {
+                        setShowPassword(!showPassword);
+                      }}
+                    />
+                  ) : (
+                    <Entypo
+                      name="eye-with-line"
+                      size={18}
+                      color={colors.gray}
+                      style={{
+                        position: "absolute",
+                        top: 10,
+                        right: 10,
+                      }}
+                      onPress={() => {
+                        setShowPassword(!showPassword);
+                      }}
+                    />
+                  )}
+                </View>
+                {inValidData.errPassword ? (
+                  <Text style={styles.errMsg}>{inValidData.errPassword}</Text>
+                ) : (
+                  ""
+                )}
+                <Text
+                  style={[
+                    tailwind("text-sm"),
+                    {
+                      marginLeft: 20,
+                      fontWeight: "500",
+                      fontSize: 13,
+                      marginTop: 10,
+                    },
+                  ]}
+                >
+                  Comfirm password{""}
+                  <Text
+                    style={{
+                      color: "red",
+                    }}
+                  >
+                    *
+                  </Text>
+                </Text>
+                <View
+                  style={[
+                    {
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      marginLeft: 18,
+                      marginTop: 3,
+                      // marginBottom: 8,
+                      width: Dimensions.get("screen").width / 1.1,
+                      height: 40,
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      borderRadius: 6,
+                      marginTop: 10,
+                    },
+                    inValidData.errRe_password && styles.errBorder,
+                  ]}
+                >
+                  <TextInput
+                    autoComplete="password"
+                    placeholder="Enter re-password"
+                    secureTextEntry={showPassword ? false : true}
+                    value={dataRegister.re_password}
+                    onChangeText={(value) => {
+                      setDataRegister({
+                        ...dataRegister,
+                        re_password: value,
+                      });
+                      handleValidRePassword(value);
                     }}
                     style={{
                       paddingLeft: 15,
@@ -671,176 +813,7 @@ const Register = ({ navigation, route }) => {
                       // height: 40,
                     }}
                   ></TextInput>
-                </View>
-                {inValidData.errEmail ? (
-                  <Text style={styles.errMsg}>{inValidData.errEmail}</Text>
-                ) : (
-                  ""
-                )}
-              </>
-            )}
-            {/*  */}
-            <Text
-              style={[
-                tailwind("text-sm"),
-                {
-                  marginLeft: 20,
-                  fontWeight: "500",
-                  fontSize: 13,
-                  marginTop: 10,
-                },
-              ]}
-            >
-              Password{""}
-              <Text
-                style={{
-                  color: "red",
-                }}
-              >
-                *
-              </Text>
-            </Text>
-            <View
-              style={[
-                {
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  marginLeft: 18,
-                  marginTop: 3,
-                  // marginBottom: 8,
-                  width: Dimensions.get("screen").width / 1.1,
-                  height: 40,
-                  borderWidth: 1,
-                  borderColor: "gray",
-                  borderRadius: 6,
-                  marginTop: 10,
-                },
-                inValidData.errPassword && styles.errBorder,
-              ]}
-            >
-              <TextInput
-                autoComplete="password"
-                placeholder="Enter password"
-                secureTextEntry={showPassword ? false : true}
-                value={dataRegister.password}
-                onChangeText={(value) => {
-                  setDataRegister({
-                    ...dataRegister,
-                    password: value,
-                  });
-                  handleValidPassword(value);
-                }}
-                style={{
-                  paddingLeft: 15,
-                  fontSize: 13,
-                  width: "100%",
-                  height: "100%",
-                  // width: Dimensions.get("screen").width / 1.1,
-                  // height: 40,
-                }}
-                onEndEditing={(e) => {
-                  // handleValidPassword(e.nativeEvent.text);
-                }}
-              ></TextInput>
-              {showPassword ? (
-                <Entypo
-                  name="eye"
-                  size={18}
-                  color={colors.gray}
-                  style={{
-                    position: "absolute",
-                    top: 10,
-                    right: 10,
-                  }}
-                  onPress={() => {
-                    setShowPassword(!showPassword);
-                  }}
-                />
-              ) : (
-                <Entypo
-                  name="eye-with-line"
-                  size={18}
-                  color={colors.gray}
-                  style={{
-                    position: "absolute",
-                    top: 10,
-                    right: 10,
-                  }}
-                  onPress={() => {
-                    setShowPassword(!showPassword);
-                  }}
-                />
-              )}
-            </View>
-            {inValidData.errPassword ? (
-              <Text style={styles.errMsg}>{inValidData.errPassword}</Text>
-            ) : (
-              ""
-            )}
-            <Text
-              style={[
-                tailwind("text-sm"),
-                {
-                  marginLeft: 20,
-                  fontWeight: "500",
-                  fontSize: 13,
-                  marginTop: 10,
-                },
-              ]}
-            >
-              Comfirm password{""}
-              <Text
-                style={{
-                  color: "red",
-                }}
-              >
-                *
-              </Text>
-            </Text>
-            <View
-              style={[
-                {
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  marginLeft: 18,
-                  marginTop: 3,
-                  // marginBottom: 8,
-                  width: Dimensions.get("screen").width / 1.1,
-                  height: 40,
-                  borderWidth: 1,
-                  borderColor: "gray",
-                  borderRadius: 6,
-                  marginTop: 10,
-                },
-                inValidData.errRe_password && styles.errBorder,
-              ]}
-            >
-              <TextInput
-                autoComplete="password"
-                placeholder="Enter re-password"
-                secureTextEntry={showPassword ? false : true}
-                value={dataRegister.re_password}
-                onChangeText={(value) => {
-                  setDataRegister({
-                    ...dataRegister,
-                    re_password: value,
-                  });
-                  handleValidRePassword(value);
-                }}
-                style={{
-                  paddingLeft: 15,
-                  fontSize: 13,
-                  width: "100%",
-                  height: "100%",
-                  // width: Dimensions.get("screen").width / 1.1,
-                  // height: 40,
-                }}
-              ></TextInput>
-              {/* {showPassword ? (
+                  {/* {showPassword ? (
               <Entypo
                 name="eye"
                 size={18}
@@ -861,144 +834,147 @@ const Register = ({ navigation, route }) => {
                 }}
               />
             )} */}
-            </View>
-            {inValidData.errRe_password ? (
-              <Text style={styles.errMsg}>{inValidData.errRe_password}</Text>
-            ) : (
-              ""
-            )}
-            {inValidData.errRequire ? (
-              <Text style={styles.errMsg}>{inValidData.errRequire}</Text>
-            ) : (
-              ""
-            )}
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: 10,
-                marginBottom: 25,
-              }}
-            >
-              <TouchableOpacity
-                //   color="#841584"
-                //   accessibilityLabel="Learn more about this purple button"
-                style={{
-                  backgroundColor: "rgb(8,27,57)",
-                  width: Dimensions.get("screen").width / 1.1,
-                  borderRadius: 6,
-                }}
-                onPress={() => {
-                  // openModalConfirmationCode(setModalVisible);
-                  onSubmitRegister();
-                }}
-              >
-                <Text
+                </View>
+                {inValidData.errRe_password ? (
+                  <Text style={styles.errMsg}>
+                    {inValidData.errRe_password}
+                  </Text>
+                ) : (
+                  ""
+                )}
+                {inValidData.errRequire ? (
+                  <Text style={styles.errMsg}>{inValidData.errRequire}</Text>
+                ) : (
+                  ""
+                )}
+                <View
                   style={{
-                    color: "white",
-                    textAlign: "center",
-                    paddingVertical: 10,
-                    fontSize: 14,
-                    fontWeight: "500",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 10,
+                    marginBottom: 25,
                   }}
                 >
-                  Sign up
-                </Text>
-              </TouchableOpacity>
-            </View>
+                  <TouchableOpacity
+                    //   color="#841584"
+                    //   accessibilityLabel="Learn more about this purple button"
+                    style={{
+                      backgroundColor: "rgb(8,27,57)",
+                      width: Dimensions.get("screen").width / 1.1,
+                      borderRadius: 6,
+                    }}
+                    onPress={() => {
+                      // openModalConfirmationCode(setModalVisible);
+                      onSubmitRegister();
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        textAlign: "center",
+                        paddingVertical: 10,
+                        fontSize: 14,
+                        fontWeight: "500",
+                      }}
+                    >
+                      Sign up
+                    </Text>
+                  </TouchableOpacity>
+                </View>
 
-            {/* modal */}
+                {/* modal */}
 
-            {isPhoneNumber ? (
-              <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={false}
-                height={280}
-                openDuration={500}
-                customStyles={{
-                  wrapper: {
-                    // backgroundColor: "transparent",
-                  },
-                  draggableIcon: {
-                    backgroundColor: "#000",
-                  },
-                }}
-              >
-                {/* <YourOwnComponent /> */}
-                <ModalCode
-                  phoneNumber={dataRegister.phoneNumber}
-                  confirmCode={confirmCode}
+                {isPhoneNumber ? (
+                  <RBSheet
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
+                    closeOnPressMask={false}
+                    height={280}
+                    openDuration={500}
+                    customStyles={{
+                      wrapper: {
+                        // backgroundColor: "transparent",
+                      },
+                      draggableIcon: {
+                        backgroundColor: "#000",
+                      },
+                    }}
+                  >
+                    {/* <YourOwnComponent /> */}
+                    <ModalCode
+                      phoneNumber={dataRegister.phoneNumber}
+                      confirmCode={confirmCode}
+                    />
+                    {/* <ModalCode phoneNumber={dataRegister.phoneNumber} /> */}
+                  </RBSheet>
+                ) : (
+                  <></>
+                )}
+
+                <FirebaseRecaptchaVerifierModal
+                  ref={recaptchaVerifier}
+                  firebaseConfig={firebaseConfig}
+                  androidHardwareAccelerationDisabled={true}
+                  // androidLayerType="software"
+                  attemptInvisibleVerification={
+                    Platform.OS === "ios" ? true : true
+                  }
+                  // appVerificationDisabledForTesting={false}
                 />
-                {/* <ModalCode phoneNumber={dataRegister.phoneNumber} /> */}
-              </RBSheet>
-            ) : (
-              <></>
-            )}
-
-            <FirebaseRecaptchaVerifierModal
-              ref={recaptchaVerifier}
-              firebaseConfig={firebaseConfig}
-              androidHardwareAccelerationDisabled={true}
-              // androidLayerType="software"
-              attemptInvisibleVerification={
-                Platform.OS === "ios" ? true : true
-              }
-              // appVerificationDisabledForTesting={false}
-            />
-            {/* {attemptInvisibleVerification && <FirebaseRecaptchaBanner />} */}
-            <AwesomeAlert
-              show={showAlert}
-              showProgress={false}
-              title="Verify Error"
-              message="Cannot verify phone number"
-              closeOnTouchOutside={true}
-              closeOnHardwareBackPress={false}
-              showCancelButton={true}
-              showConfirmButton={true}
-              cancelText="Cancel"
-              confirmText="Ok"
-              confirmButtonColor="#008080"
-              onCancelPressed={() => {
-                handleHideAlert();
-              }}
-              onConfirmPressed={() => {
-                handleHideAlert();
-              }}
-            />
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: 10,
-                marginBottom: 25,
-              }}
-            >
-              <Text style={{ marginRight: 10 }}>
-                Have you an account already?
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  handleBackSignin();
-                }}
-              >
-                <Text style={{ color: "rgb(50,100,255)" }}>Sign In</Text>
-              </TouchableOpacity>
-            </View>
-          {/* {true && <FirebaseRecaptchaBanner />} */}
-          </View>
-          {/* <ModalCode
+                {/* {attemptInvisibleVerification && <FirebaseRecaptchaBanner />} */}
+                <AwesomeAlert
+                  show={showAlert}
+                  showProgress={false}
+                  title="Verify Error"
+                  message="Cannot verify phone number"
+                  closeOnTouchOutside={true}
+                  closeOnHardwareBackPress={false}
+                  showCancelButton={true}
+                  showConfirmButton={true}
+                  cancelText="Cancel"
+                  confirmText="Ok"
+                  confirmButtonColor="#008080"
+                  onCancelPressed={() => {
+                    handleHideAlert();
+                  }}
+                  onConfirmPressed={() => {
+                    handleHideAlert();
+                  }}
+                />
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 10,
+                    marginBottom: 25,
+                  }}
+                >
+                  <Text style={{ marginRight: 10 }}>
+                    Have you an account already?
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleBackSignin();
+                    }}
+                  >
+                    <Text style={{ color: "rgb(50,100,255)" }}>Sign In</Text>
+                  </TouchableOpacity>
+                </View>
+                {/* {true && <FirebaseRecaptchaBanner />} */}
+              </View>
+              {/* <ModalCode
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
           /> */}
-        </ScrollView>
-      )}
-    </View>
-
+            </ScrollView>
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
     // <View style={tailwind("pt-12 items-center")}>
     //   <View style={tailwind("bg-blue-200 px-3 py-1 rounded-full")}>
     //     <Text style={tailwind("text-blue-800 font-semibold")}>
@@ -1010,125 +986,3 @@ const Register = ({ navigation, route }) => {
 };
 
 export default Register;
-
-{
-  /* <ModalCode modalVisible={modalVisible} setModalVisible={setModalVisible}/> */
-}
-{
-  /* <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: 25,
-          }}
-        >
-          <View
-            style={{
-              height: 1,
-              width: Dimensions.get("screen").width / 2.5,
-              backgroundColor: "black",
-              marginRight: 10,
-            }}
-          ></View>
-          <Text
-            style={{
-              fontSize: 13,
-            }}
-          >
-            Or
-          </Text>
-          <View
-            style={{
-              height: 1,
-              width: Dimensions.get("screen").width / 2.5,
-              backgroundColor: "black",
-              marginLeft: 10,
-            }}
-          ></View>
-        </View> */
-}
-{
-  /* <View
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: 10,
-            marginBottom: 25,
-          }}
-        >
-          <Icon size={24} color="black" name="google" />
-          <TouchableOpacity
-            // onPress={onPressLearnMore}
-            //   color="#841584"
-            //   accessibilityLabel="Learn more about this purple button"
-            style={{
-              backgroundColor: "white",
-              width: Dimensions.get("screen").width / 1.1,
-              borderRadius: 6,
-              borderWidth: 1,
-              borderColor: "gray",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Icon
-              size={18}
-              color="black"
-              name="google"
-              style={{ position: "absolute", left: 15, top: "25%" }}
-            />
-            <Text
-              style={{
-                color: "black",
-                textAlign: "center",
-                paddingVertical: 10,
-                fontSize: 14,
-                fontWeight: "800",
-              }}
-            >
-              Sign In With Google
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            // onPress={onPressLearnMore}
-            //   color="#841584"
-            //   accessibilityLabel="Learn more about this purple button"
-            style={{
-              backgroundColor: "white",
-              width: Dimensions.get("screen").width / 1.1,
-              borderRadius: 6,
-              marginTop: 10,
-              borderWidth: 1,
-              borderColor: "gray",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Icon
-              size={18}
-              color="black"
-              name="apple1"
-              style={{ position: "absolute", left: 15, top: "25%" }}
-            />
-            <Text
-              style={{
-                color: "black",
-                textAlign: "center",
-                paddingVertical: 10,
-                fontSize: 14,
-                fontWeight: "800",
-              }}
-            >
-              Sign In With Apple
-            </Text>
-          </TouchableOpacity>
-        </View> */
-}

@@ -8,13 +8,6 @@ import {
   Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { useState } from "react";
-import Header from "../../components/Header/Header";
-import SearchFrame from "../../components/BookingTickets/SearchFrame";
-import { registerTranslation } from "react-native-paper-dates";
-import data from "../../constants/virtualDataRecent";
-import Icon from "react-native-vector-icons/AntDesign";
-import Entypo from "react-native-vector-icons/Entypo";
 import { colorRoute } from "../../constants/colorsRoute";
 
 const styles = StyleSheet.create({
@@ -68,7 +61,7 @@ const CardRoute = ({ item }) => {
       }}
     >
       <Image
-        source={{uri: item.image}}
+        source={{ uri: item.image }}
         style={{
           width: Dimensions.get("screen").width / 3,
           height: 100,
@@ -91,7 +84,14 @@ const CardRoute = ({ item }) => {
       >
         {item.departLocation} - {item.arriveLocation}
       </Text>
-      <Text style={{ paddingHorizontal: 6, fontSize: 12, paddingTop: 4, color: "white" }}>
+      <Text
+        style={{
+          paddingHorizontal: 6,
+          fontSize: 12,
+          paddingTop: 4,
+          color: "white",
+        }}
+      >
         From {item.price}
       </Text>
       <Text

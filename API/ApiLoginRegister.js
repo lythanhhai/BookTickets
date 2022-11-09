@@ -3,13 +3,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
 import { loginAction, signupAction } from "../redux/actions/authenAction";
+import { baseUrl } from "./config";
 
 const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
   // const dispatch = useDispatch()
   setIsLoading(true);
   axios({
     method: "post",
-    url: "https://book-ticket-doan.herokuapp.com/api/auth/login",
+    url: `${baseUrl}auth/login`,
     data: Data,
   })
     .then((res) => {
@@ -46,7 +47,7 @@ const ApiRegister = (
   setIsLoading(true);
   axios({
     method: "post",
-    url: "https://book-ticket-doan.herokuapp.com/api/auth/signup",
+    url: `${baseUrl}auth/signup`,
     data: Data,
   })
     .then((res) => {

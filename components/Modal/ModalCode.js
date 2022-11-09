@@ -4,9 +4,6 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  Modal,
-  Button,
-  TextInput,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -44,7 +41,7 @@ const styles = StyleSheet.create({
   //   borderBottomColor: "#00000030",
   // },
   cellRoot: {
-    width: (width / 7) - 10,
+    width: width / 7 - 10,
     height: 50,
     justifyContent: "center",
     alignItems: "center",
@@ -154,7 +151,7 @@ const ModalCode = ({ navigation, route, phoneNumber, confirmCode }) => {
             marginTop: 10,
           }}
           onPress={() => {
-            confirmCode(value)
+            confirmCode(value);
             // confirmVerificationCode(value)
           }}
         >

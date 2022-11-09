@@ -11,14 +11,11 @@ import { useState, useCallback, useEffect } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import Icon from "react-native-vector-icons/AntDesign";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { DatePickerModal } from "react-native-paper-dates";
-import { registerTranslation } from "react-native-paper-dates";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import setTabStyleVisibility from "../../utils/setVisible";
 import { useDispatch, useSelector } from "react-redux";
-import { getLocationReducer } from "../../redux/reducers/getLocationReducer";
 import { swapLocation, getDate } from "../../redux/actions/getLocationAction";
 import colors from "../../constants/colors";
 
@@ -73,6 +70,8 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
       arrayDate[2] +
       " " +
       arrayDate[3];
+    // console.warn(dateChoosen);
+    // console.warn(formatDate(dateChoosen));
     setDate(dateChoosen);
     hideDatePicker();
   };
@@ -88,8 +87,6 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
     },
     [setOpen, setDate]
   );
-  // useSelector
-  const selector = useSelector((state) => state.getLocationReducer);
   // useEffect(() => {
   //   console.warn(selector)
   // })
@@ -100,18 +97,11 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
   const location = useSelector((state) => state.getLocationReducer);
   const SearchTicket = () => {
     if (location.date && location.startPoint && location.stopPoint) {
-      // navigation.navigate("ChooseTrip", {
-      //   departLocation: location.startPoint,
-      //   arrivalLocation: location.stopPoint,
-      //   date: location.date,
-      //   showModal: false,
-      // });
       navigation.navigate("ChooseTrip");
       setCheckClickSearch(true);
     } else {
       Alert.alert("Cannot Search", "Please fill out information!");
     }
-    // console.warn("a")
   };
 
   // dispatch date in search
@@ -233,13 +223,13 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    fontSize: !selector.startPoint ? 15 : 15,
+                    fontSize: !location.startPoint ? 15 : 15,
                     width: Dimensions.get("screen").width / 1.6,
                   }}
                 >
-                  {!selector.startPoint
+                  {!location.startPoint
                     ? "Choose start point"
-                    : selector.startPoint}
+                    : location.startPoint.split("-")[0]}
                   {/* {selector.startPoint} */}
                 </Text>
               </TouchableOpacity>
@@ -347,13 +337,13 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    fontSize: !selector.stopPoint ? 15 : 15,
+                    fontSize: !location.stopPoint ? 15 : 15,
                     width: Dimensions.get("screen").width / 1.6,
                   }}
                 >
-                  {!selector.stopPoint
+                  {!location.stopPoint
                     ? "Choose stop point"
-                    : selector.stopPoint}
+                    : location.stopPoint.split("-")[0]}
                 </Text>
               </TouchableOpacity>
             </View>

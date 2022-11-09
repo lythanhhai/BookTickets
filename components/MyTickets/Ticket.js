@@ -8,12 +8,6 @@ import {
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { useState } from "react";
-import Header from "../../components/Header/Header";
-import SearchFrame from "../../components/BookingTickets/SearchFrame";
-import { registerTranslation } from "react-native-paper-dates";
-import data from "../../constants/virtualDataRecent";
-import Icon from "react-native-vector-icons/AntDesign";
-import Entypo from "react-native-vector-icons/Entypo";
 import colors from "../../constants/colors";
 import RequireLogin from "./RequireLogin";
 
@@ -31,19 +25,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const Ticket = ({ item }) => {
+const Ticket = ({ item, setCurrentTab }) => {
   const tailwind = useTailwind();
   const [isChoosing, setIsChoosing] = useState("Upcomming");
 
   const chooseTabUpcomming = () => {
+    setCurrentTab("Upcomming");
     setIsChoosing("Upcomming");
   };
 
   const chooseTabCompleted = () => {
+    setCurrentTab("Completed");
     setIsChoosing("Completed");
   };
 
   const chooseTabCanceled = () => {
+    setCurrentTab("Canceled");
     setIsChoosing("Canceled");
   };
   return (

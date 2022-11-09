@@ -7,11 +7,6 @@ import {
   FlatList,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { useState } from "react";
-import Header from "../../components/Header/Header";
-import SearchFrame from "../../components/BookingTickets/SearchFrame";
-import { registerTranslation } from "react-native-paper-dates";
-import data from "../../constants/virtualDataRecent";
 import Icon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -169,15 +164,15 @@ const CardRecent = ({ item }) => {
             {item.arriveLocation}
           </Text>
         </View>
-          <Text
-            style={{
-              color: "rgb(110, 110, 110)",
-              fontSize: 10,
-              paddingLeft: 32,
-            }}
-          >
-            {item.date}
-          </Text>
+        <Text
+          style={{
+            color: "rgb(110, 110, 110)",
+            fontSize: 10,
+            paddingLeft: 32,
+          }}
+        >
+          {item.date}
+        </Text>
       </View>
       <Icon
         size={18}
