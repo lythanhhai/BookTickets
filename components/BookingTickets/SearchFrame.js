@@ -16,7 +16,12 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import setTabStyleVisibility from "../../utils/setVisible";
 import { useDispatch, useSelector } from "react-redux";
-import { swapLocation, getDate } from "../../redux/actions/getLocationAction";
+import {
+  swapLocation,
+  getDate,
+  getNewDate,
+  swapNewLocation,
+} from "../../redux/actions/getLocationAction";
 import colors from "../../constants/colors";
 
 const styles = StyleSheet.create({
@@ -51,7 +56,7 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
   const [date, setDate] = useState(currentDate);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [open, setOpen] = useState(false);
+
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -70,37 +75,31 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
       arrayDate[2] +
       " " +
       arrayDate[3];
-    // console.warn(dateChoosen);
-    // console.warn(formatDate(dateChoosen));
     setDate(dateChoosen);
     hideDatePicker();
   };
 
-  const onDismissSingle = useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-
-  const onConfirmSingle = useCallback(
-    (params) => {
-      setOpen(false);
-      setDate(params.date);
-    },
-    [setOpen, setDate]
-  );
-  // useEffect(() => {
-  //   console.warn(selector)
-  // })
   const dispatch = useDispatch();
   const clickSwapLocation = () => {
-    dispatch(swapLocation());
+    if (screen === "Home") {
+      dispatch(swapLocation());
+    } else {
+      dispatch(swapNewLocation());
+    }
   };
   const location = useSelector((state) => state.getLocationReducer);
+
+  // function search ticket depend on dep, des and date
   const SearchTicket = () => {
-    if (location.date && location.startPoint && location.stopPoint) {
-      navigation.navigate("ChooseTrip");
-      setCheckClickSearch(true);
+    if (screen === "Home") {
+      if (location.date && location.startPoint && location.stopPoint) {
+        navigation.replace("ChooseTrip", { screen: "Home" });
+        // setCheckClickSearch(true);
+      } else {
+        Alert.alert("Cannot Search", "Please fill out information!");
+      }
     } else {
-      Alert.alert("Cannot Search", "Please fill out information!");
+      navigation.replace("ChooseTrip", { screen: "ChooseTrip" });
     }
   };
 
@@ -121,12 +120,14 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
       location.date !== ""
     ) {
     } else {
-      dispatch(getDate(date));
+      if (screen === "Home") {
+        dispatch(getDate(date));
+      } else {
+        dispatch(getNewDate(date));
+      }
     }
   }, [date]);
-  // useEffect(() => {
-  //   console.warn(location);
-  // }, [location.date]);
+
   return (
     <View>
       <View
@@ -227,10 +228,16 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
                     width: Dimensions.get("screen").width / 1.6,
                   }}
                 >
-                  {!location.startPoint
+                  {/* {!location.startPoint
+                    ? "Choose start point"
+                    : location.startPoint.split("-")[0]} */}
+                  {screen === "ChooseTrip"
+                    ? location.startPoint !== location.newStartPoint
+                      ? location.newStartPoint.split("-")[0]
+                      : location.startPoint.split("-")[0]
+                    : !location.startPoint
                     ? "Choose start point"
                     : location.startPoint.split("-")[0]}
-                  {/* {selector.startPoint} */}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -341,7 +348,14 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
                     width: Dimensions.get("screen").width / 1.6,
                   }}
                 >
-                  {!location.stopPoint
+                  {/* {!location.stopPoint
+                    ? "Choose stop point"
+                    : location.stopPoint.split("-")[0]} */}
+                  {screen === "ChooseTrip"
+                    ? location.stopPoint !== location.newStopPoint
+                      ? location.newStopPoint.split("-")[0]
+                      : location.stopPoint.split("-")[0]
+                    : !location.stopPoint
                     ? "Choose stop point"
                     : location.stopPoint.split("-")[0]}
                 </Text>
@@ -402,7 +416,13 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
                   fontSize: 15,
                 }}
               >
-                {!location.date ? "Choose date" : location.date}
+                {screen === "ChooseTrip"
+                  ? location.date !== location.newDate
+                    ? location.newDate
+                    : location.date
+                  : !location.date
+                  ? "Choose date"
+                  : location.date}
               </Text>
             </TouchableOpacity>
             {Platform.OS === "ios" ? (

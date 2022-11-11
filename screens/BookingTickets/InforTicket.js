@@ -326,7 +326,9 @@ const InforTicket = ({ navigation, route }) => {
             width: width / 1.1,
             borderRadius: 6,
           }}
-          onPress={() => {navigation.replace(screenName.paymentScreen)}}
+          onPress={() => {
+            navigation.replace(screenName.paymentScreen);
+          }}
         >
           <Text
             style={{

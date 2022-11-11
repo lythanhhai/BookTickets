@@ -4,8 +4,6 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
   FlatList,
   Image,
 } from "react-native";
@@ -23,15 +21,13 @@ const styles = StyleSheet.create({
     height: Dimensions.get("screen").height / 3.4,
     width: Dimensions.get("screen").width,
     display: "flex",
-    // flexDirection: "column",
-    // justifyContent: "center",
     paddingLeft: Dimensions.get("screen").width / 21,
     borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,
   },
 });
 
-const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
+const CardTrip = ({ item, navigation, showModalDetailTrip, setTripChosen }) => {
   const tailwind = useTailwind();
   const heightDevice = Dimensions.get("screen").height;
   const HandleChooseATrip = () => {
@@ -39,6 +35,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
   };
   const handleClickDetailTrip = () => {
     showModalDetailTrip.current.open();
+    setTripChosen(item);
   };
   // console.warn(item);
   return (
@@ -91,15 +88,15 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
               { height: "100%" },
             ]}
           >
-            <Text style={[tailwind(), { fontSize: 14 }]}>
+            <Text style={[tailwind(), { fontSize: 15 }]}>
               {item.timeStart.split(":")[0] +
                 ":" +
                 item.timeStart.split(":")[1]}
             </Text>
-            <Text style={[tailwind("text-sm"), { fontSize: 9 }]}>
+            <Text style={[tailwind("text-sm"), { fontSize: 10 }]}>
               {calculateSumHour(item.timeStart, item.timeStations).duration}
             </Text>
-            <Text style={[tailwind(), { fontSize: 14 }]}>
+            <Text style={[tailwind(), { fontSize: 15 }]}>
               {calculateSumHour(item.timeStart, item.timeStations).endTime}
             </Text>
           </View>
@@ -119,7 +116,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
               style={{
                 color: "black",
                 height: "100%",
-                fontSize: 14,
+                fontSize: 15,
                 fontWeight: "600",
                 width: "100%",
               }}
@@ -129,7 +126,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
                 name="swapright"
                 style={{
                   color: "black",
-                  fontSize: 14,
+                  fontSize: 15,
                   fontWeight: "600",
                   width: "100%",
                 }}
@@ -159,7 +156,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
                 {/* From{" "} */}
                 <Text
                   style={{
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: "700",
                   }}
                 >
@@ -211,7 +208,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
             >
               <Text
                 style={{
-                  fontSize: 15,
+                  fontSize: 16,
                   fontWeight: "600",
                   marginBottom: 1,
                 }}
@@ -220,7 +217,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
               </Text>
               <Text
                 style={{
-                  fontSize: 13,
+                  fontSize: 14,
                   // fontWeight: "500",
                   marginBottom: 4,
                 }}
@@ -298,32 +295,6 @@ const CardTrip = ({ item, navigation, showModalDetailTrip }) => {
                   Verify immediatelly ticket
                 </Text>
               </View>
-              {/* <View
-              style={[
-                tailwind("flex flex-row justify-start items-center"),
-                {
-                  width: "100%",
-                  // backgroundColor: "red",
-                },
-              ]}
-            >
-              <Octicons
-                name="verified"
-                style={{
-                  color: colors.greenVerify,
-                  fontSize: 13,
-                  fontWeight: "500",
-                  marginRight: 5,
-                }}
-              ></Octicons>
-              <Text
-                style={{
-                  fontSize: 13,
-                }}
-              >
-                Verify immediatelly ticket
-              </Text>
-            </View> */}
             </View>
             <TouchableOpacity
               style={{

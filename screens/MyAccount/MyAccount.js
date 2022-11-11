@@ -1,7 +1,4 @@
-import {
-  StyleSheet,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { useState } from "react";
 import Header from "../../components/Header/Header";

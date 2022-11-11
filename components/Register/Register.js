@@ -147,8 +147,7 @@ const Register = ({ navigation, route }) => {
         ...inValidData,
         errPhoneNumber: "Phone number no more than 11 number!",
       });
-    }
-    else if (!val) {
+    } else if (!val) {
       setInValidData({
         ...inValidData,
         errPhoneNumber: "Phone number is required!",
@@ -214,27 +213,6 @@ const Register = ({ navigation, route }) => {
       });
     }
   };
-  // authentication with phone number in firebase
-  // const [confirm, setConfirm] = useState(null);
-  // async function getConfirmMethod(phoneNumber) {
-  //   try {
-  //     const confirmation = await signInWithPhoneNumber(phoneNumber);
-  //     setConfirm(confirmation);
-  //   } catch (error) {
-  //     console.warn("oke1")
-  //     alert(error);
-  //   }
-  // }
-  // async function confirmVerificationCode(code) {
-  //   try {
-  //     await confirm.confirm(code);
-  //     setConfirm(null);
-  //   } catch (error) {
-  //     console.warn("oke2")
-  //     alert('Invalid code');
-  //   }
-  // }
-  // const [code, setCode] = useState("");
   const [verificationId, setVerificationId] = useState(null);
   const recaptchaVerifier = useRef(null);
 
@@ -298,7 +276,6 @@ const Register = ({ navigation, route }) => {
   const handleBackSignin = () => {
     // navigation.navigate("Login");
     try {
-      // console.warn(route);
       navigation.goBack();
     } catch (err) {
       console.warn(err);
@@ -360,18 +337,7 @@ const Register = ({ navigation, route }) => {
 
               <View
                 style={{
-                  //   display: "flex",
-                  //   flexDirection: "column",
-                  //   justifyContent: "center",
-                  //   paddingLeft: 25,
                   backgroundColor: "white",
-                  // height:
-                  //   Dimensions.get("screen").height,
-                  //   Dimensions.get("screen").height / 3,
-                  // minHeight:
-                  //   Dimensions.get("screen").height -
-                  //   Dimensions.get("screen").height / 3 +
-                  //   45,
                   height:
                     Dimensions.get("screen").height -
                     Dimensions.get("screen").height / 3 +
@@ -389,8 +355,6 @@ const Register = ({ navigation, route }) => {
                     alignItems: "center",
                     marginTop: 30,
                     marginLeft: 20,
-                    // marginBottom: 12,
-                    // width: Dimensions.get('screen').width / 1.1,
                   }}
                 >
                   <Text
@@ -809,31 +773,8 @@ const Register = ({ navigation, route }) => {
                       fontSize: 13,
                       width: "100%",
                       height: "100%",
-                      // width: Dimensions.get("screen").width / 1.1,
-                      // height: 40,
                     }}
                   ></TextInput>
-                  {/* {showPassword ? (
-              <Entypo
-                name="eye"
-                size={18}
-                style={{
-                  position: "absolute",
-                  top: 10,
-                  right: 10,
-                }}
-              />
-            ) : (
-              <Entypo
-                name="eye-with-line"
-                size={18}
-                style={{
-                  position: "absolute",
-                  top: 10,
-                  right: 10,
-                }}
-              />
-            )} */}
                 </View>
                 {inValidData.errRe_password ? (
                   <Text style={styles.errMsg}>
@@ -975,13 +916,6 @@ const Register = ({ navigation, route }) => {
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-    // <View style={tailwind("pt-12 items-center")}>
-    //   <View style={tailwind("bg-blue-200 px-3 py-1 rounded-full")}>
-    //     <Text style={tailwind("text-blue-800 font-semibold")}>
-    //       Hello Tailwind
-    //     </Text>
-    //   </View>
-    // </View>
   );
 };
 

@@ -252,15 +252,6 @@ const ChooseSeat = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const location = useSelector((state) => state.getLocationReducer);
   useEffect(() => {
-    // getTrips(
-    //   {
-    //     date: formatDate(location.date),
-    //     dep: parseInt(location.startPoint.split("-")[1]),
-    //     des: parseInt(location.stopPoint.split("-")[1]),
-    //   },
-    //   setData,
-    //   setLoading
-    // );
     let arrayFirst = route.params.seatStatuses.slice(0, 23);
     let arraySecond = route.params.seatStatuses.slice(23, 46);
     arrayFirst.forEach((item, index) => {
@@ -381,11 +372,6 @@ const ChooseSeat = ({ navigation, route }) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            // height:
-            //   Dimensions.get("screen").height -
-            //   Dimensions.get("screen").height / 5,
-            // backgroundColor: "red",
-            // marginBottom: heightBottomSheet,
           }}
           horizontal={false}
           nestedScrollEnabled={true}

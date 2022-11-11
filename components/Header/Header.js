@@ -7,7 +7,7 @@ import {
   Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import authenReducer from "../../redux/reducers/authenReducer";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -26,6 +26,7 @@ import {
   paymentScreen,
 } from "../../constants/nameScreen";
 import colors from "../../constants/colors";
+import { resetNew } from "../../redux/actions/getLocationAction";
 
 const styles = StyleSheet.create({});
 
@@ -43,6 +44,7 @@ const Header = ({
   var title;
   var pl = 0;
   var loginOrEdit;
+  const dispatch = useDispatch();
 
   // Booking Tickets screen
   if (whichScreen === tabBookTicketScreen) {
@@ -160,46 +162,67 @@ const Header = ({
             })
           }
         >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Home");
-            }}
-            style={{
-              marginRight: 4,
-            }}
-          >
-            <Ionicons name="arrow-back" size={25} style={{ color: "white" }} />
-          </TouchableOpacity>
+          {showChangeModal ? (
+            <></>
+          ) : (
+            <View
+              style={
+                ([tailwind("flex")],
+                {
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                })
+              }
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Home");
+                }}
+                style={{
+                  marginRight: 4,
+                }}
+              >
+                <Ionicons
+                  name="arrow-back"
+                  size={25}
+                  style={{ color: "white" }}
+                />
+              </TouchableOpacity>
 
-          <View style={[tailwind("flex flex-col items-start"), {}]}>
-            <View style={[tailwind("flex flex-row items-center"), {}]}>
-              <Text style={[tailwind("text-[color:white]"), {}]}>
-                {location.startPoint.split("-")[0]}
-              </Text>
-              <AntDesign
-                name="swapright"
-                // size={30}
-                style={[
-                  tailwind("text-[color:white]"),
-                  {
-                    fontSize: 25,
-                  },
-                ]}
-              />
-              <Text style={[tailwind("text-[color:white]"), {}]}>
-                {location.stopPoint.split("-")[0]}
-              </Text>
+              <View style={[tailwind("flex flex-col items-start"), {}]}>
+                <View style={[tailwind("flex flex-row items-center"), {}]}>
+                  <Text style={[tailwind("text-[color:white]"), {}]}>
+                    {location.startPoint.split("-")[0]}
+                  </Text>
+                  <AntDesign
+                    name="swapright"
+                    // size={30}
+                    style={[
+                      tailwind("text-[color:white]"),
+                      {
+                        fontSize: 25,
+                      },
+                    ]}
+                  />
+                  <Text style={[tailwind("text-[color:white]"), {}]}>
+                    {location.stopPoint.split("-")[0]}
+                  </Text>
+                </View>
+                <Text style={[tailwind("text-[color:white]"), {}]}>
+                  {location.date}
+                </Text>
+              </View>
             </View>
-            <Text style={[tailwind("text-[color:white]"), {}]}>
-              {location.date}
-            </Text>
-          </View>
+          )}
         </View>
         <TouchableOpacity
           onPress={() => {
             // close
             if (showChangeModal) {
               setShowChangeModal(false);
+              dispatch(resetNew());
             } else {
               setShowChangeModal(true);
             }

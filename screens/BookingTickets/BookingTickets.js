@@ -37,13 +37,7 @@ const styles = StyleSheet.create({
   backgroundBottom: {
     backgroundColor: "rgb(246, 246, 246)",
     width: Dimensions.get("screen").width,
-    // height: 2000,
-    // display: "flex",
-    // flexDirection: "column",
-    // justifyContent: "center",
-    // position: "relative",
-    // top: 0,
-    // left: 0,
+
   },
 });
 
@@ -56,7 +50,7 @@ const BookingTickets = ({ navigation, route }) => {
         "https://storage.googleapis.com/vex-config/cms-tool/destination/images/25/img_hero.png",
       departLocation: "Đà Nẵng",
       arriveLocation: "Quảng Trị",
-      date: "19/10/2022",
+      date: "2022-10-19",
       price: "150.000vnd",
       originalPrice: "300.000vnd",
     },
@@ -118,6 +112,7 @@ const BookingTickets = ({ navigation, route }) => {
         navigation={navigation}
         route={route}
         setCheckClickSearch={setCheckClickSearch}
+        screen={"Home"}
       />
       <View
         style={{

@@ -43,11 +43,9 @@ const CardPoint = ({
   index,
   dropScreen,
 }) => {
-  // const [itemChosen, setItemChosen] = useState(-1);
   const choosePickupPoint = () => {
     setItemChosen(item);
   };
-  // console.warn(index);
   return (
     <View
       style={{

@@ -75,7 +75,7 @@ const InforDetail = ({ navigation, route }) => {
                 borderRadius: 6,
               }}
               onPress={() => {
-                navigation.replace(screenName.inforTicketScreen)
+                navigation.replace(screenName.inforTicketScreen);
               }}
             >
               <Text

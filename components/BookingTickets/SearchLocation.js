@@ -24,9 +24,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getLocationStart,
   getLocationStop,
+  getNewLocationStart,
+  getNewLocationStop,
 } from "../../redux/actions/getLocationAction";
 import { getListLocation } from "../../API/ApiGetStation";
 import Loading from "../Loading/Loading";
+import { toNonAccentVietnamese } from "../../utils/formatTextSearch";
+import { similarity } from "../../utils/similiarStr";
 
 const styles = StyleSheet.create({
   background: {
@@ -49,26 +53,25 @@ const SearchLocation = ({ item, navigation, route }) => {
   const [listSearchDistrict, setListSearchDistrict] = useState([]);
   const [Data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // get list station from api
   useEffect(() => {
     getListLocation(setListLocation, setLoading);
   }, []);
 
+  // search location depend on input text
   const searchALocation = (value) => {
     var listProvince = [];
     var listDistrict = [];
-    // console.warn("Hà nội".normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+    // console.warn("Đà Nẵng".normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+    // .normalize("NFD")
+    // .replace(/[\u0300-\u036f]/g, "")
+    // .toLowerCase();
     listLocation.forEach((item, index) => {
-      var itemAfterRemoveAccented = item.nameStation
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/gu, "")
-        .toLowerCase();
+      var itemAfterRemoveAccented = toNonAccentVietnamese(item.nameStation);
+
       if (
-        itemAfterRemoveAccented.includes(
-          value
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/gu, "")
-            .toLowerCase()
-        ) &&
+        itemAfterRemoveAccented.includes(toNonAccentVietnamese(value)) &&
         !itemAfterRemoveAccented.includes("-")
       ) {
         listProvince.push({
@@ -76,12 +79,25 @@ const SearchLocation = ({ item, navigation, route }) => {
           nameStation: item.nameStation,
         });
       } else if (
-        itemAfterRemoveAccented.includes(
-          value
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/gu, "")
-            .toLowerCase()
-        ) &&
+        itemAfterRemoveAccented.includes(toNonAccentVietnamese(value)) &&
+        itemAfterRemoveAccented.includes("-")
+      ) {
+        listDistrict.push({
+          id: item.id,
+          nameStation: item.nameStation,
+        });
+      } else if (
+        similarity(toNonAccentVietnamese(value), itemAfterRemoveAccented) >
+          0.7 &&
+        !itemAfterRemoveAccented.includes("-")
+      ) {
+        listProvince.push({
+          id: item.id,
+          nameStation: item.nameStation,
+        });
+      } else if (
+        similarity(toNonAccentVietnamese(value), itemAfterRemoveAccented) >
+          0.7 &&
         itemAfterRemoveAccented.includes("-")
       ) {
         listDistrict.push({
@@ -155,7 +171,6 @@ const SearchLocation = ({ item, navigation, route }) => {
           onChangeText={(value) => {
             setValueSearch(value);
             searchALocation(value);
-            // console.warn(value)
           }}
           style={{
             width: Dimensions.get("screen").width / 1.25,
@@ -201,16 +216,6 @@ const SearchLocation = ({ item, navigation, route }) => {
         ) : (
           <SectionList
             sections={Data}
-            // style={{
-            //   backgroundColor: "white",
-            //   width: Dimensions.get("screen").width,
-            //   // position: "absolute",
-            //   // top: 60,
-            //   // left: 0,
-            //   // minHeight: 1000,
-            //   // overflowY: "scroll",
-            //   // overflowX: "hidden",
-            // }}
             keyExtractor={(item, index) => item.id + index}
             renderItem={({ item }) => {
               // console.warn(item)
@@ -229,13 +234,12 @@ const SearchLocation = ({ item, navigation, route }) => {
                     width: Dimensions.get("screen").width / 1.05,
                     height: 50,
                     bacgroundColor: "red",
-                    // flexWrap: "wrap"
                   }}
                   onPress={() => {
                     if (route.params.screenReturn === "ChooseTrip") {
                       if (route.params.screen === "startpoint") {
                         dispatch(
-                          getLocationStart(item.nameStation + "-" + item.id)
+                          getNewLocationStart(item.nameStation + "-" + item.id)
                         );
                         navigation.navigate("ChooseTrip");
                         // , {
@@ -246,7 +250,7 @@ const SearchLocation = ({ item, navigation, route }) => {
                         // }
                       } else {
                         dispatch(
-                          getLocationStop(item.nameStation + "-" + item.id)
+                          getNewLocationStop(item.nameStation + "-" + item.id)
                         );
                         navigation.navigate("ChooseTrip");
                       }

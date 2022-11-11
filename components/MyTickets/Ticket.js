@@ -17,8 +17,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get("screen").height / 3.4,
     width: Dimensions.get("screen").width,
     display: "flex",
-    // flexDirection: "column",
-    // justifyContent: "center",
     paddingLeft: Dimensions.get("screen").width / 21,
     borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,

@@ -11,13 +11,13 @@ import { persistStore, persistReducer } from "redux-persist";
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: ['getLocationReducer', 'authenReducer'],
+  blacklist: ["getLocationReducer", "authenReducer"],
   // whitelist: ['getLocationReducer']
 };
 
 const rootReducer = combineReducers({
   getLocationReducer: getLocationReducer,
-  authenReducer: authenReducer
+  authenReducer: authenReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

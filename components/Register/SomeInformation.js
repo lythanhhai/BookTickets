@@ -7,7 +7,7 @@ import {
   Image,
   BackHandler,
   KeyboardAvoidingView,
-  Platform
+  Platform,
 } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useState, useEffect } from "react";

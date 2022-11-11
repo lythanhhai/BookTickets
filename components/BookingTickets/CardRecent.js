@@ -17,8 +17,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get("screen").height / 3.4,
     width: Dimensions.get("screen").width,
     display: "flex",
-    // flexDirection: "column",
-    // justifyContent: "center",
     paddingLeft: Dimensions.get("screen").width / 21,
     borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,
@@ -55,55 +53,11 @@ const CardRecent = ({ item }) => {
         marginBottom: 10,
       }}
     >
-      {/* <View
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "center",
-        }}
-      >
-        <FontAwesome
-          size={18}
-          color="black"
-          name="dot-circle-o"
-          style={{
-            marginHorizontal: 15,
-            fontSize: 13,
-            color: "rgb(35,115,228)",
-          }}
-        />
-        <View
-          style={{
-            height: "27%",
-            width: 1,
-            backgroundColor: "black",
-          }}
-        ></View>
-        <FontAwesome
-          size={18}
-          color="black"
-          name="dot-circle-o"
-          style={{
-            marginHorizontal: 15,
-            fontSize: 13,
-            color: "red",
-          }}
-        />
-      </View> */}
       <View
         style={{
           width: 120,
-          // display: "flex",
-          // flexDirection: "column",
-          // justifyContent: "center",
-          // alignItems: "flex-start",
         }}
       >
-        {/* <Text style={{ color: "black" }}>{data.departLocation}</Text>
-        <Text>{data.arriveLocation}</Text>
-        <Text>{data.date}</Text>
-         */}
         <View
           style={{
             display: "flex",
@@ -131,7 +85,7 @@ const CardRecent = ({ item }) => {
               fontWeight: "bold",
             }}
           >
-            {item.departLocation}
+            {item.departLocation.split("-")[0]}
           </Text>
         </View>
         <View
@@ -161,7 +115,7 @@ const CardRecent = ({ item }) => {
               fontWeight: "bold",
             }}
           >
-            {item.arriveLocation}
+            {item.arriveLocation.split("-")[0]}
           </Text>
         </View>
         <Text

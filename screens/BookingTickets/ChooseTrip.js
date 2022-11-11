@@ -23,8 +23,10 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { useRef } from "react";
 import ModalTrip from "../../components/Modal/ModalTrip";
 import { getTrips } from "../../API/ApiGetTrips";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "../../utils/formatDate";
+import NotFound from "../../components/NotFound.js/NotFound";
+import { resetNew, search } from "../../redux/actions/getLocationAction";
 
 const styles = StyleSheet.create(styleGlobal);
 const stylesFilter = StyleSheet.create({
@@ -72,19 +74,34 @@ const ChooseTrip = ({ navigation, route }) => {
   const [showChangeModal, setShowChangeModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showModalFilter, setShowModalFilter] = useState(false);
+  const [tripChosen, setTripChosen] = useState({});
   const RBSheetRefTrip = useRef();
   const location = useSelector((state) => state.getLocationReducer);
+  const dispatch = useDispatch();
   useEffect(() => {
     // setShowChangeModal(false)
-    getTrips(
-      {
-        date: formatDate(location.date),
-        dep: parseInt(location.startPoint.split("-")[1]),
-        des: parseInt(location.stopPoint.split("-")[1]),
-      },
-      setData,
-      setLoading
-    );
+    if (route.params?.screen === "Home") {
+      getTrips(
+        {
+          date: formatDate(location.date),
+          dep: parseInt(location.startPoint.split("-")[1]),
+          des: parseInt(location.stopPoint.split("-")[1]),
+        },
+        setData,
+        setLoading
+      );
+    } else {
+      getTrips(
+        {
+          date: formatDate(location.newDate),
+          dep: parseInt(location.newStartPoint.split("-")[1]),
+          des: parseInt(location.newStopPoint.split("-")[1]),
+        },
+        setData,
+        setLoading
+      );
+      dispatch(search());
+    }
   }, []);
   return (
     <View
@@ -165,6 +182,21 @@ const ChooseTrip = ({ navigation, route }) => {
         >
           <ActivityIndicator size="large" color={colors.blue} />
         </View>
+      ) : Data.length === 0 ? (
+        <View
+          style={[
+            tailwind("flex flex-col justify-start items-center"),
+            {
+              height:
+                Dimensions.get("screen").height -
+                Dimensions.get("screen").height / 8.5 -
+                50,
+              width: Dimensions.get("screen").width,
+            },
+          ]}
+        >
+          <NotFound />
+        </View>
       ) : (
         <View
           style={[
@@ -199,6 +231,7 @@ const ChooseTrip = ({ navigation, route }) => {
                   item={item}
                   navigation={navigation}
                   showModalDetailTrip={RBSheetRefTrip}
+                  setTripChosen={setTripChosen}
                 />
               );
             }}
@@ -229,6 +262,7 @@ const ChooseTrip = ({ navigation, route }) => {
           navigation={navigation}
           route={route}
           RBSheetRefTrip={RBSheetRefTrip}
+          tripChosen={tripChosen}
         />
       </RBSheet>
       {showChangeModal ? (
@@ -270,6 +304,7 @@ const ChooseTrip = ({ navigation, route }) => {
           <TouchableOpacity
             onPress={() => {
               setShowChangeModal(false);
+              dispatch(resetNew());
             }}
             style={{
               height:

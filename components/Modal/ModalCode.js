@@ -22,24 +22,6 @@ const styles = StyleSheet.create({
   root: { flex: 1, padding: 20 },
   title: { textAlign: "center", fontSize: 30 },
   codeFieldRoot: { paddingVertical: 30 },
-  // cell: {
-  //   width: width / 7 - 10,
-  //   height: 40,
-  //   lineHeight: 38,
-  //   fontSize: 24,
-  //   borderBottomWidth: 2,
-  //   borderColor: "#00000030",
-  //   textAlign: "center",
-  //   marginRight: 10,
-  // },
-  // focusCell: {
-  //   borderColor: colors.blue,
-  //   color: colors.blue,
-  // },
-  // inputText: {
-  //   borderBottomWidth: 2,
-  //   borderBottomColor: "#00000030",
-  // },
   cellRoot: {
     width: width / 7 - 10,
     height: 50,

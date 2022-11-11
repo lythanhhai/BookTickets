@@ -44,15 +44,6 @@ const RequireLogin = ({ item, navigation, route }) => {
           height: 75,
           width: 75,
           marginBottom: 10,
-          //   shadowColor: "#000",
-          //   shadowOffset: {
-          //     width: 0,
-          //     height: 100,
-          //   },
-          //   shadowOpacity: 0.8,
-          //   shadowRadius: 5.46,
-
-          //   elevation: 24,
         }}
       />
       <View

@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import colors from "../../constants/colors";
+import { useSelector } from "react-redux";
+import { formatDate } from "../../utils/formatDate";
+import { calculateSumHour } from "../../utils/calculateSumHour";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -18,7 +21,7 @@ const heightModalBottom = 130;
 const pickup = "pickup",
   dropoff = "dropoff",
   rating = "rating";
-const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
+const ModalTrip = ({ navigation, route, RBSheetRefTrip, tripChosen }) => {
   const [currentTab, setCurrentTab] = useState(pickup);
   const handleClickDropOff = () => {
     setCurrentTab(dropoff);
@@ -29,10 +32,26 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
   const handleClickRating = () => {
     setCurrentTab(rating);
   };
+  const location = useSelector((state) => state.getLocationReducer);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    // console.warn(route.params.routeStations)
+    let arrayRes = [];
+    if (currentTab == pickup) {
+      tripChosen.routeStations.forEach((item, index) => {
+        arrayRes.push(item[0]);
+      });
+      setData(arrayRes);
+    } else if (currentTab == dropoff) {
+      tripChosen.routeStations.forEach((item, index) => {
+        arrayRes.push(item[1]);
+      });
+      setData(arrayRes);
+    }
+  }, [currentTab]);
   return (
     <View
       style={{
-        // backgroundColor: "blue",
         height: "100%",
       }}
     >
@@ -40,10 +59,9 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           marginTop: 20,
-          // backgroundColor: "red",
-          height: "80%"
+          height: "100%",
         }}
       >
         <View
@@ -69,7 +87,7 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
                 marginBottom: 5,
               }}
             >
-              An Anh Limousine
+              {tripChosen.nameVehicle}
             </Text>
             <View
               style={{
@@ -86,7 +104,7 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
                   fontWeight: "500",
                 }}
               >
-                23:00
+                {tripChosen.timeStart.split(":").slice(0, 2).join(":")}
               </Text>
               <View
                 style={{
@@ -104,7 +122,8 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
                   color: "rgb(50, 50, 50)",
                 }}
               >
-                Wed, 11/06/2022
+                {location.date.split(" ")[0] + ", " + formatDate(location.date)}
+                {/* Wed, 11/06/2022 */}
               </Text>
             </View>
           </View>
@@ -127,90 +146,90 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            width: width,
-            // backgroundColor: "red",
-            borderBottomColor: "rgb(200, 200, 200)",
-            borderBottomWidth: 1,
-            // marginTop: 10,
-          }}
-        >
-          <TouchableOpacity
+        <View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
             style={{
-              paddingHorizontal: paddingHorizontalTab,
-              borderBottomColor:
-                currentTab === pickup ? colors.blue : "transparent",
-              borderBottomWidth: 2,
-              paddingVertical: 10,
-            }}
-            onPress={() => {
-              handleClickPickUp();
+              width: width,
+              borderBottomColor: "rgb(200, 200, 200)",
+              borderBottomWidth: 1,
             }}
           >
-            <Text
+            <TouchableOpacity
               style={{
-                fontSize: 17,
-                fontWeight: "600",
-                color: currentTab === pickup ? "black" : colorGray,
+                paddingHorizontal: paddingHorizontalTab,
+                borderBottomColor:
+                  currentTab === pickup ? colors.blue : "transparent",
+                borderBottomWidth: 2,
+                paddingVertical: 10,
+              }}
+              onPress={() => {
+                handleClickPickUp();
               }}
             >
-              Pick-up
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: paddingHorizontalTab,
-              borderBottomColor:
-                currentTab === dropoff ? colors.blue : "transparent",
-
-              borderBottomWidth: 2,
-
-              paddingVertical: 10,
-            }}
-            onPress={() => {
-              handleClickDropOff();
-            }}
-          >
-            <Text
+              <Text
+                style={{
+                  fontSize: 17,
+                  fontWeight: "600",
+                  color: currentTab === pickup ? "black" : colorGray,
+                }}
+              >
+                Pick-up
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={{
-                fontSize: 17,
-                fontWeight: "600",
-                color: currentTab === dropoff ? "black" : colorGray,
+                paddingHorizontal: paddingHorizontalTab,
+                borderBottomColor:
+                  currentTab === dropoff ? colors.blue : "transparent",
+
+                borderBottomWidth: 2,
+
+                paddingVertical: 10,
+              }}
+              onPress={() => {
+                handleClickDropOff();
               }}
             >
-              Drop-off
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: paddingHorizontalTab,
-              borderBottomColor:
-                currentTab === rating ? colors.blue : "transparent",
-              borderBottomWidth: 2,
-
-              paddingVertical: 10,
-            }}
-            onPress={() => {
-              handleClickRating();
-            }}
-          >
-            <Text
+              <Text
+                style={{
+                  fontSize: 17,
+                  fontWeight: "600",
+                  color: currentTab === dropoff ? "black" : colorGray,
+                }}
+              >
+                Drop-off
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={{
-                fontSize: 17,
-                fontWeight: "600",
-                color: currentTab === rating ? "black" : colorGray,
+                paddingHorizontal: paddingHorizontalTab,
+                borderBottomColor:
+                  currentTab === rating ? colors.blue : "transparent",
+                borderBottomWidth: 2,
+
+                paddingVertical: 10,
+              }}
+              onPress={() => {
+                handleClickRating();
               }}
             >
-              Rating
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
+              <Text
+                style={{
+                  fontSize: 17,
+                  fontWeight: "600",
+                  color: currentTab === rating ? "black" : colorGray,
+                }}
+              >
+                Rating
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
         <View
           style={{
-            height: "75%",
+            height: Dimensions.get("screen").height / 2.1,
             width: width,
             marginTop: 10,
           }}
@@ -218,13 +237,34 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
           {currentTab === pickup ? (
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-              renderItem={({ item }) => {
-                return <CartItemPoint />;
+              data={data}
+              contentContainerStyle={{}}
+              renderItem={({ item, index }) => {
+                return (
+                  <CartItemPoint
+                    item={item}
+                    index={index}
+                    tripChosen={tripChosen}
+                    dropScreen={false}
+                  />
+                );
               }}
             />
           ) : currentTab === dropoff ? (
-            <></>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={data}
+              renderItem={({ item, index }) => {
+                return (
+                  <CartItemPoint
+                    item={item}
+                    index={index}
+                    tripChosen={tripChosen}
+                    dropScreen={true}
+                  />
+                );
+              }}
+            />
           ) : (
             <></>
           )}
@@ -233,7 +273,7 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
       <View
         style={{
           width: width,
-          height: "15%",
+          // height: "15%",
           backgroundColor: "white",
           position: "absolute",
           bottom: 0,
@@ -244,7 +284,6 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
           flexDirection: "column",
           justifyContent: "flex-start",
           alignItems: "center",
-          paddingTop: 15,
           borderWidth: 1,
           borderColor: "rgb(220, 220, 220)",
         }}
@@ -257,6 +296,8 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
             width: width / 1.1,
             borderRadius: 6,
             // marginTop: 0,
+            marginTop: 15,
+            marginBottom: 20,
           }}
           onPress={() => {
             // handleChoosePickup();
@@ -271,7 +312,7 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip }) => {
               fontWeight: "500",
             }}
           >
-            Continue
+            Book this trip
           </Text>
         </TouchableOpacity>
       </View>
@@ -295,7 +336,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CartItemPoint = () => {
+const CartItemPoint = ({ item, index, tripChosen, dropScreen }) => {
   return (
     <View
       style={{
@@ -310,7 +351,17 @@ const CartItemPoint = () => {
             width: "20%",
           }}
         >
-          <Text>23:00</Text>
+          <Text>
+            {dropScreen
+              ? calculateSumHour(
+                  tripChosen.timeStart,
+                  tripChosen.timeStations.slice(0, index + 1)
+                ).endTime
+              : calculateSumHour(
+                  tripChosen.timeStart,
+                  tripChosen.timeStations.slice(0, index)
+                ).endTime}
+          </Text>
         </View>
 
         <View style={[styles.containerBetween]}>
@@ -321,7 +372,7 @@ const CartItemPoint = () => {
               paddingTop: 5,
             }}
           >
-            35 Nguyen Khuyen
+            {item}
           </Text>
           <Text
             style={{
@@ -329,7 +380,7 @@ const CartItemPoint = () => {
               paddingTop: 5,
             }}
           >
-            35 Nguyen Khuyen, Hoa Khanh Nam, Lien Chieu, Da Nang
+            {item}
           </Text>
         </View>
       </View>

@@ -11,7 +11,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useState, useEffect, useRef } from "react";
@@ -48,39 +48,25 @@ const Login = ({ navigation, route }) => {
     errPassword: "",
     errRequire: "",
   });
-  // var usernameRegis, passwordRegister = ""
-  // useEffect(
-  //   () => {
-  //     if(route.params)
-  //     {
-  //       setDataLogin({
-  //         username: route.params.username,
-  //         password: route.params.password
-  //       })
-  //     }
-  //   }, []
-  // )
+
   const [showPassword, setShowPassword] = useState(false);
+
+  // validation password in login
   const handleValidPassword = (val) => {
     if (!val) {
       setInValidData({
         ...inValidData,
         errPassword: "Password is required",
       });
-    }
-    // else if (val.length < 8) {
-    //   setInValidData({
-    //     ...inValidData,
-    //     errPassword: "Password must have at least 8 char",
-    //   });
-    // }
-    else {
+    } else {
       setInValidData({
         ...inValidData,
         errPassword: "",
       });
     }
   };
+
+  // validation username in login
   const handleValidUsername = (val) => {
     if (!val) {
       setInValidData({
@@ -94,6 +80,7 @@ const Login = ({ navigation, route }) => {
       });
     }
   };
+
   useEffect(() => {
     if (dataLogin.username && dataLogin.password) {
       setInValidData({
@@ -104,8 +91,11 @@ const Login = ({ navigation, route }) => {
       });
     }
   }, [dataLogin.password, dataLogin.username]);
+
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+
+  // login
   const handleSignin = () => {
     if (!dataLogin.username || !dataLogin.password) {
       setInValidData({
@@ -127,7 +117,6 @@ const Login = ({ navigation, route }) => {
         setIsLoading
       );
     }
-    // console.warn("aa")
   };
   return (
     <KeyboardAvoidingView
@@ -174,14 +163,7 @@ const Login = ({ navigation, route }) => {
               </View>
               <View
                 style={{
-                  //   display: "flex",
-                  //   flexDirection: "column",
-                  //   justifyContent: "center",
-                  //   paddingLeft: 25,
                   backgroundColor: "white",
-                  // height:
-                  //   Dimensions.get("screen").height -
-                  //   Dimensions.get("screen").height / 3,
                   minHeight:
                     Dimensions.get("screen").height -
                     Dimensions.get("screen").height / 3 +
@@ -195,7 +177,6 @@ const Login = ({ navigation, route }) => {
                   style={[
                     tailwind("text-xl"),
                     {
-                      // marginLeft: Dimensions.get("screen").width / 2,
                       fontWeight: "600",
                       fontSize: 20,
                       marginTop: 20,
@@ -321,12 +302,8 @@ const Login = ({ navigation, route }) => {
                       fontSize: 13,
                       width: "100%",
                       height: "100%",
-                      // width: Dimensions.get("screen").width / 1.1,
-                      // height: 40,
                     }}
-                    onEndEditing={(e) => {
-                      // handleValidPassword(e.nativeEvent.text);
-                    }}
+                    onEndEditing={(e) => {}}
                   ></TextInput>
                   {showPassword ? (
                     <Entypo
@@ -448,14 +425,6 @@ const Login = ({ navigation, route }) => {
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-
-    // <View style={tailwind("pt-12 items-center")}>
-    //   <View style={tailwind("bg-blue-200 px-3 py-1 rounded-full")}>
-    //     <Text style={tailwind("text-blue-800 font-semibold")}>
-    //       Hello Tailwind
-    //     </Text>
-    //   </View>
-    // </View>
   );
 };
 

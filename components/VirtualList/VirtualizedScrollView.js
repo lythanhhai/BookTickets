@@ -1,25 +1,23 @@
-import React from 'react';
-import { FlatList } from 'react-native';
+import React from "react";
+import { FlatList } from "react-native";
 
-const VirtualizedScrollView = props => {
+const VirtualizedScrollView = (props) => {
   return (
     <FlatList
       {...props}
       data={[]}
-      keyExtractor={(e, i) => 'dom' + i.toString()}
+      keyExtractor={(e, i) => "dom" + i.toString()}
       ListEmptyComponent={null}
       renderItem={null}
-      ListHeaderComponent={() => (
-        <>{props.children}</>
-      )}
+      ListHeaderComponent={() => <>{props.children}</>}
     />
   );
 };
 
 export default VirtualizedScrollView;
 
-
-{/* <View
+{
+  /* <View
 style={{
   width: "100%",
   height: "50%",
@@ -120,4 +118,5 @@ style={{
   ></View>
   <Text>Booked</Text>
 </View>
-</View> */}
+</View> */
+}
