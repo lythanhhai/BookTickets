@@ -19,6 +19,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../../redux/actions/authenAction";
+import { ApiLogin, ApiLogout } from "../../API/ApiLoginRegister";
 
 const styles = StyleSheet.create({
   background: {
@@ -160,6 +161,7 @@ const MenuFunction = ({ item, navigation, route }) => {
     },
   ]);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
     // var User = await getTokenAferAuthen()
@@ -173,100 +175,99 @@ const MenuFunction = ({ item, navigation, route }) => {
     //   console.warn(User)
     // }
     // console.warn(User);
-    dispatch(
-      logoutAction({
-        userId: null,
-        username: "",
-        accessToken: "",
-        tokenType: "",
-      })
-    );
+    ApiLogout(dispatch, navigation, setLoading);
   };
   return (
-    <View
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        backgroundColor: "transparent",
-        width: Dimensions.get("screen").width,
-        height: Dimensions.get("screen").height,
-        backgroundColor: "transparent",
-        // height: 3000,
-        // marginTop: Dimensions.get("screen").height / 8.5,
-      }}
-    >
-      <FlatList
-        data={Data}
-        horizontal={false}
-        renderItem={({ item }) => {
-          if (!User.accessToken && item.title === "Log out") {
-            return <></>;
-          } else {
-            return (
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  marginTop: 7,
-                  height: Dimensions.get("screen").height / 13,
-                  // width: Dimensions.get("screen").width,
-                }}
-                onPress={() => {
-                  handleLogout();
-                }}
-              >
-                {item.icon}
-                {/* <AntDesign name="logout" /> */}
-                <View
+    <View>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          backgroundColor: "transparent",
+          width: Dimensions.get("screen").width,
+          height: Dimensions.get("screen").height,
+          backgroundColor: "transparent",
+          // height: 3000,
+          // marginTop: Dimensions.get("screen").height / 8.5,
+        }}
+      >
+        <FlatList
+          data={Data}
+          horizontal={false}
+          renderItem={({ item }) => {
+            if (!User.accessToken && item.title === "Log out") {
+              return <></>;
+            } else {
+              return (
+                <TouchableOpacity
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "space-between",
+                    justifyContent: "flex-start",
                     alignItems: "center",
-                    width: Dimensions.get("screen").width / 1.15,
-                    borderBottomColor: "rgb(210, 210, 210)",
-                    borderBottomWidth: 1,
-                    paddingBottom: 10,
-                    height: "100%",
-                    // backgroundColor: "red"
+                    marginTop: 7,
+                    height: Dimensions.get("screen").height / 13,
+                    // width: Dimensions.get("screen").width,
+                  }}
+                  onPress={() => {
+                    if (item.title === "Log out") {
+                      handleLogout();
+                    }
                   }}
                 >
+                  {item.icon}
+                  {/* <AntDesign name="logout" /> */}
                   <View
                     style={{
                       display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "flex-start",
-                      // backgroundColor: "black",
-                      width: "90%",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: Dimensions.get("screen").width / 1.15,
+                      borderBottomColor: "rgb(210, 210, 210)",
+                      borderBottomWidth: 1,
+                      paddingBottom: 10,
+                      height: "100%",
+                      // backgroundColor: "red"
                     }}
                   >
-                    <Text
+                    <View
                       style={{
-                        fontWeight: "400",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                        // backgroundColor: "black",
+                        width: "90%",
                       }}
                     >
-                      {item.title}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 10,
-                      }}
-                    >
-                      {item.desc}
-                    </Text>
+                      <Text
+                        style={{
+                          fontWeight: "400",
+                        }}
+                      >
+                        {item.title}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 10,
+                        }}
+                      >
+                        {item.desc}
+                      </Text>
+                    </View>
+                    {User.accessToken
+                      ? item.iconEndLogged
+                      : item.iconEndYetLogin}
                   </View>
-                  {User.accessToken ? item.iconEndLogged : item.iconEndYetLogin}
-                </View>
-              </TouchableOpacity>
-            );
-          }
-        }}
-      ></FlatList>
+                </TouchableOpacity>
+              );
+            }
+          }}
+        ></FlatList>
+      </View>
     </View>
   );
 };

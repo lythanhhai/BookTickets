@@ -39,7 +39,7 @@ const NotFound = ({ item }) => {
       }}
     >
       <Image
-        source={require("../../assets/Image/not-found.png")}
+        source={require("../../../assets/Image/not-found.png")}
         style={{
           objectFit: "cover",
           resizeMode: "contain",

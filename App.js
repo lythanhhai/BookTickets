@@ -2,13 +2,13 @@ import { StatusBar } from "expo-status-bar";
 // import 'react-native-gesture-handler';
 import { Dimensions, StyleSheet, Text, View, Platform } from "react-native";
 import { TailwindProvider } from "tailwind-rn";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import utilities from "./tailwind.json";
-import Login from "./components/Login/Login";
-import Register from "./components/Register/Register";
-import BookingTickets from "./screens/BookingTickets/BookingTickets";
-import MyTicket from "./screens/MyTickets/MyTicket";
-import Header from "./components/Header/Header";
+import Login from "./src/components/Login/Login";
+import Register from "./src/components/Register/Register";
+import BookingTickets from "./src/screens/BookingTickets/BookingTickets";
+import MyTicket from "./src/screens/MyTickets/MyTicket";
+import Header from "./src/components/Header/Header";
 import Icon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -17,37 +17,52 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import colors from "./constants/colors";
-import SearchTicketNavigation from "./navigations/SearchTicketNavigation";
-import Notification from "./screens/Notifications/Notification";
-import MyTicketNavigation from "./navigations/MyTicketNavigation";
-import NotificationNavigation from "./navigations/NotificationNavigation";
-import AccountNavigation from "./navigations/AccountNavigation";
-import ChooseLocation from "./screens/BookingTickets/ChooseLocation";
-import SomeInformation from "./components/Register/SomeInformation";
+import colors from "./src/constants/colors";
+import SearchTicketNavigation from "./src/navigations/SearchTicketNavigation";
+import Notification from "./src/screens/Notifications/Notification";
+import MyTicketNavigation from "./src/navigations/MyTicketNavigation";
+import NotificationNavigation from "./src/navigations/NotificationNavigation";
+import AccountNavigation from "./src/navigations/AccountNavigation";
+import ChooseLocation from "./src/screens/BookingTickets/ChooseLocation";
+import SomeInformation from "./src/components/Register/SomeInformation";
 
 // import redux
 import { legacy_createStore as createStore } from "redux";
-import { Provider, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "./redux/store/store";
-import ModalCode from "./components/Modal/ModalCode";
-import { getTokenAferAuthen } from "./utils/getJWT";
+import { store, persistor } from "./src/redux/store/store";
+import ModalCode from "./src/components/Modal/ModalCode";
+import { getTokenAferAuthen } from "./src/utils/getJWT";
 
-import authenReducer from "./redux/reducers/authenReducer";
-import ChooseTrip from "./screens/BookingTickets/ChooseTrip";
-import ChooseSeat from "./screens/BookingTickets/ChooseSeat";
-import PickupPoint from "./screens/BookingTickets/PickupPoint";
-import DropoffPoint from "./screens/BookingTickets/DropoffPoint";
-import InforDetail from "./screens/BookingTickets/InforDetail";
-import InforTicket from "./screens/BookingTickets/InforTicket";
-import Payment from "./screens/BookingTickets/Payment";
-import * as screenName from "./constants/nameScreen";
+import authenReducer from "./src/redux/reducers/authenReducer";
+import ChooseTrip from "./src/screens/BookingTickets/ChooseTrip";
+import ChooseSeat from "./src/screens/BookingTickets/ChooseSeat";
+import PickupPoint from "./src/screens/BookingTickets/PickupPoint";
+import DropoffPoint from "./src/screens/BookingTickets/DropoffPoint";
+import InforDetail from "./src/screens/BookingTickets/InforDetail";
+import InforTicket from "./src/screens/BookingTickets/InforTicket";
+import Payment from "./src/screens/BookingTickets/Payment";
+import * as screenName from "./src/constants/nameScreen";
+import { loginAction } from "./src/redux/actions/authenAction";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const Home = () => {
+  // check user have exist
+  const User = useSelector((state) => state.authenReducer);
+  const dispatch = useDispatch();
+  useLayoutEffect(() => {
+    // console.warn(User);
+    getTokenAferAuthen()
+      .then((res) => {
+        if (res.accessToken) {
+          // console.warn(res);
+          dispatch(loginAction(res));
+        }
+      })
+      .catch((err) => console.warn(err));
+  }, []);
   // store redux
   const getTabBarVisibility = (route) => {
     const routeName = route.state
@@ -182,20 +197,6 @@ export default function App() {
     // style: { backgroundColor: "white" },
   };
 
-  // useEffect(() => {
-  //   getTokenAferAuthen()
-  //     .then((data) => {
-  //       console.warn(data)
-  //       setUser(data);
-
-  //     })
-  //     .catch((err) => {
-  //       console.warn(err);
-  //     });
-  //   (async () => {
-  //     const user = await getTokenAferAuthen(setUser)
-  //   })();
-  // }, []);
   // const User = useSelector(state => state.authenReducer)
   return (
     <Provider store={store}>
@@ -241,17 +242,21 @@ export default function App() {
               <Stack.Group>
                 <Stack.Screen
                   name={screenName.chooseTripScreen}
-                  options={{
-                    gestureEnabled: false,
-                  }}
+                  options={
+                    {
+                      gestureEnabled: false,
+                    }
+                  }
                 >
                   {(props) => <ChooseTrip {...props} />}
                 </Stack.Screen>
                 <Stack.Screen
                   name={screenName.chooseSeatScreen}
-                  options={{
-                    gestureEnabled: false,
-                  }}
+                  options={
+                    {
+                      gestureEnabled: false,
+                    }
+                  }
                 >
                   {(props) => <ChooseSeat {...props} />}
                 </Stack.Screen>

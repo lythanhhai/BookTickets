@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
+import colors from "../../constants/colors";
 
 const styles = StyleSheet.create({
   background: {
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Logged = ({ item }) => {
+const RequireLogin = ({ item, navigation, route }) => {
   const tailwind = useTailwind();
 
   return (
@@ -36,13 +37,13 @@ const Logged = ({ item }) => {
       }}
     >
       <Image
-        source={require("../../assets/Image/ticket.png")}
+        source={require("../../../assets/Image/account.png")}
         style={{
           objectFit: "cover",
           resizeMode: "contain",
           height: 75,
           width: 75,
-          marginBottom: 5,
+          marginBottom: 10,
         }}
       />
       <View
@@ -50,25 +51,44 @@ const Logged = ({ item }) => {
           height: 8,
           width: 11,
           backgroundColor: "rgb(220, 220, 220)",
-          marginBottom: 15,
+          marginBottom: 20,
           borderRadius: 50,
           transform: [{ scaleX: 3 }],
         }}
       ></View>
-      <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 7 }}>
-        You have no tickets yet
+      <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 6 }}>
+        Signin required
       </Text>
-      <Text
+      <Text style={{ marginBottom: 15 }}>
+        Sign in to see your booking history
+      </Text>
+      <TouchableOpacity
+        // onPress={onPressLearnMore}
+        //   color="#841584"
+        //   accessibilityLabel="Learn more about this purple button"
         style={{
-          marginBottom: 15,
-          textAlign: "center",
+          backgroundColor: colors.colorButton,
           width: Dimensions.get("screen").width / 1.3,
+          borderRadius: 6,
+        }}
+        onPress={() => {
+          navigation.navigate("Login");
         }}
       >
-        Try pulling down to update the booking list for the last 3 months
-      </Text>
+        <Text
+          style={{
+            color: "white",
+            textAlign: "center",
+            paddingVertical: 13,
+            fontSize: 14,
+            fontWeight: "500",
+          }}
+        >
+          Sign In
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-export default Logged;
+export default RequireLogin;

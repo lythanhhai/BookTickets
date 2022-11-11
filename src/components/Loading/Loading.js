@@ -7,7 +7,7 @@ import {
   Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import ImageLoading from "../../assets/Image/loading.gif";
+import ImageLoading from "../../../assets/Image/loading.gif";
 import ExpoFastImage from "expo-fast-image";
 
 const styles = StyleSheet.create({});

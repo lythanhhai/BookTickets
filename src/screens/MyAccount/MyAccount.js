@@ -19,7 +19,7 @@ const MyAccount = ({ navigation }) => {
           whichScreen={screenName.tabMyAccountScreen}
           navigation={navigation}
         />
-        <MenuFunction />
+        <MenuFunction navigation={navigation} />
       </View>
     </View>
   );

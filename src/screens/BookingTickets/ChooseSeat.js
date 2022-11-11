@@ -691,7 +691,7 @@ const ChooseSeat = ({ navigation, route }) => {
                     }}
                   >
                     <Image
-                      source={require("../../assets/Image/Seat/icons8-steering-wheel-96.png")}
+                      source={require("../../../assets/Image/Seat/icons8-steering-wheel-96.png")}
                       style={{
                         height: shapeWidthSeat + 5,
                         width: shapeWidthSeat + 5,

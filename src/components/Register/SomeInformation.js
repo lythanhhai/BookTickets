@@ -76,7 +76,7 @@ const SomeInformation = ({ navigation, remind, whichScreen }) => {
         </Text>
       ) : (
         <Image
-          source={require("../../assets/Image/account.png")}
+          source={require("../../../assets/Image/account.png")}
           style={{
             height: 80,
             width: 80,
@@ -125,7 +125,7 @@ const SomeInformation = ({ navigation, remind, whichScreen }) => {
           }}
         >
           <Image
-            source={require("../../assets/Image/adaptive-icon.png")}
+            source={require("../../../assets/Image/adaptive-icon.png")}
             style={{
               height: "80%",
               width: "30%",

@@ -36,7 +36,7 @@ const EmptyNotification = ({ item }) => {
       }}
     >
       <Image
-        source={require("../../assets/Image/notification-bell.png")}
+        source={require("../../../assets/Image/notification-bell.png")}
         style={{
           objectFit: "cover",
           resizeMode: "contain",

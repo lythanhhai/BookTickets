@@ -8,7 +8,6 @@ import {
   Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import colors from "../../constants/colors";
 
 const styles = StyleSheet.create({
   background: {
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RequireLogin = ({ item, navigation, route }) => {
+const Logged = ({ item }) => {
   const tailwind = useTailwind();
 
   return (
@@ -37,13 +36,13 @@ const RequireLogin = ({ item, navigation, route }) => {
       }}
     >
       <Image
-        source={require("../../assets/Image/account.png")}
+        source={require("../../../assets/Image/ticket.png")}
         style={{
           objectFit: "cover",
           resizeMode: "contain",
           height: 75,
           width: 75,
-          marginBottom: 10,
+          marginBottom: 5,
         }}
       />
       <View
@@ -51,44 +50,25 @@ const RequireLogin = ({ item, navigation, route }) => {
           height: 8,
           width: 11,
           backgroundColor: "rgb(220, 220, 220)",
-          marginBottom: 20,
+          marginBottom: 15,
           borderRadius: 50,
           transform: [{ scaleX: 3 }],
         }}
       ></View>
-      <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 6 }}>
-        Signin required
+      <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 7 }}>
+        You have no tickets yet
       </Text>
-      <Text style={{ marginBottom: 15 }}>
-        Sign in to see your booking history
-      </Text>
-      <TouchableOpacity
-        // onPress={onPressLearnMore}
-        //   color="#841584"
-        //   accessibilityLabel="Learn more about this purple button"
+      <Text
         style={{
-          backgroundColor: colors.colorButton,
+          marginBottom: 15,
+          textAlign: "center",
           width: Dimensions.get("screen").width / 1.3,
-          borderRadius: 6,
-        }}
-        onPress={() => {
-          navigation.navigate("Login");
         }}
       >
-        <Text
-          style={{
-            color: "white",
-            textAlign: "center",
-            paddingVertical: 13,
-            fontSize: 14,
-            fontWeight: "500",
-          }}
-        >
-          Sign In
-        </Text>
-      </TouchableOpacity>
+        Try pulling down to update the booking list for the last 3 months
+      </Text>
     </View>
   );
 };
 
-export default RequireLogin;
+export default Logged;

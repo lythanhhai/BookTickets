@@ -185,7 +185,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip, setTripChosen }) => {
             ]}
           >
             <Image
-              source={require("../../assets/Image/busDemonstrate.jpeg")}
+              source={require("../../../assets/Image/busDemonstrate.jpeg")}
               style={{
                 // height: 100,
                 // width: 100,

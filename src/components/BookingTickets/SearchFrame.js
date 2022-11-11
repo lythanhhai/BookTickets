@@ -102,9 +102,10 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
       navigation.replace("ChooseTrip", { screen: "ChooseTrip" });
     }
   };
-
+  const [Count, setCount] = useState(1);
   // dispatch date in search
   useEffect(() => {
+    setCount(2);
     var arrayComapre = new Date().toString().split(" ");
     var currentDateCompare =
       arrayComapre[0] +
@@ -119,6 +120,9 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
       date === currentDateCompare &&
       location.date !== ""
     ) {
+      if (date === currentDateCompare && Count > 1) {
+        dispatch(getDate(date));
+      }
     } else {
       if (screen === "Home") {
         dispatch(getDate(date));

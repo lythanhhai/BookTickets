@@ -102,7 +102,7 @@ const Header = ({
         }}
       >
         <Image
-          source={require("../../assets/Image/account.png")}
+          source={require("../../../assets/Image/account.png")}
           style={{
             height: 30,
             width: 30,

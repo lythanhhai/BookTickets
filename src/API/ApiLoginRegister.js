@@ -2,7 +2,11 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
-import { loginAction, signupAction } from "../redux/actions/authenAction";
+import {
+  loginAction,
+  logoutAction,
+  signupAction,
+} from "../redux/actions/authenAction";
 import { baseUrl } from "./config";
 
 const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
@@ -17,13 +21,14 @@ const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
       // console.warn(res.data);
       return res.data;
     })
-    .then((data) => {
+    .then(async (data) => {
       setIsLoading(false);
       try {
         if (data.message) {
           // console.warn(data.message);
           Alert.alert(data.message, "Your username or password are incorrect");
         } else {
+          await AsyncStorage.setItem("currentUser", JSON.stringify(data));
           dispatch(loginAction(data));
           // console.warn(data)
           navigation.navigate("Home");
@@ -53,7 +58,7 @@ const ApiRegister = (
     .then((res) => {
       return res.data;
     })
-    .then((data) => {
+    .then(async (data) => {
       setIsLoading(false);
       try {
         if (data.message) {
@@ -62,6 +67,7 @@ const ApiRegister = (
           Alert.alert(data.message, "Your phone number is existed");
         } else {
           // console.warn(data.accessToken);
+          await AsyncStorage.setItem("currentUser", JSON.stringify(data));
           dispatch(signupAction(data));
           // Alert.alert(
           //   "Register succefully!!!",
@@ -89,4 +95,34 @@ const ApiRegister = (
     });
 };
 
-export { ApiLogin, ApiRegister };
+const ApiLogout = (dispatch, navigation, setIsLoading) => {
+  // const dispatch = useDispatch()
+  setIsLoading(true);
+
+  // navigation.replace("My_account");
+  axios({
+    method: "post",
+    url: `${baseUrl}auth/logout`,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .then(async (data) => {
+      setIsLoading(false);
+      await AsyncStorage.removeItem("currentUser");
+      dispatch(
+        logoutAction({
+          userId: null,
+          username: "",
+          accessToken: "",
+          tokenType: "",
+        })
+      );
+      // Alert.alert("Logout", "Your username or password are incorrect");
+    })
+    .catch((err) => {
+      console.warn(err);
+    });
+};
+
+export { ApiLogin, ApiRegister, ApiLogout };

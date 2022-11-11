@@ -497,7 +497,7 @@ const Register = ({ navigation, route }) => {
                         }}
                       >
                         <Image
-                          source={require("../../assets/Image/adaptive-icon.png")}
+                          source={require("../../../assets/Image/adaptive-icon.png")}
                           style={{
                             height: "80%",
                             width: "30%",
