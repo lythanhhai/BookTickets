@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "booking-tickets-app",
-    "slug": "booking-tickets-app",
+    "slug": "bookingticketsapp",
+    "owner": "lythanhhai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
