@@ -44,6 +44,33 @@ import InforTicket from "./src/screens/BookingTickets/InforTicket";
 import Payment from "./src/screens/BookingTickets/Payment";
 import * as screenName from "./src/constants/nameScreen";
 import { loginAction } from "./src/redux/actions/authenAction";
+import React from "react";
+import Loading from "./src/components/Loading/Loading";
+
+// add sentry to booking tickets app
+import * as Sentry from "sentry-expo";
+
+Sentry.init({
+  dsn: "https://59e443ac7dfb46f280541589357621c1@o4504106872209408.ingest.sentry.io/4504155015020544",
+  enableInExpoDevelopment: true,
+  // integrations: [
+  //   new RewriteFrames({
+  //     iteratee: (frame) => {
+  //       if (frame.filename) {
+  //         // the values depend on what names you give the bundle files you are uploading to Sentry
+  //         frame.filename =
+  //           Platform.OS === "android"
+  //             ? "app:///index.android.bundle"
+  //             : "app:///main.jsbundle";
+  //       }
+  //       return frame;
+  //     },
+  //   }),
+  // ],
+  debug: true,
+  enableNative: false,
+  environment: "develoment",
+});
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -56,7 +83,7 @@ const Home = () => {
     // console.warn(User);
     getTokenAferAuthen()
       .then((res) => {
-        if (res.accessToken) {
+        if (res?.accessToken) {
           // console.warn(res);
           dispatch(loginAction(res));
         }
@@ -153,6 +180,7 @@ const Home = () => {
           },
         }}
       />
+
       <Tab.Screen
         name="My_account"
         component={AccountNavigation}
@@ -161,6 +189,7 @@ const Home = () => {
           //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
           // },
           title: "My account",
+
           tabBarIcon: ({ focused, color, size }) => {
             var elem;
             focused
@@ -186,17 +215,18 @@ const Home = () => {
   );
 };
 
-export default function App() {
+const App = () => {
   const [isLoginScreen, setIsLoginScreen] = useState(true);
   const checkScreen = (data) => {
     setIsLoginScreen(data);
   };
+
   const customTabBarStyle = {
     activeTintColor: colors.blue,
     inactiveTintColor: "gray",
     // style: { backgroundColor: "white" },
   };
-
+  Sentry.Native.captureException(new Error("error"));
   // const User = useSelector(state => state.authenReducer)
   return (
     <Provider store={store}>
@@ -211,7 +241,13 @@ export default function App() {
                 headerShown: false,
               }}
             >
-              <Stack.Screen name="Home" component={Home}></Stack.Screen>
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{
+                  gestureEnabled: false,
+                }}
+              ></Stack.Screen>
               <Stack.Group>
                 <Stack.Screen
                   name="LocationStart"
@@ -242,21 +278,17 @@ export default function App() {
               <Stack.Group>
                 <Stack.Screen
                   name={screenName.chooseTripScreen}
-                  options={
-                    {
-                      gestureEnabled: false,
-                    }
-                  }
+                  options={{
+                    gestureEnabled: false,
+                  }}
                 >
                   {(props) => <ChooseTrip {...props} />}
                 </Stack.Screen>
                 <Stack.Screen
                   name={screenName.chooseSeatScreen}
-                  options={
-                    {
-                      gestureEnabled: false,
-                    }
-                  }
+                  options={{
+                    gestureEnabled: false,
+                  }}
                 >
                   {(props) => <ChooseSeat {...props} />}
                 </Stack.Screen>
@@ -330,6 +362,16 @@ export default function App() {
                     {(props) => <Login {...props} />}
                   </Stack.Screen>
                   <Stack.Screen
+                    name="Loading"
+                    options={
+                      {
+                        //gestureEnabled: false
+                      }
+                    }
+                  >
+                    {(props) => <Loading {...props} />}
+                  </Stack.Screen>
+                  <Stack.Screen
                     name="Register"
                     options={{ gestureEnabled: false }}
                   >
@@ -359,7 +401,9 @@ export default function App() {
       </PersistGate>
     </Provider>
   );
-}
+};
+
+export default Sentry.Native.wrap(App);
 
 const styles = StyleSheet.create({
   container: {

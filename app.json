@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "booking-tickets-app",
-    "slug": "bookingticketsapp",
+    "slug": "booking-tickets-app",
     "owner": "lythanhhai",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,6 +11,18 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "CDCN",
+            "project": "bookingticketsapp",
+            "authToken": "794538e4bf994e218c17e0cb15d6f8b7103e0e7853e54b6889c3dfeba3d3b921"
+          }
+        }
+      ]
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -43,7 +55,8 @@
             "useFrameworks": "static"
           }
         }
-      ]
+      ],
+      "sentry-expo"
     ]
   }
 }
