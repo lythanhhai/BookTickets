@@ -8,6 +8,7 @@ import {
   signupAction,
 } from "../redux/actions/authenAction";
 import { baseUrl } from "./config";
+// import * as Sentry from 'sentry-expo'
 
 const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
   // const dispatch = useDispatch()
@@ -29,10 +30,12 @@ const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
           Alert.alert(data.message, "Your username or password are incorrect");
         } else {
           await AsyncStorage.setItem("currentUser", JSON.stringify(data));
+          // Sentry.captureException(err)
           dispatch(loginAction(data));
           // console.warn(data)
           navigation.navigate("Home");
         }
+
       } catch (e) {
         console.warn(e);
       }
@@ -97,8 +100,8 @@ const ApiRegister = (
 
 const ApiLogout = (dispatch, navigation, setIsLoading) => {
   // const dispatch = useDispatch()
-  setIsLoading(true);
-
+  // setIsLoading(true);
+  navigation.navigate("Loading");
   // navigation.replace("My_account");
   axios({
     method: "post",
@@ -108,7 +111,7 @@ const ApiLogout = (dispatch, navigation, setIsLoading) => {
       return res.data;
     })
     .then(async (data) => {
-      setIsLoading(false);
+      // setIsLoading(false);
       await AsyncStorage.removeItem("currentUser");
       dispatch(
         logoutAction({
@@ -118,6 +121,7 @@ const ApiLogout = (dispatch, navigation, setIsLoading) => {
           tokenType: "",
         })
       );
+      navigation.navigate("Home");
       // Alert.alert("Logout", "Your username or password are incorrect");
     })
     .catch((err) => {

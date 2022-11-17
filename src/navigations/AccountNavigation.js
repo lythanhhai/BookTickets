@@ -1,5 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import MyAccount from "../screens/MyAccount/MyAccount";
+import { View } from "react-native";
 
 const Stack = createStackNavigator();
 
