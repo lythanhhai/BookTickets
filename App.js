@@ -77,6 +77,7 @@ const Stack = createStackNavigator();
 
 const Home = () => {
   // check user have exist
+  // Sentry.Native.captureException(new Error("error"));
   const User = useSelector((state) => state.authenReducer);
   const dispatch = useDispatch();
   useLayoutEffect(() => {
@@ -226,184 +227,189 @@ const App = () => {
     inactiveTintColor: "gray",
     // style: { backgroundColor: "white" },
   };
-  Sentry.Native.captureException(new Error("error"));
-  // const User = useSelector(state => state.authenReducer)
-  return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <TailwindProvider utilities={utilities}>
-          <NavigationContainer>
-            {/* <View style={styles.container}> */}
-            {/* { isLoginScreen ? <Login checkScreen={checkScreen}/> : <Register checkScreen={checkScreen}/>} */}
-            {/* <BookingTickets /> */}
-            <Stack.Navigator
-              screenOptions={{
-                headerShown: false,
-              }}
-            >
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{
-                  gestureEnabled: false,
+  // Sentry.Native.captureException(new Error("error"));
+  try {
+    return (
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <TailwindProvider utilities={utilities}>
+            <NavigationContainer>
+              {/* <View style={styles.container}> */}
+              {/* { isLoginScreen ? <Login checkScreen={checkScreen}/> : <Register checkScreen={checkScreen}/>} */}
+              {/* <BookingTickets /> */}
+              <Stack.Navigator
+                screenOptions={{
+                  headerShown: false,
                 }}
-              ></Stack.Screen>
-              <Stack.Group>
+              >
                 <Stack.Screen
-                  name="LocationStart"
-                  component={ChooseLocation}
-                  options={{
-                    title: "Start point",
-                    headerShown: true,
-                    headerStyle: {
-                      backgroundColor: colors.blue,
-                      // height: Dimensions.get("screen").height / 8,
-                    },
-                    headerTintColor: "#fff",
-                  }}
-                />
-                <Stack.Screen
-                  name="LocationStop"
-                  component={ChooseLocation}
-                  options={{
-                    title: "Stop point",
-                    headerShown: true,
-                    headerStyle: {
-                      backgroundColor: colors.blue,
-                    },
-                    headerTintColor: "#fff",
-                  }}
-                />
-              </Stack.Group>
-              <Stack.Group>
-                <Stack.Screen
-                  name={screenName.chooseTripScreen}
+                  name="Home"
+                  component={Home}
                   options={{
                     gestureEnabled: false,
                   }}
-                >
-                  {(props) => <ChooseTrip {...props} />}
-                </Stack.Screen>
-                <Stack.Screen
-                  name={screenName.chooseSeatScreen}
-                  options={{
-                    gestureEnabled: false,
-                  }}
-                >
-                  {(props) => <ChooseSeat {...props} />}
-                </Stack.Screen>
-                <Stack.Screen
-                  name={screenName.pickupPointScreen}
-                  options={{
-                    gestureEnabled: false,
-                    // title: (
-                    //   <View
-                    //     style={{
-                    //       width: Dimensions.get("screen").width / 1.1,
-                    //       backgroundColor: "red",
-                    //     }}
-                    //   >
-                    //     <Text>aaa</Text>
-                    //   </View>
-                    // ),
-                    // headerShown: true,
-                    // headerStyle: {
-                    //   backgroundColor: colors.blue,
-                    // },
-                    // headerTintColor: "#fff",
-                    // headerBackTitleVisible: false,
-                  }}
-                >
-                  {(props) => <PickupPoint {...props} />}
-                </Stack.Screen>
-                <Stack.Screen
-                  name={screenName.dropoffPointScreen}
-                  options={{
-                    gestureEnabled: false,
-                  }}
-                >
-                  {(props) => <DropoffPoint {...props} />}
-                </Stack.Screen>
-                <Stack.Screen
-                  name={screenName.inforDetailScreen}
-                  options={{
-                    gestureEnabled: false,
-                  }}
-                >
-                  {(props) => <InforDetail {...props} />}
-                </Stack.Screen>
-                <Stack.Screen
-                  name={screenName.inforTicketScreen}
-                  options={{
-                    gestureEnabled: false,
-                  }}
-                >
-                  {(props) => <InforTicket {...props} />}
-                </Stack.Screen>
-                <Stack.Screen
-                  name={screenName.paymentScreen}
-                  options={
-                    {
-                      // gestureEnabled: false,
-                    }
-                  }
-                >
-                  {(props) => <Payment {...props} />}
-                </Stack.Screen>
-              </Stack.Group>
-              {false ? (
-                <></>
-              ) : (
+                ></Stack.Screen>
                 <Stack.Group>
                   <Stack.Screen
-                    name="Login"
-                    options={{ gestureEnabled: false }}
+                    name="LocationStart"
+                    component={ChooseLocation}
+                    options={{
+                      title: "Start point",
+                      headerShown: true,
+                      headerStyle: {
+                        backgroundColor: colors.blue,
+                        // height: Dimensions.get("screen").height / 8,
+                      },
+                      headerTintColor: "#fff",
+                    }}
+                  />
+                  <Stack.Screen
+                    name="LocationStop"
+                    component={ChooseLocation}
+                    options={{
+                      title: "Stop point",
+                      headerShown: true,
+                      headerStyle: {
+                        backgroundColor: colors.blue,
+                      },
+                      headerTintColor: "#fff",
+                    }}
+                  />
+                </Stack.Group>
+                <Stack.Group>
+                  <Stack.Screen
+                    name={screenName.chooseTripScreen}
+                    options={{
+                      gestureEnabled: false,
+                    }}
                   >
-                    {(props) => <Login {...props} />}
+                    {(props) => <ChooseTrip {...props} />}
                   </Stack.Screen>
                   <Stack.Screen
-                    name="Loading"
+                    name={screenName.chooseSeatScreen}
+                    options={{
+                      gestureEnabled: false,
+                    }}
+                  >
+                    {(props) => <ChooseSeat {...props} />}
+                  </Stack.Screen>
+                  <Stack.Screen
+                    name={screenName.pickupPointScreen}
+                    options={{
+                      gestureEnabled: false,
+                      // title: (
+                      //   <View
+                      //     style={{
+                      //       width: Dimensions.get("screen").width / 1.1,
+                      //       backgroundColor: "red",
+                      //     }}
+                      //   >
+                      //     <Text>aaa</Text>
+                      //   </View>
+                      // ),
+                      // headerShown: true,
+                      // headerStyle: {
+                      //   backgroundColor: colors.blue,
+                      // },
+                      // headerTintColor: "#fff",
+                      // headerBackTitleVisible: false,
+                    }}
+                  >
+                    {(props) => <PickupPoint {...props} />}
+                  </Stack.Screen>
+                  <Stack.Screen
+                    name={screenName.dropoffPointScreen}
+                    options={{
+                      gestureEnabled: false,
+                    }}
+                  >
+                    {(props) => <DropoffPoint {...props} />}
+                  </Stack.Screen>
+                  <Stack.Screen
+                    name={screenName.inforDetailScreen}
+                    options={{
+                      gestureEnabled: false,
+                    }}
+                  >
+                    {(props) => <InforDetail {...props} />}
+                  </Stack.Screen>
+                  <Stack.Screen
+                    name={screenName.inforTicketScreen}
+                    options={{
+                      gestureEnabled: false,
+                    }}
+                  >
+                    {(props) => <InforTicket {...props} />}
+                  </Stack.Screen>
+                  <Stack.Screen
+                    name={screenName.paymentScreen}
                     options={
                       {
-                        //gestureEnabled: false
+                        // gestureEnabled: false,
                       }
                     }
                   >
-                    {(props) => <Loading {...props} />}
+                    {(props) => <Payment {...props} />}
                   </Stack.Screen>
-                  <Stack.Screen
-                    name="Register"
-                    options={{ gestureEnabled: false }}
-                  >
-                    {(props) => <Register {...props} />}
-                  </Stack.Screen>
-                  {/* <Stack.Screen
-                  name="Information"
-                  options={{
-                    title: "Account Information",
-                    gestureEnabled: false,
-                    headerShown: true,
-                    headerStyle: {
-                      backgroundColor: colors.blue,
-                    },
-                    headerTintColor: "#fff",
-                  }}
-                >
-                  {(props) => <SomeInformation {...props} />}
-                </Stack.Screen> */}
                 </Stack.Group>
-              )}
-            </Stack.Navigator>
-            {/* <Text> aaa</Text> */}
-            {/* </View> */}
-          </NavigationContainer>
-        </TailwindProvider>
-      </PersistGate>
-    </Provider>
-  );
+                {false ? (
+                  <></>
+                ) : (
+                  <Stack.Group>
+                    <Stack.Screen
+                      name="Login"
+                      options={{ gestureEnabled: false }}
+                    >
+                      {(props) => <Login {...props} />}
+                    </Stack.Screen>
+                    <Stack.Screen
+                      name="Loading"
+                      options={
+                        {
+                          //gestureEnabled: false
+                        }
+                      }
+                    >
+                      {(props) => <Loading {...props} />}
+                    </Stack.Screen>
+                    <Stack.Screen
+                      name="Register"
+                      options={{ gestureEnabled: false }}
+                    >
+                      {(props) => <Register {...props} />}
+                    </Stack.Screen>
+                    {/* <Stack.Screen
+                    name="Information"
+                    options={{
+                      title: "Account Information",
+                      gestureEnabled: false,
+                      headerShown: true,
+                      headerStyle: {
+                        backgroundColor: colors.blue,
+                      },
+                      headerTintColor: "#fff",
+                    }}
+                  >
+                    {(props) => <SomeInformation {...props} />}
+                  </Stack.Screen> */}
+                  </Stack.Group>
+                )}
+              </Stack.Navigator>
+              {/* <Text> aaa</Text> */}
+              {/* </View> */}
+            </NavigationContainer>
+          </TailwindProvider>
+        </PersistGate>
+      </Provider>
+    );
+  } catch (error) {
+    // Sentry.Native.captureException(new Error(error));
+  }
+  // const User = useSelector(state => state.authenReducer)
 };
 
 export default Sentry.Native.wrap(App);
+// export default App;
 
 const styles = StyleSheet.create({
   container: {

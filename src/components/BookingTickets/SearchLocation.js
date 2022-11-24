@@ -136,49 +136,54 @@ const SearchLocation = ({ item, navigation, route }) => {
         // marginTop: Dimensions.get("screen").height / 8.5,
       }}
     >
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          width: "100%",
-          height: 50,
-          backgroundColor: "white",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          zIndex: 1,
-          // marginTop: 50,
-        }}
-      >
-        <Entypo
-          size={18}
-          color="black"
-          name="location-pin"
+      {loading ? (
+        <></>
+      ) : (
+        <View
           style={{
-            marginHorizontal: 15,
-            fontSize: 26,
-            color: route.params.screen === "startpoint" ? colors.blue : "red",
-          }}
-        />
-
-        <TextInput
-          placeholder="Enter province, city or district"
-          underlineColorAndroid={"rgba(0,0,0,0)"}
-          inputContainerStyle={{ borderBottomWidth: 0 }}
-          value={valueSearch}
-          onChangeText={(value) => {
-            setValueSearch(value);
-            searchALocation(value);
-          }}
-          style={{
-            width: Dimensions.get("screen").width / 1.25,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            width: "100%",
             height: 50,
-            backgroundColor: "transparent",
+            backgroundColor: "white",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            zIndex: 1,
+            // marginTop: 50,
           }}
-        />
-      </View>
+        >
+          <Entypo
+            size={18}
+            color="black"
+            name="location-pin"
+            style={{
+              marginHorizontal: 15,
+              fontSize: 26,
+              color: route.params.screen === "startpoint" ? colors.blue : "red",
+            }}
+          />
+
+          <TextInput
+            placeholder="Enter province, city or district"
+            underlineColorAndroid={"rgba(0,0,0,0)"}
+            inputContainerStyle={{ borderBottomWidth: 0 }}
+            value={valueSearch}
+            onChangeText={(value) => {
+              setValueSearch(value);
+              searchALocation(value);
+            }}
+            style={{
+              width: Dimensions.get("screen").width / 1.25,
+              height: 50,
+              backgroundColor: "transparent",
+            }}
+          />
+        </View>
+      )}
+
       <View
         style={[
           {

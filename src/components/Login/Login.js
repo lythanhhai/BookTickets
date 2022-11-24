@@ -107,6 +107,7 @@ const Login = ({ navigation, route }) => {
         ...inValidData,
         errRequire: "",
       });
+      // throw new Error("haha");
       ApiLogin(
         {
           username: dataLogin.username,

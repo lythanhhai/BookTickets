@@ -17,8 +17,8 @@
         {
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
-            "organization": "CDCN",
-            "project": "bookingticketsapp",
+            "organization": "ccn-v6",
+            "project": "react-native",
             "authToken": "794538e4bf994e218c17e0cb15d6f8b7103e0e7853e54b6889c3dfeba3d3b921"
           }
         }

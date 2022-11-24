@@ -7,9 +7,13 @@ import {
   Modal,
   Button,
   TextInput,
+  Alert,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 import colors from "../../constants/colors";
+import { setQuantity, setSeatIds } from "../../redux/actions/inforBookAction";
+import { formatCurrency } from "../../utils/formatCurrency";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -47,8 +51,52 @@ const ModalSeatSelected = ({
   dataModalSeat,
 }) => {
   // console.warn(route.params)
+  const userCurrent = useSelector((state) => state.authenReducer);
+  const dispatch = useDispatch();
   const handleClickChooseSeat = () => {
-    navigation.navigate("PickupPoint", route.params);
+    if (userCurrent.accessToken) {
+      if (dataModalSeat.nameSeats.length === 0) {
+        dispatch(setQuantity(dataModalSeat.numberSeat));
+        navigation.navigate("PickupPoint", route.params);
+      } else {
+        dispatch(setSeatIds(dataModalSeat.idSeat));
+        navigation.navigate("InforDetail", route.params);
+      }
+    } else {
+      Alert.alert(
+        "Please Login",
+        "You need to login before continuing!!!",
+        Platform.OS === "ios"
+          ? [
+              {
+                text: "Ok",
+                onPress: () => {
+                  navigation.navigate("Login");
+                },
+                style: "cancel",
+              },
+              {
+                text: "Cancel",
+                onPress: () => {},
+                style: "cancel",
+              },
+            ]
+          : [
+              {
+                text: "Cancel",
+                onPress: () => {},
+                style: "cancel",
+              },
+              {
+                text: "Ok",
+                onPress: () => {
+                  navigation.navigate("Login");
+                },
+                style: "cancel",
+              },
+            ]
+      );
+    }
   };
   return (
     <View
@@ -67,6 +115,9 @@ const ModalSeatSelected = ({
         borderEndWidth: 1,
         borderStartColor: "rgb(220, 220, 220)",
         borderStartWidth: 1,
+        position: dataModalSeat.nameSeats.length > 0 ? "relative" : "absolute",
+        bottom: 0,
+        left: 0,
         // backgroundColor: "red"
       }}
     >
@@ -102,7 +153,7 @@ const ModalSeatSelected = ({
             })}
           </Text>
         </View>
-        <Text>{dataModalSeat.price}VND</Text>
+        <Text>{formatCurrency(dataModalSeat.price)}VND</Text>
       </View>
       <View
         style={{

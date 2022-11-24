@@ -38,13 +38,13 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip, tripChosen }) => {
     // console.warn(route.params.routeStations)
     let arrayRes = [];
     if (currentTab == pickup) {
-      tripChosen.routeStations.forEach((item, index) => {
-        arrayRes.push(item[0]);
+      Object.keys(tripChosen.routeStations).forEach((item, index) => {
+        arrayRes.push(tripChosen.routeStations[item][0]);
       });
       setData(arrayRes);
     } else if (currentTab == dropoff) {
-      tripChosen.routeStations.forEach((item, index) => {
-        arrayRes.push(item[1]);
+      Object.keys(tripChosen.routeStations).forEach((item, index) => {
+        arrayRes.push(tripChosen.routeStations[item][1]);
       });
       setData(arrayRes);
     }

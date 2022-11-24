@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
+  Alert,
 } from "react-native";
 import React from "react";
 import styleGlobal from "../../constants/styleGlobal";
@@ -13,6 +14,11 @@ import Header from "../../components/Header/Header";
 import { useState, useEffect } from "react";
 import * as screenName from "../../constants/nameScreen";
 import colors from "../../constants/colors";
+import { useDispatch, useSelector } from "react-redux";
+import { formatDate } from "../../utils/formatDate";
+import { cancelTicket } from "../../redux/actions/inforBookAction";
+import { formatCurrency } from "../../utils/formatCurrency";
+import { calculateSumHour } from "../../utils/calculateSumHour";
 
 const styles = StyleSheet.create(styleGlobal);
 const width = Dimensions.get("screen").width;
@@ -68,6 +74,53 @@ const stylesInfor = StyleSheet.create({
   },
 });
 const InforTicket = ({ navigation, route }) => {
+  const inforBookTicket = useSelector((state) => state.inforBookReducer);
+  // const [inforTicketData, setInforTicketData] = useState({})
+  useEffect(() => {
+    // console.warn(route.params.list);
+    // // console.warn(route.params.dataTrip.dep);
+    // console.warn(inforBookTicket);
+  }, []);
+  const dispatch = useDispatch();
+  const handleCancelBooking = () => {
+    Alert.alert(
+      "Comfirm cancel book tickets",
+      "Are you sure remove this book?",
+      Platform.OS === "ios"
+        ? [
+            {
+              text: "Ok",
+              onPress: () => {
+                dispatch(cancelTicket());
+                navigation.navigate("Home");
+                Alert.alert("This book removed successfully");
+              },
+              style: "cancel",
+            },
+            {
+              text: "Cancel",
+              onPress: () => {},
+              style: "cancel",
+            },
+          ]
+        : [
+            {
+              text: "Cancel",
+              onPress: () => {},
+              style: "cancel",
+            },
+            {
+              text: "Ok",
+              onPress: () => {
+                dispatch(cancelTicket());
+                navigation.navigate("Home");
+                Alert.alert("This book removed successfully");
+              },
+              style: "cancel",
+            },
+          ]
+    );
+  };
   return (
     <View
       style={[
@@ -82,6 +135,7 @@ const InforTicket = ({ navigation, route }) => {
         <Header
           whichScreen={screenName.inforTicketScreen}
           navigation={navigation}
+          handleCancelBooking={handleCancelBooking}
         />
       </View>
       <ScrollView
@@ -113,26 +167,37 @@ const InforTicket = ({ navigation, route }) => {
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Route</Text>
             <Text style={[stylesInfor.textRight]}>
-              Da Nang {"->"} Quang Tri
+              {route.params.dataTrip.dep} {"->"} {route.params.dataTrip.des}
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Bus Operator</Text>
-            <Text style={[stylesInfor.textRight]}>An Anh Limousine</Text>
+            <Text style={[stylesInfor.textRight]}>
+              {route.params.dataTrip.nameVehicle}
+            </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Trip</Text>
             <Text style={[stylesInfor.textRight]}>
-              23:00 {"-"} Wed, 11/06/2022
+              {route.params.list[0].timeStart.split(":").slice(0, 2).join(":")}
+              {", "}
+              {formatDate(route.params.list[0].date)}
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Number of tickets</Text>
-            <Text style={[stylesInfor.textRight]}>1 ticket</Text>
+            <Text style={[stylesInfor.textRight]}>
+              {route.params.list.length} ticket
+            </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Total</Text>
-            <Text style={[stylesInfor.textRight]}>850,000VND</Text>
+            <Text style={[stylesInfor.textRight]}>
+              {formatCurrency(
+                route.params.list.length * route.params.list[0].price
+              )}
+              VND
+            </Text>
           </View>
           <View>
             <View style={[stylesInfor.flex]}>
@@ -144,7 +209,7 @@ const InforTicket = ({ navigation, route }) => {
                   width: "65%",
                 }}
                 onPress={() => {
-                  navigation.replace(screenName.pickupPointScreen);
+                  handleCancelBooking();
                 }}
               >
                 <Text
@@ -161,13 +226,19 @@ const InforTicket = ({ navigation, route }) => {
             </View>
             <View style={[stylesInfor.detailPoint]}>
               <Text style={[stylesInfor.textDetailPoint]}>
-                35 Nguyen Khuyen
+                {route.params.list[0].dep}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
-                Hoa Khanh Nam, Lien Chieu, Da Nang
+                {route.params.list[0].dep}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
-                Boarding at 23:00 11/06/2022
+                Boarding at{" "}
+                {route.params.list[0].timeStart
+                  .split(":")
+                  .slice(0, 2)
+                  .join(":")}
+                {", "}
+                {formatDate(route.params.list[0].date)}
               </Text>
             </View>
           </View>
@@ -181,7 +252,7 @@ const InforTicket = ({ navigation, route }) => {
                   width: "65%",
                 }}
                 onPress={() => {
-                  navigation.replace(screenName.dropoffPointScreen);
+                  handleCancelBooking();
                 }}
               >
                 <Text
@@ -198,13 +269,24 @@ const InforTicket = ({ navigation, route }) => {
             </View>
             <View style={[stylesInfor.detailPoint]}>
               <Text style={[stylesInfor.textDetailPoint]}>
-                35 Nguyen Khuyen
+                {route.params.list[0].des}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
-                Hoa Khanh Nam, Lien Chieu, Da Nang
+                {route.params.list[0].des}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
-                Boarding at 23:00 11/06/2022
+                Boarding at{" "}
+                {
+                  calculateSumHour(
+                    route.params.list[0].timeStart,
+                    route.params.dataTrip.timeStations.slice(
+                      0,
+                      route.params.dataTrip.timeStations.length
+                    )
+                  ).endTime
+                }
+                {", "}
+                {formatDate(route.params.list[0].date)}
               </Text>
             </View>
           </View>
@@ -238,7 +320,7 @@ const InforTicket = ({ navigation, route }) => {
                 width: "50%",
               }}
               onPress={() => {
-                navigation.replace(screenName.inforDetailScreen);
+                navigation.replace(screenName.inforDetailScreen, route.params);
               }}
             >
               <Text
@@ -255,16 +337,20 @@ const InforTicket = ({ navigation, route }) => {
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeftPassenger]}>Full name</Text>
-            <Text style={[stylesInfor.textRightPassenger]}>Ly Thanh Hai</Text>
+            <Text style={[stylesInfor.textRightPassenger]}>
+              {route.params.list[0].passengerInfo.name}
+            </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeftPassenger]}>Phone number</Text>
-            <Text style={[stylesInfor.textRightPassenger]}>097833744*</Text>
+            <Text style={[stylesInfor.textRightPassenger]}>
+              {route.params.list[0].passengerInfo.phone}
+            </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeftPassenger]}>Email address</Text>
             <Text style={[stylesInfor.textRightPassenger]}>
-              lythanhhait@gmail.com
+              {route.params.list[0].passengerInfo.email}
             </Text>
           </View>
         </View>
@@ -283,7 +369,9 @@ const InforTicket = ({ navigation, route }) => {
               borderRadius: 6,
               marginTop: 30,
             }}
-            onPress={() => {}}
+            onPress={() => {
+              handleCancelBooking();
+            }}
           >
             <Text
               style={{
@@ -327,7 +415,7 @@ const InforTicket = ({ navigation, route }) => {
             borderRadius: 6,
           }}
           onPress={() => {
-            navigation.replace(screenName.paymentScreen);
+            navigation.replace(screenName.paymentScreen, route.params);
           }}
         >
           <Text

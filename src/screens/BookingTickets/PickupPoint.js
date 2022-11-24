@@ -12,6 +12,12 @@ import Header from "../../components/Header/Header";
 import { useState, useEffect } from "react";
 import CardPoint from "../../components/BookingTickets/CardPoint";
 import * as screenName from "../../constants/nameScreen";
+import { useDispatch } from "react-redux";
+import {
+  setDropoffPoint,
+  setPickupPoint,
+  setPoint,
+} from "../../redux/actions/inforBookAction";
 
 const styles = StyleSheet.create(styleGlobal);
 const widthDevice = Dimensions.get("screen").width;
@@ -21,17 +27,49 @@ const heightModalBottom = 130;
 const PickupPoint = ({ navigation, route }) => {
   const [data, setData] = useState([]);
   const [itemChosen, setItemChosen] = useState(0);
+  const dispatch = useDispatch();
+  const [firstOrSecond, setFirstOrSecond] = useState({
+    first: null,
+    second: null,
+  });
+  const [first, setFirst] = useState(null);
+  const [second, setSecond] = useState(null);
   const handleChoosePickup = () => {
-    navigation.replace("DropoffPoint", route.params);
+    // let idFirst = 0;
+    // data.forEach((item, index) => {
+    //   if (item === itemChosen) {
+    //     idFirst = index + 1;
+    //   }
+    // });
+    // console.warn(first + "," + second);
+    dispatch(setPoint([first, second]));
+    // dispatch(setPickupPoint(firstOrSecond.first));
+    // dispatch(setDropoffPoint(firstOrSecond.second));
+    navigation.replace("InforDetail", route.params);
   };
   useEffect(() => {
     // console.warn(route.params.routeStations)
     let arrayRes = [];
-    route.params.routeStations.forEach((item, index) => {
-      arrayRes.push(item[0]);
+    let count = -1;
+    // Objects.keys(route.params.routeStations)
+    Object.keys(route.params.routeStations).forEach((item, index) => {
+      count++;
+    });
+    Object.keys(route.params.routeStations).forEach((item, index) => {
+      if (index === 0) {
+        arrayRes.push(route.params.routeStations[item][0]);
+        setFirst(parseInt(item));
+      } else if (index === count) {
+        arrayRes.push(route.params.routeStations[item][0]);
+        arrayRes.push(route.params.routeStations[item][1]);
+        setSecond(parseInt(item));
+      } else {
+        arrayRes.push(route.params.routeStations[item][0]);
+      }
     });
     setData(arrayRes);
   }, []);
+
   return (
     <View
       style={{
@@ -95,7 +133,7 @@ const PickupPoint = ({ navigation, route }) => {
           contentContainerStyle={{}}
         />
       </View>
-      {itemChosen ? (
+      {!itemChosen ? (
         <View
           style={{
             width: widthDevice,
@@ -139,7 +177,7 @@ const PickupPoint = ({ navigation, route }) => {
                 fontWeight: "500",
               }}
             >
-              Continue
+              Comfirm
             </Text>
           </TouchableOpacity>
         </View>
