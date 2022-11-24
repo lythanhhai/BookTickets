@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 40,
   },
 });
-const MenuFunction = ({ item, navigation, route }) => {
+const MenuFunction = ({ item, navigation, route, setLoading }) => {
   const tailwind = useTailwind();
   var User = useSelector((state) => state.authenReducer);
   const [Data, setData] = useState([
@@ -161,7 +161,6 @@ const MenuFunction = ({ item, navigation, route }) => {
     },
   ]);
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
     // var User = await getTokenAferAuthen()

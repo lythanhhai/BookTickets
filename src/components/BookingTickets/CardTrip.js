@@ -14,6 +14,9 @@ import colors from "../../constants/colors";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Octicons from "react-native-vector-icons/Octicons";
 import { calculateSumHour } from "../../utils/calculateSumHour";
+import { formatCurrency } from "../../utils/formatCurrency";
+import { useDispatch } from "react-redux";
+import { setIdTrip, setPrice } from "../../redux/actions/inforBookAction";
 
 const styles = StyleSheet.create({
   background: {
@@ -29,8 +32,11 @@ const styles = StyleSheet.create({
 
 const CardTrip = ({ item, navigation, showModalDetailTrip, setTripChosen }) => {
   const tailwind = useTailwind();
+  const dispatch = useDispatch();
   const heightDevice = Dimensions.get("screen").height;
   const HandleChooseATrip = () => {
+    dispatch(setIdTrip(item.idTrip));
+    dispatch(setPrice(item.price));
     navigation.replace("ChooseSeat", item);
   };
   const handleClickDetailTrip = () => {
@@ -160,7 +166,7 @@ const CardTrip = ({ item, navigation, showModalDetailTrip, setTripChosen }) => {
                     fontWeight: "700",
                   }}
                 >
-                  {item.price}
+                  {formatCurrency(item.price)}
                   {"VND"}
                 </Text>
               </Text>

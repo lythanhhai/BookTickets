@@ -37,6 +37,8 @@ const Header = ({
   setShowChangeModal,
   showChangeModal,
   item,
+  handleCancelBooking,
+  route
 }) => {
   const tailwind = useTailwind();
   const User = useSelector((state) => state.authenReducer);
@@ -50,8 +52,16 @@ const Header = ({
   if (whichScreen === tabBookTicketScreen) {
     title = (
       <Text style={{ color: "white", fontSize: 16 }}>Booking Tickets</Text>
+      // <Image
+      //   source={require("../../../assets/Image/logo.png")}
+      //   style={{
+      //     height: 60,
+      //     width: 150,
+      //     objectFit: "cover",
+      //   }}
+      // />
     );
-    pl = Dimensions.get("screen").width / 90;
+    pl = Dimensions.get("screen").width / 150;
     loginOrEdit = (
       <TouchableOpacity
         style={{
@@ -392,7 +402,7 @@ const Header = ({
             </View>
           </View>
         </View>
-        <Text style={{ color: "white", fontSize: 13 }}>Pick-up point</Text>
+        <Text style={{ color: "white", fontSize: 13 }}>List station</Text>
       </View>
     );
   } else if (whichScreen === dropoffPointScreen) {
@@ -509,7 +519,8 @@ const Header = ({
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack(dropoffPointScreen);
+              // navigation.navigate(dropoffPointScreen, item);
+              navigation.goBack();
             }}
             style={{
               marginRight: 4,
@@ -543,7 +554,9 @@ const Header = ({
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack(inforDetailScreen);
+              handleCancelBooking()
+              // navigation.replace(inforDetailScreen);
+              // navigation.goBack();
             }}
             style={{
               marginRight: 4,
@@ -577,7 +590,7 @@ const Header = ({
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack(inforTicketScreen);
+              navigation.replace(inforTicketScreen, item);
             }}
             style={{
               marginRight: 4,

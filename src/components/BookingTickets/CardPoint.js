@@ -57,6 +57,7 @@ const CardPoint = ({
     >
       <TouchableOpacity
         style={[styles.container]}
+        disabled={true}
         onPress={() => {
           choosePickupPoint();
         }}
@@ -74,6 +75,7 @@ const CardPoint = ({
         ) : (
           <Feather name="circle" style={styles.iconStart} />
         )}
+        
 
         <View style={[styles.containerBetween]}>
           <Text
