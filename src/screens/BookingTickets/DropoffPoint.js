@@ -12,6 +12,8 @@ import Header from "../../components/Header/Header";
 import { useState, useEffect } from "react";
 import CardPoint from "../../components/BookingTickets/CardPoint";
 import * as screenName from "../../constants/nameScreen";
+import { useDispatch } from "react-redux";
+import { setDropoffPoint } from "../../redux/actions/inforBookAction";
 
 const styles = StyleSheet.create(styleGlobal);
 const widthDevice = Dimensions.get("screen").width;
@@ -21,14 +23,22 @@ const heightModal = (20 * heightDevice) / 100;
 const DropoffPoint = ({ navigation, route }) => {
   const [data, setData] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
   const [itemChosen, setItemChosen] = useState(0);
+  const dispatch = useDispatch();
   const handleChooseDropoff = () => {
-    navigation.replace("InforDetail");
+    let idEnd = 0;
+    data.forEach((item, index) => {
+      if (item === itemChosen) {
+        idEnd = index + 1;
+      }
+    });
+    dispatch(setDropoffPoint(idEnd));
+    navigation.replace("InforDetail", route.params);
   };
   useEffect(() => {
     // console.warn(route.params.routeStations)
     let arrayRes = [];
-    route.params.routeStations.forEach((item, index) => {
-      arrayRes.push(item[1]);
+    Object.keys(route.params.routeStations).forEach((item, index) => {
+      arrayRes.push(route.params.routeStations[item][1]);
     });
     setData(arrayRes);
   }, []);

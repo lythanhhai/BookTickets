@@ -11,7 +11,6 @@ import { baseUrl } from "./config";
 // import * as Sentry from 'sentry-expo'
 
 const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
-  // const dispatch = useDispatch()
   setIsLoading(true);
   axios({
     method: "post",
@@ -24,6 +23,8 @@ const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
     })
     .then(async (data) => {
       setIsLoading(false);
+      // Sentry.Native.captureException("hha");
+      // throw new Error("hhe");
       try {
         if (data.message) {
           // console.warn(data.message);
@@ -33,9 +34,8 @@ const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
           // Sentry.captureException(err)
           dispatch(loginAction(data));
           // console.warn(data)
-          navigation.navigate("Home");
+          navigation.goBack("PickupPoint");
         }
-
       } catch (e) {
         console.warn(e);
       }
@@ -87,7 +87,8 @@ const ApiRegister = (
           //     },
           //   ]
           // );
-          navigation.navigate("Home");
+          // navigation.navigate("Home");
+          navigation.goBack("PickupPoint");
         }
       } catch (e) {
         console.warn(e);
@@ -99,8 +100,6 @@ const ApiRegister = (
 };
 
 const ApiLogout = (dispatch, navigation, setIsLoading) => {
-  // const dispatch = useDispatch()
-  // setIsLoading(true);
   navigation.navigate("Loading");
   // navigation.replace("My_account");
   axios({
@@ -129,4 +128,20 @@ const ApiLogout = (dispatch, navigation, setIsLoading) => {
     });
 };
 
-export { ApiLogin, ApiRegister, ApiLogout };
+const ApiGetCurrent = (setCurrentUser) => {
+  axios({
+    method: "get",
+    url: `${baseUrl}auth/current`,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .then((data) => {
+      setCurrentUser(data);
+    })
+    .catch((err) => {
+      console.warn(err);
+    });
+};
+
+export { ApiLogin, ApiRegister, ApiLogout, ApiGetCurrent };

@@ -75,8 +75,13 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
       arrayDate[2] +
       " " +
       arrayDate[3];
-    setDate(dateChoosen);
-    hideDatePicker();
+    if (date.valueOf() - new Date().valueOf() > 86400000 / 2) {
+      setDate(dateChoosen);
+      // console.warn(date.valueOf() - new Date().valueOf());
+      hideDatePicker();
+    } else {
+      // Alert.alert("Please choose valid date");
+    }
   };
 
   const dispatch = useDispatch();
@@ -444,6 +449,7 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
                 isDarkModeEnabled={false}
+                // minimumDate={new Date().getDate()}
               />
             ) : (
               <DateTimePickerModal

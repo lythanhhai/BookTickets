@@ -1,4 +1,5 @@
 import { getLocationReducer } from "../reducers/getLocationReducer";
+import inforBookReducer from "../reducers/inforBookReducer";
 import authenReducer from "../reducers/authenReducer";
 // import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
@@ -18,6 +19,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   getLocationReducer: getLocationReducer,
   authenReducer: authenReducer,
+  inforBookReducer: inforBookReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

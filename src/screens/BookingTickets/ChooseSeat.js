@@ -27,6 +27,7 @@ import * as screenName from "../../constants/nameScreen";
 import { useSelector } from "react-redux";
 import { getTrips } from "../../API/ApiGetTrips";
 import { formatDate } from "../../utils/formatDate";
+import { formatCurrency } from "../../utils/formatCurrency";
 // import { ScrollView } from 'react-native-virtualized-view'
 
 const widthScreen = Dimensions.get("screen").width;
@@ -136,12 +137,14 @@ const SeatItem = ({ item, index, hanldeClickSeat }) => {
     </TouchableOpacity>
   );
 };
+
 const ChooseSeat = ({ navigation, route }) => {
   const RBSheetRef = useRef();
   // choose seat
   const [showModalSeat, setShowModalSeat] = useState(false);
   const [dataModalSeat, setDataModalSeat] = useState({
     numberSeat: 0,
+    idSeat: [],
     nameSeats: [],
     price: 0,
   });
@@ -157,21 +160,30 @@ const ChooseSeat = ({ navigation, route }) => {
     }
     let arrayResult = [];
     if (item.status === 0 && item.nameSeat.includes("A")) {
-      FirstFloor.forEach((seat, index) => {
-        seat.nameSeat !== item.nameSeat
-          ? arrayResult.push(seat)
-          : arrayResult.push({
-              ...item,
-              nameSeat: item.nameSeat,
-              status: 1,
-            });
-      });
-      setFirstFloor(arrayResult);
-      setDataModalSeat({
-        numberSeat: dataModalSeat.numberSeat + 1,
-        nameSeats: [...dataModalSeat.nameSeats, item.nameSeat],
-        price: route.params.price * (dataModalSeat.numberSeat + 1),
-      });
+      if (dataModalSeat.numberSeat > 2) {
+        Alert.alert(
+          `This vehicle only was chosen max ${3} seats`
+        );
+      }
+      else 
+      {
+        FirstFloor.forEach((seat, index) => {
+          seat.nameSeat !== item.nameSeat
+            ? arrayResult.push(seat)
+            : arrayResult.push({
+                ...item,
+                nameSeat: item.nameSeat,
+                status: 1,
+              });
+        });
+        setFirstFloor(arrayResult);
+        setDataModalSeat({
+          numberSeat: dataModalSeat.numberSeat + 1,
+          nameSeats: [...dataModalSeat.nameSeats, item.nameSeat],
+          price: route.params.price * (dataModalSeat.numberSeat + 1),
+          idSeat: [...dataModalSeat.idSeat, item.id],
+        });
+      }
     } else if (item.status === 1 && item.nameSeat.includes("A")) {
       FirstFloor.forEach((seat, index) => {
         seat.nameSeat !== item.nameSeat
@@ -189,23 +201,35 @@ const ChooseSeat = ({ navigation, route }) => {
           return item.nameSeat !== itemInSeats;
         }),
         price: route.params.price * (dataModalSeat.numberSeat - 1),
+        idSeat: [...dataModalSeat.idSeat].filter((item1, index) => {
+          return item.id !== item1;
+        }),
       });
     } else if (item.status === 0 && item.nameSeat.includes("B")) {
-      SecondFloor.forEach((seat, index) => {
-        seat.nameSeat !== item.nameSeat
-          ? arrayResult.push(seat)
-          : arrayResult.push({
-              ...item,
-              name: item.nameSeat,
-              status: 1,
-            });
-      });
-      setSecondFloor(arrayResult);
-      setDataModalSeat({
-        numberSeat: dataModalSeat.numberSeat + 1,
-        nameSeats: [...dataModalSeat.nameSeats, item.nameSeat],
-        price: route.params.price * (dataModalSeat.numberSeat + 1),
-      });
+      if (dataModalSeat.numberSeat > 2) {
+        Alert.alert(
+          `This vehicle only was chosen max ${3} seats`
+        );
+      }
+      else 
+      {
+        SecondFloor.forEach((seat, index) => {
+          seat.nameSeat !== item.nameSeat
+            ? arrayResult.push(seat)
+            : arrayResult.push({
+                ...item,
+                name: item.nameSeat,
+                status: 1,
+              });
+        });
+        setSecondFloor(arrayResult);
+        setDataModalSeat({
+          numberSeat: dataModalSeat.numberSeat + 1,
+          nameSeats: [...dataModalSeat.nameSeats, item.nameSeat],
+          price: route.params.price * (dataModalSeat.numberSeat + 1),
+          idSeat: [...dataModalSeat.idSeat, item.id],
+        });
+      }
     } else if (item.status === 1 && item.nameSeat.includes("B")) {
       SecondFloor.forEach((seat, index) => {
         seat.nameSeat !== item.nameSeat
@@ -223,6 +247,9 @@ const ChooseSeat = ({ navigation, route }) => {
           return item.nameSeat !== itemInSeats;
         }),
         price: route.params.price * (dataModalSeat.numberSeat - 1),
+        idSeat: [...dataModalSeat.idSeat].filter((item1, index) => {
+          return item.id !== item1;
+        }),
       });
     } else {
     }
@@ -252,52 +279,28 @@ const ChooseSeat = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const location = useSelector((state) => state.getLocationReducer);
   useEffect(() => {
-    let arrayFirst = route.params.seatStatuses.slice(0, 23);
-    let arraySecond = route.params.seatStatuses.slice(23, 46);
-    arrayFirst.forEach((item, index) => {
-      if (!arrayFirst[index].status) {
-        arrayFirst[index].status = 0;
-      } else {
-        arrayFirst[index].status = 3;
-      }
-    });
-    arraySecond.forEach((item, index) => {
-      if (!arraySecond[index].status) {
-        arraySecond[index].status = 0;
-      } else {
-        arraySecond[index].status = 3;
-      }
-    });
-    // console.warn(arrayFirst);
-    setFirstFloor(arrayFirst);
-    setSecondFloor(arraySecond);
+    if (route.params.status) {
+      let arrayFirst = route.params.seatStatuses.slice(0, 23);
+      let arraySecond = route.params.seatStatuses.slice(23, 46);
+      arrayFirst.forEach((item, index) => {
+        if (!arrayFirst[index].status) {
+          arrayFirst[index].status = 0;
+        } else {
+          arrayFirst[index].status = 3;
+        }
+      });
+      arraySecond.forEach((item, index) => {
+        if (!arraySecond[index].status) {
+          arraySecond[index].status = 0;
+        } else {
+          arraySecond[index].status = 3;
+        }
+      });
+      // console.warn(arrayFirst);
+      setFirstFloor(arrayFirst);
+      setSecondFloor(arraySecond);
+    }
   }, []);
-
-  // useEffect(() => {
-  //   if (Data.length > 0) {
-  //     // convert status true/false into number
-  //     let arrayFirst = Data[0].seatStatuses.slice(0, 23);
-  //     let arraySecond = Data[0].seatStatuses.slice(23, 46);
-  //     arrayFirst.forEach((item, index) => {
-  //       if (!arrayFirst[index].status) {
-  //         arrayFirst[index].status = 0;
-  //       } else {
-  //         arrayFirst[index].status = 3;
-  //       }
-  //     });
-  //     arraySecond.forEach((item, index) => {
-  //       if (!arraySecond[index].status) {
-  //         arraySecond[index].status = 0;
-  //       } else {
-  //         arraySecond[index].status = 3;
-  //       }
-  //     });
-  //     // console.warn(arrayFirst);
-  //     setFirstFloor(arrayFirst);
-  //     setSecondFloor(arraySecond);
-  //   }
-  //   // console.warn(Data)
-  // }, [Data]);
 
   // animation
   const state = {
@@ -346,7 +349,8 @@ const ChooseSeat = ({ navigation, route }) => {
       style={[
         styles.backgroundBottom,
         {
-          backgroundColor: "rgb(243,243,243)",
+          // backgroundColor: "rgb(243,243,243)",
+          backgroundColor: "white",
         },
       ]}
     >
@@ -365,7 +369,7 @@ const ChooseSeat = ({ navigation, route }) => {
         >
           <ActivityIndicator size="large" color={colors.blue} />
         </View>
-      ) : (
+      ) : route.params.status ? (
         <ScrollView
           contentContainerStyle={{
             display: "flex",
@@ -911,8 +915,114 @@ const ChooseSeat = ({ navigation, route }) => {
             </View>
           </View>
         </ScrollView>
+      ) : (
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            width: widthScreen,
+            height: heightScreen - Dimensions.get("screen").height / 8,
+            backgroundColor: "white",
+          }}
+        >
+          <Text
+            style={{
+              textAlign: "justify",
+              width: widthScreen / 1.2,
+              fontSize: 18,
+              marginTop: 50,
+              marginBottom: 30,
+              fontWeight: "500",
+            }}
+          >
+            Seat selection is not available for this trip. Please choose the
+            number of seats
+          </Text>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-around",
+              width: "100%",
+              marginTop: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                color: "rgb(100,100,100)",
+              }}
+            >
+              {formatCurrency(route.params.price)}VND/seat
+            </Text>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  if (dataModalSeat.numberSeat > 0) {
+                    setDataModalSeat({
+                      ...dataModalSeat,
+                      numberSeat: dataModalSeat.numberSeat - 1,
+                      price:
+                        (dataModalSeat.numberSeat - 1) * route.params.price,
+                    });
+                  }
+                }}
+              >
+                <MaterialIcons
+                  name="remove-circle-outline"
+                  style={{
+                    fontSize: 35,
+                    color: "rgb(60, 60, 60)",
+                  }}
+                />
+              </TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 18,
+                  paddingHorizontal: 10,
+                }}
+              >
+                {dataModalSeat.numberSeat}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  if (dataModalSeat.numberSeat > 2) {
+                    Alert.alert(
+                      `This vehicle only was chosen max ${3} seats`
+                    );
+                  } else {
+                    setDataModalSeat({
+                      ...dataModalSeat,
+                      numberSeat: dataModalSeat.numberSeat + 1,
+                      price:
+                        (dataModalSeat.numberSeat + 1) * route.params.price,
+                    });
+                  }
+                }}
+              >
+                <MaterialIcons
+                  name="add-circle-outline"
+                  style={{
+                    fontSize: 35,
+                    color: "rgb(60, 60, 60)",
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       )}
-      {dataModalSeat.nameSeats.length > 0 ? (
+      {dataModalSeat.nameSeats.length > 0 || dataModalSeat.numberSeat > 0 ? (
         <ModalSeatSelected
           showModalSeat={showModalSeat}
           heightBottomSheet={heightBottomSheet}
