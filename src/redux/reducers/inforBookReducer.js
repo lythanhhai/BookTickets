@@ -3,6 +3,8 @@ const initialState = {
   name: "",
   note: "",
   phoneNumber: "",
+  nameAgency: "",
+  nameVehicle: "",
   price: 0,
   quantity: 0,
   routeStationBook: [null, null],
@@ -31,6 +33,15 @@ const inforBookReducer = (state = initialState, action) => {
         price: action.payload,
       };
     }
+
+    case "setAgency": {
+      return {
+        ...state,
+        nameAgency: action.payload.nameAgency,
+        nameVehicle: action.payload.nameVehicle,
+      };
+    }
+
     case "setSeatIds": {
       // let array = [...state.seatIds];
       // array.push(action.payload);

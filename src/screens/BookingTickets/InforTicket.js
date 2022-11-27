@@ -179,23 +179,21 @@ const InforTicket = ({ navigation, route }) => {
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Trip</Text>
             <Text style={[stylesInfor.textRight]}>
-              {route.params.list[0].timeStart.split(":").slice(0, 2).join(":")}
+              {route.params.list.timeStart.split(":").slice(0, 2).join(":")}
               {", "}
-              {formatDate(route.params.list[0].date)}
+              {formatDate(route.params.list.date)}
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Number of tickets</Text>
             <Text style={[stylesInfor.textRight]}>
-              {route.params.list.length} ticket
+              {route.params.list.ticketInfoResponseList.length} ticket
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Total</Text>
             <Text style={[stylesInfor.textRight]}>
-              {formatCurrency(
-                route.params.list.length * route.params.list[0].price
-              )}
+              {formatCurrency(route.params.list.totalPrice)}
               VND
             </Text>
           </View>
@@ -226,19 +224,16 @@ const InforTicket = ({ navigation, route }) => {
             </View>
             <View style={[stylesInfor.detailPoint]}>
               <Text style={[stylesInfor.textDetailPoint]}>
-                {route.params.list[0].dep}
+                {route.params.list.dep}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
-                {route.params.list[0].dep}
+                Bến xe {route.params.list.dep}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
                 Boarding at{" "}
-                {route.params.list[0].timeStart
-                  .split(":")
-                  .slice(0, 2)
-                  .join(":")}
+                {route.params.list.timeStart.split(":").slice(0, 2).join(":")}
                 {", "}
-                {formatDate(route.params.list[0].date)}
+                {formatDate(route.params.list.date)}
               </Text>
             </View>
           </View>
@@ -269,16 +264,16 @@ const InforTicket = ({ navigation, route }) => {
             </View>
             <View style={[stylesInfor.detailPoint]}>
               <Text style={[stylesInfor.textDetailPoint]}>
-                {route.params.list[0].des}
+                {route.params.list.des}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
-                {route.params.list[0].des}
+                Bến xe {route.params.list.des}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
                 Boarding at{" "}
                 {
                   calculateSumHour(
-                    route.params.list[0].timeStart,
+                    route.params.list.timeStart,
                     route.params.dataTrip.timeStations.slice(
                       0,
                       route.params.dataTrip.timeStations.length
@@ -286,7 +281,7 @@ const InforTicket = ({ navigation, route }) => {
                   ).endTime
                 }
                 {", "}
-                {formatDate(route.params.list[0].date)}
+                {formatDate(route.params.list.date)}
               </Text>
             </View>
           </View>
@@ -338,19 +333,19 @@ const InforTicket = ({ navigation, route }) => {
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeftPassenger]}>Full name</Text>
             <Text style={[stylesInfor.textRightPassenger]}>
-              {route.params.list[0].passengerInfo.name}
+              {route.params.list.passengerInfo.name}
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeftPassenger]}>Phone number</Text>
             <Text style={[stylesInfor.textRightPassenger]}>
-              {route.params.list[0].passengerInfo.phone}
+              {route.params.list.passengerInfo.phone}
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeftPassenger]}>Email address</Text>
             <Text style={[stylesInfor.textRightPassenger]}>
-              {route.params.list[0].passengerInfo.email}
+              {route.params.list.passengerInfo.email}
             </Text>
           </View>
         </View>

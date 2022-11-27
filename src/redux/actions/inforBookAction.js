@@ -19,6 +19,13 @@ const setPrice = (price) => {
   };
 };
 
+const setAgency = (data) => {
+  return {
+    type: "setAgency",
+    payload: data,
+  };
+};
+
 const setPickupPoint = (id) => {
   return {
     type: "setPickupPoint",
@@ -77,5 +84,6 @@ export {
   setSeatIds,
   removeSeatIds,
   setPrice,
-  setPoint
+  setPoint,
+  setAgency,
 };

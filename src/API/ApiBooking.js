@@ -38,14 +38,14 @@ const ApiBookingSeat = (Data, navigation, setIsLoading, dataTrip) => {
     })
     .then((data) => {
       setIsLoading(false);
-      // console.warn(data);
-      if (data.length > 0) {
-        navigation.replace(screenName.inforTicketScreen, {
-          list: data,
-          dataTrip: dataTrip,
-        });
-      } else {
-      }
+      console.warn(data);
+      // if (data.length > 0) {
+      // } else {
+      // }
+      navigation.replace(screenName.inforTicketScreen, {
+        list: data,
+        dataTrip: dataTrip,
+      });
     })
     .catch((err) => {
       console.warn(err);
@@ -53,7 +53,7 @@ const ApiBookingSeat = (Data, navigation, setIsLoading, dataTrip) => {
 };
 
 const ApiPayment = (Data, navigation, setIsLoading) => {
-  setIsLoading(true)
+  setIsLoading(true);
   axios({
     method: "post",
     url: `${baseUrl}payment`,
@@ -64,8 +64,8 @@ const ApiPayment = (Data, navigation, setIsLoading) => {
     })
     .then((data) => {
       // console.warn(data);
-      setIsLoading(false)
-      Linking.openURL(data.toString());
+      setIsLoading(false);
+      Linking.openURL(data.url.toString());
       navigation.navigate("Home");
     })
     .catch((err) => {
