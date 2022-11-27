@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
   backgroundBottom: {
     backgroundColor: "rgb(246, 246, 246)",
     width: Dimensions.get("screen").width,
-
   },
 });
 
@@ -134,8 +133,8 @@ const BookingTickets = ({ navigation, route }) => {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            // navigation.navigate(screenName.paymentScreen);
-            Linking.openURL("https://mailchimp.com/landers/templates/?gclid=Cj0KCQiA4OybBhCzARIsAIcfn9k1Cbj7UNGk9U1Z4xYgA9wDWT03-q0lAfd4bEyDb8zQVmtvBim7qRcaAgn3EALw_wcB&gclsrc=aw.ds")
+            // navigation.navigate("Profile");
+            // Linking.openURL("https://mailchimp.com/landers/templates/?gclid=Cj0KCQiA4OybBhCzARIsAIcfn9k1Cbj7UNGk9U1Z4xYgA9wDWT03-q0lAfd4bEyDb8zQVmtvBim7qRcaAgn3EALw_wcB&gclsrc=aw.ds")
           }}
         >
           <Text

@@ -49,6 +49,7 @@ import Loading from "./src/components/Loading/Loading";
 
 // add sentry to booking tickets app
 import * as Sentry from "sentry-expo";
+import Profile from "./src/screens/MyAccount/Profile";
 
 Sentry.init({
   dsn: "https://59e443ac7dfb46f280541589357621c1@o4504106872209408.ingest.sentry.io/4504155015020544",
@@ -351,6 +352,21 @@ const App = () => {
                   >
                     {(props) => <Payment {...props} />}
                   </Stack.Screen>
+                </Stack.Group>
+                <Stack.Group>
+                  <Stack.Screen
+                    name="Profile"
+                    component={Profile}
+                    options={{
+                      title: "My profile",
+                      headerShown: true,
+                      headerStyle: {
+                        backgroundColor: colors.blue,
+                        // height: Dimensions.get("screen").height / 8,
+                      },
+                      headerTintColor: "#fff",
+                    }}
+                  />
                 </Stack.Group>
                 {false ? (
                   <></>

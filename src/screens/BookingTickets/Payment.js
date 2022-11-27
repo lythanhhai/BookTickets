@@ -77,11 +77,12 @@ const stylesInfor = StyleSheet.create({
 const Payment = ({ navigation, route }) => {
   const [chooseMethod, setChooseMethod] = useState(false);
   const [select, setSelect] = useState(false);
+  const [seeSeat, setSeeSeat] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handlePayment = () => {
     let Data = {
-      id: route.params.list[0].paymentId,
-      price: route.params.list[0].price * route.params.list.length,
+      id: route.params.list.paymentId,
+      price: route.params.list.totalPrice,
     };
     ApiPayment(Data, navigation, setIsLoading);
   };
@@ -281,7 +282,7 @@ const Payment = ({ navigation, route }) => {
                 paddingHorizontal: 20,
               }}
             >
-              <View style={[stylesInfor.flex]}>
+              <View style={[stylesInfor.flex, { alignItems: "flex-start" }]}>
                 <Text
                   style={[
                     stylesInfor.textLeftPassenger,
@@ -295,28 +296,115 @@ const Payment = ({ navigation, route }) => {
                 >
                   Total
                 </Text>
-                <TouchableOpacity
+                <View
                   style={{
                     width: "70%",
+                    display: "flex",
+                    flexDirection: "column",
+                    // backgroundColor: "red",
                   }}
-                  onPress={() => {}}
                 >
-                  <Text
-                    style={[
-                      stylesInfor.touchable,
-                      {
-                        fontWeight: "600",
-                        textDecorationLine: "none",
-                        color: "black",
-                      },
-                    ]}
+                  <TouchableOpacity
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                    }}
+                    onPress={() => {
+                      setSeeSeat(!seeSeat);
+                    }}
                   >
-                    {formatCurrency(
-                      route.params.list[0].price * route.params.list.length
+                    <Text
+                      style={[
+                        stylesInfor.touchable,
+                        {
+                          fontWeight: "600",
+                          textDecorationLine: "none",
+                          color: "black",
+                          marginRight: 7,
+                        },
+                      ]}
+                    >
+                      {formatCurrency(route.params.list.totalPrice)}
+                      {"VND"}
+                    </Text>
+                    {seeSeat ? (
+                      <Feather
+                        name="chevron-up"
+                        style={{
+                          fontSize: 20,
+                          fontWeight: "500",
+                        }}
+                      />
+                    ) : (
+                      <Feather
+                        name="chevron-down"
+                        style={{
+                          fontSize: 20,
+                          fontWeight: "500",
+                        }}
+                      />
                     )}
-                    {"VND"}
-                  </Text>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                  {seeSeat ? (
+                    <View
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "flex-end",
+                        alignItems: "center",
+                        marginTop: 10,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: "500",
+                        }}
+                      >
+                        Seats:{" "}
+                      </Text>
+                      {route.params.list.ticketInfoResponseList.map(
+                        (item, index) => {
+                          if (
+                            index ===
+                            route.params.list.ticketInfoResponseList.length - 1
+                          ) {
+                            return (
+                              <Text
+                                style={{
+                                  fontSize: 15,
+                                  fontWeight: "500",
+                                }}
+                                key={index}
+                              >
+                                {item.nameSeat}
+                              </Text>
+                            );
+                          } else {
+                            return (
+                              <Text
+                                style={{
+                                  fontSize: 15,
+                                  fontWeight: "500",
+                                }}
+                                key={index}
+                              >
+                                {item.nameSeat}
+                                {", "}
+                              </Text>
+                            );
+                          }
+                        }
+                      )}
+                    </View>
+                  ) : (
+                    <></>
+                  )}
+                </View>
               </View>
             </View>
           </ScrollView>

@@ -44,6 +44,7 @@ import firebase from "firebase/compat/app";
 import { ApiRegister } from "../../API/ApiLoginRegister";
 import { useDispatch } from "react-redux";
 import Loading from "../Loading/Loading";
+import CustomInput from "../CustomInput/CustomInput";
 
 const styles = StyleSheet.create({
   errMsg: {
@@ -284,7 +285,7 @@ const Register = ({ navigation, route }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+      style={[styles.container]}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
@@ -617,6 +618,7 @@ const Register = ({ navigation, route }) => {
                   </>
                 )}
                 {/*  */}
+
                 <Text
                   style={[
                     tailwind("text-sm"),

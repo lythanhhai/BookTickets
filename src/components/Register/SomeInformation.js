@@ -10,13 +10,14 @@ import {
   Platform,
 } from "react-native";
 import { useTailwind } from "tailwind-rn";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import colors from "../../constants/colors";
 import * as screenName from "../../constants/nameScreen";
 import { useSelector } from "react-redux";
+import { GetProfile } from "../../API/ApiProfile";
 
 const radiusInput = 7;
-const verticalPadding = 5;
+const verticalPadding = 10;
 const marginTop = 20;
 
 const SomeInformation = ({
@@ -88,6 +89,11 @@ const SomeInformation = ({
   };
 
   const userCurrent = useSelector((state) => state.authenReducer);
+  // const [dataDetail, setDataDetail] = useState({});
+  // const [isLoading, setIsLoading] = useState(false);
+  // useLayoutEffect(() => {
+  //   GetProfile(setDataDetail, userCurrent.accessToken, setIsLoading);
+  // }, []);
   return (
     <KeyboardAvoidingView
       style={{
@@ -157,6 +163,7 @@ const SomeInformation = ({
       >
         <TextInput
           placeholder="Enter your fullname"
+          defaultValue={data.name}
           onChangeText={(value) => {
             // console.warn(value)
             setData({
@@ -240,7 +247,7 @@ const SomeInformation = ({
             keyboardType="numeric"
             label="Your phone number"
             placeholder="Phone Number"
-            defaultValue={userCurrent.username}
+            defaultValue={data.phoneNumber}
             onChangeText={(value) => {
               setData({
                 ...data,
@@ -277,6 +284,7 @@ const SomeInformation = ({
       <View>
         <TextInput
           placeholder="Email to receive E-ticket"
+          defaultValue={data.email}
           onChangeText={(value) => {
             setData({
               ...data,
