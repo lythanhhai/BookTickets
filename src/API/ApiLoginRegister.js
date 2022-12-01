@@ -31,6 +31,7 @@ const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
           Alert.alert(data.message, "Your username or password are incorrect");
         } else {
           await AsyncStorage.setItem("currentUser", JSON.stringify(data));
+          await AsyncStorage.setItem("expireJwt", JSON.stringify(new Date()));
           // Sentry.captureException(err)
           dispatch(loginAction(data));
           // console.warn(data)
@@ -71,6 +72,7 @@ const ApiRegister = (
         } else {
           // console.warn(data.accessToken);
           await AsyncStorage.setItem("currentUser", JSON.stringify(data));
+          await AsyncStorage.setItem("expireJwt", JSON.stringify(new Date()));
           dispatch(signupAction(data));
           // Alert.alert(
           //   "Register succefully!!!",
@@ -112,6 +114,7 @@ const ApiLogout = (dispatch, navigation, setIsLoading) => {
     .then(async (data) => {
       // setIsLoading(false);
       await AsyncStorage.removeItem("currentUser");
+      await AsyncStorage.setItem("expireJwt", JSON.stringify(new Date()));
       dispatch(
         logoutAction({
           userId: null,

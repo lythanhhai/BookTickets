@@ -19,6 +19,7 @@ import { formatDate } from "../../utils/formatDate";
 import { cancelTicket } from "../../redux/actions/inforBookAction";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { calculateSumHour } from "../../utils/calculateSumHour";
+import { ApiRefund, ApiRefundEdit } from "../../API/ApiBooking";
 
 const styles = StyleSheet.create(styleGlobal);
 const width = Dimensions.get("screen").width;
@@ -92,8 +93,9 @@ const InforTicket = ({ navigation, route }) => {
               text: "Ok",
               onPress: () => {
                 dispatch(cancelTicket());
-                navigation.navigate("Home");
-                Alert.alert("This book removed successfully");
+                // navigation.navigate("Home");
+                // Alert.alert("This book removed successfully");
+                ApiRefund(route.params.list.paymentId, navigation);
               },
               style: "cancel",
             },
@@ -113,8 +115,7 @@ const InforTicket = ({ navigation, route }) => {
               text: "Ok",
               onPress: () => {
                 dispatch(cancelTicket());
-                navigation.navigate("Home");
-                Alert.alert("This book removed successfully");
+                ApiRefund(route.params.list.paymentId, navigation);
               },
               style: "cancel",
             },
@@ -202,7 +203,7 @@ const InforTicket = ({ navigation, route }) => {
               <Text style={[stylesInfor.textLeft, { width: "35%" }]}>
                 Pick-up point
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   width: "65%",
                 }}
@@ -220,7 +221,7 @@ const InforTicket = ({ navigation, route }) => {
                 >
                   Change
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={[stylesInfor.detailPoint]}>
               <Text style={[stylesInfor.textDetailPoint]}>
@@ -242,7 +243,7 @@ const InforTicket = ({ navigation, route }) => {
               <Text style={[stylesInfor.textLeft, { width: "35%" }]}>
                 Drop-off point
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   width: "65%",
                 }}
@@ -260,7 +261,7 @@ const InforTicket = ({ navigation, route }) => {
                 >
                   Change
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={[stylesInfor.detailPoint]}>
               <Text style={[stylesInfor.textDetailPoint]}>
@@ -315,7 +316,11 @@ const InforTicket = ({ navigation, route }) => {
                 width: "50%",
               }}
               onPress={() => {
-                navigation.replace(screenName.inforDetailScreen, route.params);
+                ApiRefundEdit(
+                  route.params.list.paymentId,
+                  route.params,
+                  screenName.inforDetailScreen
+                );
               }}
             >
               <Text

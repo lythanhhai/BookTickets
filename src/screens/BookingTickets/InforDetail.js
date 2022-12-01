@@ -83,6 +83,7 @@ const InforDetail = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const inforTicketBook = useSelector((state) => state.inforBookReducer);
   const [loading, setLoading] = useState(false);
+  const [url, setUrl] = useState("");
   const printTicket = () => {
     // console.warn(inValidData);
     // console.warn(data);
@@ -120,8 +121,14 @@ const InforDetail = ({ navigation, route }) => {
             nameAgency: inforTicketBook.nameAgency,
             nameVehicle: inforTicketBook.nameVehicle,
           };
-          console.warn(inforTicketData)
-          ApiBookingSeat(inforTicketData, navigation, setLoading, route.params);
+          // console.warn(inforTicketData)
+          ApiBookingSeat(
+            inforTicketData,
+            navigation,
+            setLoading,
+            route.params,
+            setUrl
+          );
         } else {
           inforTicketData = {
             email: data.email,
@@ -139,7 +146,8 @@ const InforDetail = ({ navigation, route }) => {
             inforTicketData,
             navigation,
             setLoading,
-            route.params
+            route.params,
+            setUrl
           );
         }
       }
@@ -217,7 +225,7 @@ const InforDetail = ({ navigation, route }) => {
                         fontWeight: "500",
                       }}
                     >
-                      Continue
+                      Book
                     </Text>
                   </TouchableOpacity>
                 </View>

@@ -1,9 +1,15 @@
 import axios from "axios";
 import { baseUrl } from "./config";
 import * as screenName from "../constants/nameScreen";
-import { Linking } from "react-native";
+import { Alert, Linking } from "react-native";
 
-const ApiBookingPartSeat = (Data, navigation, setIsLoading, dataTrip) => {
+const ApiBookingPartSeat = (
+  Data,
+  navigation,
+  setIsLoading,
+  dataTrip,
+  setUrl
+) => {
   setIsLoading(true);
   axios({
     method: "post",
@@ -16,6 +22,13 @@ const ApiBookingPartSeat = (Data, navigation, setIsLoading, dataTrip) => {
     .then((data) => {
       setIsLoading(false);
       // console.warn(data);
+      ApiPaymentAfterBooking(
+        {
+          id: data.paymentId,
+          price: data.totalPrice,
+        },
+        setUrl
+      );
       navigation.replace(screenName.inforTicketScreen, {
         list: data,
         dataTrip: dataTrip,
@@ -26,7 +39,7 @@ const ApiBookingPartSeat = (Data, navigation, setIsLoading, dataTrip) => {
     });
 };
 
-const ApiBookingSeat = (Data, navigation, setIsLoading, dataTrip) => {
+const ApiBookingSeat = (Data, navigation, setIsLoading, dataTrip, setUrl) => {
   setIsLoading(true);
   axios({
     method: "post",
@@ -38,10 +51,17 @@ const ApiBookingSeat = (Data, navigation, setIsLoading, dataTrip) => {
     })
     .then((data) => {
       setIsLoading(false);
-      console.warn(data);
+      // console.warn(data);
       // if (data.length > 0) {
       // } else {
       // }
+      ApiPaymentAfterBooking(
+        {
+          id: data.paymentId,
+          price: data.totalPrice,
+        },
+        setUrl
+      );
       navigation.replace(screenName.inforTicketScreen, {
         list: data,
         dataTrip: dataTrip,
@@ -73,4 +93,61 @@ const ApiPayment = (Data, navigation, setIsLoading) => {
     });
 };
 
-export { ApiBookingPartSeat, ApiBookingSeat, ApiPayment };
+const ApiPaymentAfterBooking = (Data, setUrl) => {
+  axios({
+    method: "post",
+    url: `${baseUrl}payment`,
+    data: Data,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .then((data) => {
+      // console.warn(data);
+      setUrl(data.url.toString());
+    })
+    .catch((err) => {
+      console.warn(err);
+    });
+};
+
+const ApiRefund = (idPayment, navigation) => {
+  axios({
+    method: "post",
+    url: `${baseUrl}refund${idPayment}`,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .then((data) => {
+      navigation.navigate("Home");
+      Alert.alert("This book removed successfully");
+    })
+    .catch((err) => {
+      console.warn(err);
+    });
+};
+
+const ApiRefundEdit = (idPayment, Data, nameScreen) => {
+  axios({
+    method: "post",
+    url: `${baseUrl}refund${idPayment}`,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .then((data) => {
+      navigation.replace(nameScreen, Data);
+    })
+    .catch((err) => {
+      console.warn(err);
+    });
+};
+
+export {
+  ApiBookingPartSeat,
+  ApiBookingSeat,
+  ApiPayment,
+  ApiRefund,
+  ApiRefundEdit,
+};
