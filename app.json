@@ -33,6 +33,7 @@
       "bundleIdentifier": "bookingtickets.pbl6.android"
     },
     "android": {
+      "googleServicesFile": "./android/app/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

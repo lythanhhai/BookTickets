@@ -42,9 +42,9 @@ const EditProfile = (data, accessToken) => {
   axios({
     method: "post",
     url: `${baseUrl}profile/update`,
-    // headers: {
-    //   Authorization: `Bearer ${accessToken}`,
-    // },
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
     data: data,
   })
     .then((res) => {

@@ -71,10 +71,15 @@ const stylesFilter = StyleSheet.create({
 const ChooseTrip = ({ navigation, route }) => {
   const tailwind = useTailwind();
   const [Data, setData] = useState([]);
+  const [DataFilter, setDataFilter] = useState([]);
   const [showChangeModal, setShowChangeModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showModalFilter, setShowModalFilter] = useState(false);
   const [tripChosen, setTripChosen] = useState({});
+  const [method, setMethod] = useState({
+    type: "",
+    orient: false,
+  });
   const RBSheetRefTrip = useRef();
   const location = useSelector((state) => state.getLocationReducer);
   const dispatch = useDispatch();
@@ -88,7 +93,8 @@ const ChooseTrip = ({ navigation, route }) => {
           des: parseInt(location.stopPoint.split("-")[1]),
         },
         setData,
-        setLoading
+        setLoading,
+        setDataFilter
       );
     } else {
       getTrips(
@@ -98,11 +104,46 @@ const ChooseTrip = ({ navigation, route }) => {
           des: parseInt(location.newStopPoint.split("-")[1]),
         },
         setData,
-        setLoading
+        setLoading,
+        setDataFilter
       );
       dispatch(search());
     }
   }, []);
+
+  useEffect(() => {
+    let res = DataFilter;
+    // console.warn(method);
+    if (method.type === "Time") {
+      if (!method.orient) {
+        res = Data.sort((a, b) => {
+          return (
+            Number(a.timeStart.split(":")[0]) -
+            Number(b.timeStart.split(":")[0])
+          );
+        });
+      } else {
+        res = Data.sort((a, b) => {
+          return (
+            Number(b.timeStart.split(":")[0]) -
+            Number(a.timeStart.split(":")[0])
+          );
+        });
+      }
+    } else if (method.type === "Price") {
+      if (!method.orient) {
+        res = Data.sort((a, b) => {
+          return a.price - b.price;
+        });
+      } else {
+        res = Data.sort((a, b) => {
+          return b.price - a.price;
+        });
+      }
+    } else {
+    }
+    setDataFilter(res);
+  }, [method.type, method.orient]);
   return (
     <View
       style={[
@@ -147,20 +188,64 @@ const ChooseTrip = ({ navigation, route }) => {
         <TouchableOpacity
           style={stylesFilter.touchable}
           onPress={() => {
+            // console.warn("a");
+            if (method.type === "Time") {
+              setMethod({
+                type: "Time",
+                orient: !method.orient,
+              });
+            } else {
+              setMethod({
+                type: "Time",
+                orient: true,
+              });
+            }
             // setShowModalFilter(true);
           }}
         >
           <Ionicons name="time-outline" style={stylesFilter.icon}></Ionicons>
           <Text style={stylesFilter.text}>Time</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={stylesFilter.touchable}>
+        <TouchableOpacity
+          style={stylesFilter.touchable}
+          onPress={() => {
+            if (method.type === "Price") {
+              setMethod({
+                type: "Price",
+                orient: !method.orient,
+              });
+            } else {
+              setMethod({
+                type: "Price",
+                orient: true,
+              });
+            }
+            // setShowModalFilter(true);
+          }}
+        >
           <Ionicons
             name="pricetag-outline"
             style={stylesFilter.icon}
           ></Ionicons>
           <Text style={stylesFilter.text}>Price</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={stylesFilter.touchable}>
+        <TouchableOpacity
+          style={stylesFilter.touchable}
+          onPress={() => {
+            if (method.type === "Rating") {
+              setMethod({
+                type: "Rating",
+                orient: !method.orient,
+              });
+            } else {
+              setMethod({
+                type: "Rating",
+                orient: true,
+              });
+            }
+            // setShowModalFilter(true);
+          }}
+        >
           <Ionicons name="star-outline" style={stylesFilter.icon}></Ionicons>
           <Text style={stylesFilter.text}>Rating</Text>
         </TouchableOpacity>
@@ -211,7 +296,7 @@ const ChooseTrip = ({ navigation, route }) => {
           ]}
         >
           <FlatList
-            data={Data}
+            data={DataFilter}
             horizontal={false}
             showsVerticalScrollIndicator={false}
             // keyExtractor={1}
