@@ -15,8 +15,13 @@ import colors from "../../constants/colors";
 import Feather from "react-native-vector-icons/Feather";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { useState } from "react";
-import { ApiPayment } from "../../API/ApiBooking";
+import {
+  ApiBookingPartSeat,
+  ApiBookingSeat,
+  ApiPayment,
+} from "../../API/ApiBooking";
 import Loading from "../../components/Loading/Loading";
+import { useDispatch, useSelector } from "react-redux";
 
 const styles = StyleSheet.create(styleGlobal);
 const width = Dimensions.get("screen").width;
@@ -79,12 +84,59 @@ const Payment = ({ navigation, route }) => {
   const [select, setSelect] = useState(false);
   const [seeSeat, setSeeSeat] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const inforBookTicket = useSelector((state) => state.inforBookReducer);
+  const [url, setUrl] = useState("");
+  const dispatch = useDispatch();
   const handlePayment = () => {
-    let Data = {
-      id: route.params.list.paymentId,
-      price: route.params.list.totalPrice,
-    };
-    ApiPayment(Data, navigation, setIsLoading);
+    // let Data = {
+    //   id: route.params.list.paymentId,
+    //   price: route.params.list.totalPrice,
+    // };
+    // ApiPayment(Data, navigation, setIsLoading);
+    let inforTicketData = {};
+    if (inforBookTicket.routeStationBook.length === 0) {
+      inforTicketData = {
+        email: inforBookTicket.email,
+        name: inforBookTicket.name,
+        note: inforBookTicket.note,
+        phoneNumber: inforBookTicket.phoneNumber,
+        // price: inforBookTicket.price,
+        // quantity: inforBookTicket.quantity,
+        // routeStationBook: inforBookTicket.routeStationBook,
+        seatIds: inforBookTicket.seatIds,
+        tripId: inforBookTicket.tripId,
+        nameAgency: inforBookTicket.nameAgency,
+        nameVehicle: inforBookTicket.nameVehicle,
+      };
+      // console.warn(inforTicketData)
+      ApiBookingSeat(
+        inforTicketData,
+        navigation,
+        setIsLoading,
+        route.params,
+        setUrl
+      );
+    } else {
+      inforTicketData = {
+        email: inforBookTicket.email,
+        name: inforBookTicket.name,
+        note: inforBookTicket.note,
+        phoneNumber: inforBookTicket.phoneNumber,
+        price: inforBookTicket.price,
+        quantity: inforBookTicket.quantity,
+        routeStationBook: inforBookTicket.routeStationBook,
+        tripId: inforBookTicket.tripId,
+        nameAgency: inforBookTicket.nameAgency,
+        nameVehicle: inforBookTicket.nameVehicle,
+      };
+      ApiBookingPartSeat(
+        inforTicketData,
+        navigation,
+        setIsLoading,
+        route.params,
+        setUrl
+      );
+    }
   };
   return (
     <View>
@@ -327,7 +379,15 @@ const Payment = ({ navigation, route }) => {
                         },
                       ]}
                     >
-                      {formatCurrency(route.params.list.totalPrice)}
+                      {route.params.name === "bookSeat"
+                        ? formatCurrency(
+                            route.params.dataTrip.price *
+                              inforBookTicket.seatIds.length
+                          )
+                        : formatCurrency(
+                            route.params.dataTrip.price *
+                              inforBookTicket.quantity
+                          )}
                       {"VND"}
                     </Text>
                     {seeSeat ? (
@@ -359,7 +419,7 @@ const Payment = ({ navigation, route }) => {
                         marginTop: 10,
                       }}
                     >
-                      <Text
+                      {/* <Text
                         style={{
                           fontSize: 15,
                           fontWeight: "500",
@@ -399,7 +459,7 @@ const Payment = ({ navigation, route }) => {
                             );
                           }
                         }
-                      )}
+                      )} */}
                     </View>
                   ) : (
                     <></>
@@ -456,7 +516,7 @@ const Payment = ({ navigation, route }) => {
                   fontWeight: "500",
                 }}
               >
-                Pay Securely
+                Book and Proceed Payment
               </Text>
             </TouchableOpacity>
           </View>

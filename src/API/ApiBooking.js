@@ -21,18 +21,23 @@ const ApiBookingPartSeat = (
     })
     .then((data) => {
       setIsLoading(false);
-      // console.warn(data);
-      ApiPaymentAfterBooking(
-        {
-          id: data.paymentId,
-          price: data.totalPrice,
-        },
-        setUrl
-      );
-      navigation.replace(screenName.inforTicketScreen, {
-        list: data,
-        dataTrip: dataTrip,
-      });
+      if (data?.paymentId) {
+        ApiPaymentAfterBooking(
+          {
+            id: data.paymentId,
+            price: data.totalPrice,
+          },
+          setUrl,
+          navigation
+        );
+      } else {
+        Alert.alert("Sorry, booking isn't successfully!");
+      }
+      // console.warn("booking oke");
+      // navigation.replace(screenName.inforTicketScreen, {
+      //   list: data,
+      //   dataTrip: dataTrip,
+      // });
     })
     .catch((err) => {
       console.warn(err);
@@ -51,21 +56,24 @@ const ApiBookingSeat = (Data, navigation, setIsLoading, dataTrip, setUrl) => {
     })
     .then((data) => {
       setIsLoading(false);
+      if (data?.paymentId) {
+        ApiPaymentAfterBooking(
+          {
+            id: data.paymentId,
+            price: data.totalPrice,
+          },
+          setUrl,
+          navigation
+        );
+      } else {
+        Alert.alert("Sorry, booking isn't successfully!");
+      }
+      // console.warn("booking oke");
       // console.warn(data);
-      // if (data.length > 0) {
-      // } else {
-      // }
-      ApiPaymentAfterBooking(
-        {
-          id: data.paymentId,
-          price: data.totalPrice,
-        },
-        setUrl
-      );
-      navigation.replace(screenName.inforTicketScreen, {
-        list: data,
-        dataTrip: dataTrip,
-      });
+      // navigation.replace(screenName.inforTicketScreen, {
+      //   list: data,
+      //   dataTrip: dataTrip,
+      // });
     })
     .catch((err) => {
       console.warn(err);
@@ -93,7 +101,7 @@ const ApiPayment = (Data, navigation, setIsLoading) => {
     });
 };
 
-const ApiPaymentAfterBooking = (Data, setUrl) => {
+const ApiPaymentAfterBooking = (Data, setUrl, navigation) => {
   axios({
     method: "post",
     url: `${baseUrl}payment`,
@@ -103,8 +111,9 @@ const ApiPaymentAfterBooking = (Data, setUrl) => {
       return res.data;
     })
     .then((data) => {
-      // console.warn(data);
       setUrl(data.url.toString());
+      Linking.openURL(data.url.toString());
+      navigation.navigate("Home");
     })
     .catch((err) => {
       console.warn(err);
