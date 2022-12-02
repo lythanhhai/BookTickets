@@ -32,12 +32,6 @@ const InforDetail = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const GetData = async () => {
     await GetProfile(setDataDetail, userCurrent.accessToken, setIsLoading);
-    // setData({
-    //   email: dataDetail.email,
-    //   phoneNumber: dataDetail.phone,
-    //   name: dataDetail.name,
-    //   note: "",
-    // });
   };
   useLayoutEffect(() => {
     // await GetProfile(setDataDetail, userCurrent.accessToken, setIsLoading);
@@ -51,13 +45,7 @@ const InforDetail = ({ navigation, route }) => {
       note: "",
     });
   }, [dataDetail]);
-  // useCallback(() => {
-  //   console.warn("d");
-  // }, []);
-  // useMemo(() => {
-  //   console.warn("e");
-  // }, []);
-  // console.warn("a");
+
   const [data, setData] = useState({
     email: "",
     phoneNumber: "",
@@ -106,49 +94,18 @@ const InforDetail = ({ navigation, route }) => {
         !inValidData.errEmail
       ) {
         dispatch(setInforPassenger(data));
-        let inforTicketData = {};
         if (inforTicketBook.routeStationBook.length === 0) {
-          inforTicketData = {
-            email: data.email,
-            name: data.name,
-            note: data.note,
-            phoneNumber: data.phoneNumber,
-            // price: inforTicketBook.price,
-            // quantity: inforTicketBook.quantity,
-            // routeStationBook: inforTicketBook.routeStationBook,
-            seatIds: inforTicketBook.seatIds,
-            tripId: inforTicketBook.tripId,
-            nameAgency: inforTicketBook.nameAgency,
-            nameVehicle: inforTicketBook.nameVehicle,
-          };
-          // console.warn(inforTicketData)
-          ApiBookingSeat(
-            inforTicketData,
-            navigation,
-            setLoading,
-            route.params,
-            setUrl
-          );
+          navigation.replace(screenName.inforTicketScreen, {
+            // list: data,
+            dataTrip: route.params,
+            name: "bookSeat",
+          });
         } else {
-          inforTicketData = {
-            email: data.email,
-            name: data.name,
-            note: data.note,
-            phoneNumber: data.phoneNumber,
-            price: inforTicketBook.price,
-            quantity: inforTicketBook.quantity,
-            routeStationBook: inforTicketBook.routeStationBook,
-            tripId: inforTicketBook.tripId,
-            nameAgency: inforTicketBook.nameAgency,
-            nameVehicle: inforTicketBook.nameVehicle,
-          };
-          ApiBookingPartSeat(
-            inforTicketData,
-            navigation,
-            setLoading,
-            route.params,
-            setUrl
-          );
+          navigation.replace(screenName.inforTicketScreen, {
+            // list: data,
+            dataTrip: route.params,
+            name: "bookPartSeat",
+          });
         }
       }
     }
@@ -225,7 +182,7 @@ const InforDetail = ({ navigation, route }) => {
                         fontWeight: "500",
                       }}
                     >
-                      Book
+                      Continue
                     </Text>
                   </TouchableOpacity>
                 </View>
