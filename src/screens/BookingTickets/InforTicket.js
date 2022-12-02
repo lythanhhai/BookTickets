@@ -19,6 +19,7 @@ import { formatDate } from "../../utils/formatDate";
 import { cancelTicket } from "../../redux/actions/inforBookAction";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { calculateSumHour } from "../../utils/calculateSumHour";
+import { ApiRefund, ApiRefundEdit } from "../../API/ApiBooking";
 
 const styles = StyleSheet.create(styleGlobal);
 const width = Dimensions.get("screen").width;
@@ -83,43 +84,47 @@ const InforTicket = ({ navigation, route }) => {
   }, []);
   const dispatch = useDispatch();
   const handleCancelBooking = () => {
-    Alert.alert(
-      "Comfirm cancel book tickets",
-      "Are you sure remove this book?",
-      Platform.OS === "ios"
-        ? [
-            {
-              text: "Ok",
-              onPress: () => {
-                dispatch(cancelTicket());
-                navigation.navigate("Home");
-                Alert.alert("This book removed successfully");
-              },
-              style: "cancel",
-            },
-            {
-              text: "Cancel",
-              onPress: () => {},
-              style: "cancel",
-            },
-          ]
-        : [
-            {
-              text: "Cancel",
-              onPress: () => {},
-              style: "cancel",
-            },
-            {
-              text: "Ok",
-              onPress: () => {
-                dispatch(cancelTicket());
-                navigation.navigate("Home");
-                Alert.alert("This book removed successfully");
-              },
-              style: "cancel",
-            },
-          ]
-    );
+    // Alert.alert(
+    //   "Comfirm cancel book tickets",
+    //   "Are you sure remove this book?",
+    //   Platform.OS === "ios"
+    //     ? [
+    //         {
+    //           text: "Ok",
+    //           onPress: () => {
+    //             // dispatch(cancelTicket());
+    //             // navigation.navigate("Home");
+    //             // Alert.alert("This book removed successfully");
+    //             // ApiRefund(route.params.list.paymentId, navigation);
+    //             // console.warn(route.params.list.paymentId);
+    //             navigation.replace(screenName.inforDetailScreen);
+    //           },
+    //           style: "cancel",
+    //         },
+    //         {
+    //           text: "Cancel",
+    //           onPress: () => {},
+    //           style: "cancel",
+    //         },
+    //       ]
+    //     : [
+    //         {
+    //           text: "Cancel",
+    //           onPress: () => {},
+    //           style: "cancel",
+    //         },
+    //         {
+    //           text: "Ok",
+    //           onPress: () => {
+    //             // dispatch(cancelTicket());
+    //             // ApiRefund(route.params.list.paymentId, navigation);
+    //             navigation.replace(screenName.inforDetailScreen);
+    //           },
+    //           style: "cancel",
+    //         },
+    //       ]
+    // );
+    navigation.replace(screenName.inforDetailScreen, route.params.dataTrip);
   };
   return (
     <View
@@ -179,23 +184,32 @@ const InforTicket = ({ navigation, route }) => {
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Trip</Text>
             <Text style={[stylesInfor.textRight]}>
-              {route.params.list[0].timeStart.split(":").slice(0, 2).join(":")}
+              {route.params.dataTrip.timeStart.split(":").slice(0, 2).join(":")}
               {", "}
-              {formatDate(route.params.list[0].date)}
+              {formatDate(route.params.dataTrip.date)}
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Number of tickets</Text>
             <Text style={[stylesInfor.textRight]}>
-              {route.params.list.length} ticket
+              {/* {route.params.list.ticketInfoResponseList.length} ticket */}
+              {route.params.name === "bookSeat"
+                ? inforBookTicket.seatIds.length
+                : inforBookTicket.quantity}{" "}
+              tickets
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeft]}>Total</Text>
             <Text style={[stylesInfor.textRight]}>
-              {formatCurrency(
-                route.params.list.length * route.params.list[0].price
-              )}
+              {/* {formatCurrency(route.params.list.totalPrice)} */}
+              {route.params.name === "bookSeat"
+                ? formatCurrency(
+                    route.params.dataTrip.price * inforBookTicket.seatIds.length
+                  )
+                : formatCurrency(
+                    route.params.dataTrip.price * inforBookTicket.quantity
+                  )}
               VND
             </Text>
           </View>
@@ -204,7 +218,7 @@ const InforTicket = ({ navigation, route }) => {
               <Text style={[stylesInfor.textLeft, { width: "35%" }]}>
                 Pick-up point
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   width: "65%",
                 }}
@@ -222,23 +236,23 @@ const InforTicket = ({ navigation, route }) => {
                 >
                   Change
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={[stylesInfor.detailPoint]}>
               <Text style={[stylesInfor.textDetailPoint]}>
-                {route.params.list[0].dep}
+                {route.params.dataTrip.dep}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
-                {route.params.list[0].dep}
+                Bến xe {route.params.dataTrip.dep}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
                 Boarding at{" "}
-                {route.params.list[0].timeStart
+                {route.params.dataTrip.timeStart
                   .split(":")
                   .slice(0, 2)
                   .join(":")}
                 {", "}
-                {formatDate(route.params.list[0].date)}
+                {formatDate(route.params.dataTrip.date)}
               </Text>
             </View>
           </View>
@@ -247,7 +261,7 @@ const InforTicket = ({ navigation, route }) => {
               <Text style={[stylesInfor.textLeft, { width: "35%" }]}>
                 Drop-off point
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   width: "65%",
                 }}
@@ -265,20 +279,20 @@ const InforTicket = ({ navigation, route }) => {
                 >
                   Change
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={[stylesInfor.detailPoint]}>
               <Text style={[stylesInfor.textDetailPoint]}>
-                {route.params.list[0].des}
+                {route.params.dataTrip.des}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
-                {route.params.list[0].des}
+                Bến xe {route.params.dataTrip.des}
               </Text>
               <Text style={[stylesInfor.textDetailPoint]}>
                 Boarding at{" "}
                 {
                   calculateSumHour(
-                    route.params.list[0].timeStart,
+                    route.params.dataTrip.timeStart,
                     route.params.dataTrip.timeStations.slice(
                       0,
                       route.params.dataTrip.timeStations.length
@@ -286,7 +300,7 @@ const InforTicket = ({ navigation, route }) => {
                   ).endTime
                 }
                 {", "}
-                {formatDate(route.params.list[0].date)}
+                {formatDate(route.params.dataTrip.date)}
               </Text>
             </View>
           </View>
@@ -320,7 +334,15 @@ const InforTicket = ({ navigation, route }) => {
                 width: "50%",
               }}
               onPress={() => {
-                navigation.replace(screenName.inforDetailScreen, route.params);
+                // ApiRefundEdit(
+                //   route.params.list.paymentId,
+                //   route.params,
+                //   screenName.inforDetailScreen
+                // );
+                navigation.replace(
+                  screenName.inforDetailScreen,
+                  route.params.dataTrip
+                );
               }}
             >
               <Text
@@ -338,19 +360,22 @@ const InforTicket = ({ navigation, route }) => {
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeftPassenger]}>Full name</Text>
             <Text style={[stylesInfor.textRightPassenger]}>
-              {route.params.list[0].passengerInfo.name}
+              {/* {route.params.list.passengerInfo.name} */}
+              {inforBookTicket.name}
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeftPassenger]}>Phone number</Text>
             <Text style={[stylesInfor.textRightPassenger]}>
-              {route.params.list[0].passengerInfo.phone}
+              {/* {route.params.list.passengerInfo.phone} */}
+              {inforBookTicket.phoneNumber}
             </Text>
           </View>
           <View style={[stylesInfor.flex]}>
             <Text style={[stylesInfor.textLeftPassenger]}>Email address</Text>
             <Text style={[stylesInfor.textRightPassenger]}>
-              {route.params.list[0].passengerInfo.email}
+              {/* {route.params.list.passengerInfo.email} */}
+              {inforBookTicket.email}
             </Text>
           </View>
         </View>
@@ -360,7 +385,7 @@ const InforTicket = ({ navigation, route }) => {
             // backgroundColor: "red"
           }}
         >
-          <TouchableOpacity
+          {/* <TouchableOpacity
             //   color="#841584"
             //   accessibilityLabel="Learn more about this purple button"
             style={{
@@ -384,7 +409,7 @@ const InforTicket = ({ navigation, route }) => {
             >
               Cancel booking
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
       <View
@@ -427,7 +452,7 @@ const InforTicket = ({ navigation, route }) => {
               fontWeight: "500",
             }}
           >
-            Pay
+            Comfirm
           </Text>
         </TouchableOpacity>
       </View>

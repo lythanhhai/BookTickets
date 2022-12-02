@@ -1,7 +1,7 @@
 import axios from "axios";
 import { baseUrl } from "./config";
 
-const getTrips = (Data, setData, setLoading) => {
+const getTrips = (Data, setData, setLoading, setDataFilter) => {
   setLoading(true);
   axios({
     method: "POST",
@@ -11,6 +11,7 @@ const getTrips = (Data, setData, setLoading) => {
     .then((res) => {
       let listResponse = res.data;
       setData(listResponse);
+      setDataFilter(listResponse);
       setLoading(false);
     })
     .catch((err) => console.warn(err));

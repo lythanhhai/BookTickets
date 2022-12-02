@@ -16,7 +16,11 @@ import Octicons from "react-native-vector-icons/Octicons";
 import { calculateSumHour } from "../../utils/calculateSumHour";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { useDispatch } from "react-redux";
-import { setIdTrip, setPrice } from "../../redux/actions/inforBookAction";
+import {
+  setAgency,
+  setIdTrip,
+  setPrice,
+} from "../../redux/actions/inforBookAction";
 
 const styles = StyleSheet.create({
   background: {
@@ -37,6 +41,12 @@ const CardTrip = ({ item, navigation, showModalDetailTrip, setTripChosen }) => {
   const HandleChooseATrip = () => {
     dispatch(setIdTrip(item.idTrip));
     dispatch(setPrice(item.price));
+    dispatch(
+      setAgency({
+        nameAgency: item.nameAgency,
+        nameVehicle: item.nameVehicle,
+      })
+    );
     navigation.replace("ChooseSeat", item);
   };
   const handleClickDetailTrip = () => {

@@ -5,8 +5,10 @@ import {
   Dimensions,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
+import colors from "../../constants/colors";
 import CardItemTicket from "./CardItemTicket";
 
 const styles = StyleSheet.create({
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ListTicket = ({ item, list }) => {
+const ListTicket = ({ item, list, isLoading, setModalVisible, currentTab }) => {
   const tailwind = useTailwind();
 
   return (
@@ -35,7 +37,7 @@ const ListTicket = ({ item, list }) => {
         marginTop: 15,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: isLoading ? "flex-start" : "center",
         alignItems: "center",
       }}
     >
@@ -46,19 +48,29 @@ const ListTicket = ({ item, list }) => {
         >
           Pull to update tickets for the last 3 months
         </Text> */}
-      <FlatList
-        data={list}
-        horizontal={false}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => {
-          return <CardItemTicket />;
-        }}
-        contentContainerStyle={
-          {
-            // width: "100%",
+      {isLoading ? (
+        <ActivityIndicator size="large" color={colors.blue} />
+      ) : (
+        <FlatList
+          data={list}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => {
+            return (
+              <CardItemTicket
+                item={item}
+                setModalVisible={setModalVisible}
+                currentTab={currentTab}
+              />
+            );
+          }}
+          contentContainerStyle={
+            {
+              // width: "100%",
+            }
           }
-        }
-      />
+        />
+      )}
     </View>
   );
 };

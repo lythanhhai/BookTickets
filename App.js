@@ -1,6 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 // import 'react-native-gesture-handler';
-import { Dimensions, StyleSheet, Text, View, Platform } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  Alert,
+} from "react-native";
 import { TailwindProvider } from "tailwind-rn";
 import { useState, useEffect, useLayoutEffect } from "react";
 import utilities from "./tailwind.json";
@@ -49,6 +56,8 @@ import Loading from "./src/components/Loading/Loading";
 
 // add sentry to booking tickets app
 import * as Sentry from "sentry-expo";
+import Profile from "./src/screens/MyAccount/Profile";
+import getExpireJwt from "./src/utils/getExpire";
 
 Sentry.init({
   dsn: "https://59e443ac7dfb46f280541589357621c1@o4504106872209408.ingest.sentry.io/4504155015020544",
@@ -81,13 +90,27 @@ const Home = () => {
   const User = useSelector((state) => state.authenReducer);
   const dispatch = useDispatch();
   useLayoutEffect(() => {
-    // console.warn(User);
-    getTokenAferAuthen()
+    let expireTime = 0;
+    getExpireJwt()
       .then((res) => {
-        if (res?.accessToken) {
-          // console.warn(res);
-          dispatch(loginAction(res));
-        }
+        expireTime = res;
+        // console.warn(typeof expireTime.valueOf());
+        // console.warn(Date.parse(expireTime));
+        // console.warn(expireTime);
+        // console.warn(new Date().valueOf() - Date.parse(expireTime));
+        getTokenAferAuthen()
+          .then((res) => {
+            // console.warn(res.accessToken)
+            if (
+              res?.accessToken &&
+              new Date().valueOf() - Date.parse(expireTime) < 86400000
+            ) {
+              dispatch(loginAction(res));
+            } else {
+              Alert.alert("Your session is expired!!!");
+            }
+          })
+          .catch((err) => console.warn(err));
       })
       .catch((err) => console.warn(err));
   }, []);
@@ -351,6 +374,21 @@ const App = () => {
                   >
                     {(props) => <Payment {...props} />}
                   </Stack.Screen>
+                </Stack.Group>
+                <Stack.Group>
+                  <Stack.Screen
+                    name="Profile"
+                    component={Profile}
+                    options={{
+                      title: "My profile",
+                      headerShown: true,
+                      headerStyle: {
+                        backgroundColor: colors.blue,
+                        // height: Dimensions.get("screen").height / 8,
+                      },
+                      headerTintColor: "#fff",
+                    }}
+                  />
                 </Stack.Group>
                 {false ? (
                   <></>

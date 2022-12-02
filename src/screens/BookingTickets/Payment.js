@@ -15,8 +15,13 @@ import colors from "../../constants/colors";
 import Feather from "react-native-vector-icons/Feather";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { useState } from "react";
-import { ApiPayment } from "../../API/ApiBooking";
+import {
+  ApiBookingPartSeat,
+  ApiBookingSeat,
+  ApiPayment,
+} from "../../API/ApiBooking";
 import Loading from "../../components/Loading/Loading";
+import { useDispatch, useSelector } from "react-redux";
 
 const styles = StyleSheet.create(styleGlobal);
 const width = Dimensions.get("screen").width;
@@ -77,13 +82,61 @@ const stylesInfor = StyleSheet.create({
 const Payment = ({ navigation, route }) => {
   const [chooseMethod, setChooseMethod] = useState(false);
   const [select, setSelect] = useState(false);
+  const [seeSeat, setSeeSeat] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const inforBookTicket = useSelector((state) => state.inforBookReducer);
+  const [url, setUrl] = useState("");
+  const dispatch = useDispatch();
   const handlePayment = () => {
-    let Data = {
-      id: route.params.list[0].paymentId,
-      price: route.params.list[0].price * route.params.list.length,
-    };
-    ApiPayment(Data, navigation, setIsLoading);
+    // let Data = {
+    //   id: route.params.list.paymentId,
+    //   price: route.params.list.totalPrice,
+    // };
+    // ApiPayment(Data, navigation, setIsLoading);
+    let inforTicketData = {};
+    if (inforBookTicket.routeStationBook.length === 0) {
+      inforTicketData = {
+        email: inforBookTicket.email,
+        name: inforBookTicket.name,
+        note: inforBookTicket.note,
+        phoneNumber: inforBookTicket.phoneNumber,
+        // price: inforBookTicket.price,
+        // quantity: inforBookTicket.quantity,
+        // routeStationBook: inforBookTicket.routeStationBook,
+        seatIds: inforBookTicket.seatIds,
+        tripId: inforBookTicket.tripId,
+        nameAgency: inforBookTicket.nameAgency,
+        nameVehicle: inforBookTicket.nameVehicle,
+      };
+      // console.warn(inforTicketData)
+      ApiBookingSeat(
+        inforTicketData,
+        navigation,
+        setIsLoading,
+        route.params,
+        setUrl
+      );
+    } else {
+      inforTicketData = {
+        email: inforBookTicket.email,
+        name: inforBookTicket.name,
+        note: inforBookTicket.note,
+        phoneNumber: inforBookTicket.phoneNumber,
+        price: inforBookTicket.price,
+        quantity: inforBookTicket.quantity,
+        routeStationBook: inforBookTicket.routeStationBook,
+        tripId: inforBookTicket.tripId,
+        nameAgency: inforBookTicket.nameAgency,
+        nameVehicle: inforBookTicket.nameVehicle,
+      };
+      ApiBookingPartSeat(
+        inforTicketData,
+        navigation,
+        setIsLoading,
+        route.params,
+        setUrl
+      );
+    }
   };
   return (
     <View>
@@ -281,7 +334,7 @@ const Payment = ({ navigation, route }) => {
                 paddingHorizontal: 20,
               }}
             >
-              <View style={[stylesInfor.flex]}>
+              <View style={[stylesInfor.flex, { alignItems: "flex-start" }]}>
                 <Text
                   style={[
                     stylesInfor.textLeftPassenger,
@@ -295,28 +348,123 @@ const Payment = ({ navigation, route }) => {
                 >
                   Total
                 </Text>
-                <TouchableOpacity
+                <View
                   style={{
                     width: "70%",
+                    display: "flex",
+                    flexDirection: "column",
+                    // backgroundColor: "red",
                   }}
-                  onPress={() => {}}
                 >
-                  <Text
-                    style={[
-                      stylesInfor.touchable,
-                      {
-                        fontWeight: "600",
-                        textDecorationLine: "none",
-                        color: "black",
-                      },
-                    ]}
+                  <TouchableOpacity
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                    }}
+                    onPress={() => {
+                      setSeeSeat(!seeSeat);
+                    }}
                   >
-                    {formatCurrency(
-                      route.params.list[0].price * route.params.list.length
+                    <Text
+                      style={[
+                        stylesInfor.touchable,
+                        {
+                          fontWeight: "600",
+                          textDecorationLine: "none",
+                          color: "black",
+                          marginRight: 7,
+                        },
+                      ]}
+                    >
+                      {route.params.name === "bookSeat"
+                        ? formatCurrency(
+                            route.params.dataTrip.price *
+                              inforBookTicket.seatIds.length
+                          )
+                        : formatCurrency(
+                            route.params.dataTrip.price *
+                              inforBookTicket.quantity
+                          )}
+                      {"VND"}
+                    </Text>
+                    {seeSeat ? (
+                      <Feather
+                        name="chevron-up"
+                        style={{
+                          fontSize: 20,
+                          fontWeight: "500",
+                        }}
+                      />
+                    ) : (
+                      <Feather
+                        name="chevron-down"
+                        style={{
+                          fontSize: 20,
+                          fontWeight: "500",
+                        }}
+                      />
                     )}
-                    {"VND"}
-                  </Text>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                  {seeSeat ? (
+                    <View
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "flex-end",
+                        alignItems: "center",
+                        marginTop: 10,
+                      }}
+                    >
+                      {/* <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: "500",
+                        }}
+                      >
+                        Seats:{" "}
+                      </Text>
+                      {route.params.list.ticketInfoResponseList.map(
+                        (item, index) => {
+                          if (
+                            index ===
+                            route.params.list.ticketInfoResponseList.length - 1
+                          ) {
+                            return (
+                              <Text
+                                style={{
+                                  fontSize: 15,
+                                  fontWeight: "500",
+                                }}
+                                key={index}
+                              >
+                                {item.nameSeat}
+                              </Text>
+                            );
+                          } else {
+                            return (
+                              <Text
+                                style={{
+                                  fontSize: 15,
+                                  fontWeight: "500",
+                                }}
+                                key={index}
+                              >
+                                {item.nameSeat}
+                                {", "}
+                              </Text>
+                            );
+                          }
+                        }
+                      )} */}
+                    </View>
+                  ) : (
+                    <></>
+                  )}
+                </View>
               </View>
             </View>
           </ScrollView>
@@ -368,7 +516,7 @@ const Payment = ({ navigation, route }) => {
                   fontWeight: "500",
                 }}
               >
-                Pay Securely
+                Book and Proceed Payment
               </Text>
             </TouchableOpacity>
           </View>
