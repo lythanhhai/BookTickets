@@ -23,23 +23,33 @@ const styles = StyleSheet.create({
   },
 });
 
-const ListTicket = ({ item, list, isLoading, setModalVisible, currentTab }) => {
+const ListTicket = ({
+  item,
+  list,
+  isLoading,
+  setModalVisible,
+  currentTab,
+  navigation,
+  route,
+}) => {
   const tailwind = useTailwind();
 
   return (
     <View
-      style={{
-        width: Dimensions.get("screen").width,
-        height:
-          Dimensions.get("screen").height -
-          Dimensions.get("screen").height / 8 +
-          -110,
-        marginTop: 15,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: isLoading ? "flex-start" : "center",
-        alignItems: "center",
-      }}
+      style={[
+        {
+          width: Dimensions.get("screen").width,
+          height:
+            Dimensions.get("screen").height -
+            Dimensions.get("screen").height / 8 -
+            120,
+          marginTop: 15,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: isLoading ? "flex-start" : "center",
+          alignItems: "center",
+        },
+      ]}
     >
       {/* <Text
           style={{
@@ -61,12 +71,16 @@ const ListTicket = ({ item, list, isLoading, setModalVisible, currentTab }) => {
                 item={item}
                 setModalVisible={setModalVisible}
                 currentTab={currentTab}
+                navigation={navigation}
+                route={route}
               />
             );
           }}
           contentContainerStyle={
             {
               // width: "100%",
+              // height: "100%",
+              // flexGrow: 1,
             }
           }
         />

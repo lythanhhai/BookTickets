@@ -2,13 +2,16 @@ import axios from "axios";
 import { baseUrl } from "./config";
 import * as screenName from "../constants/nameScreen";
 import { Alert, Linking } from "react-native";
+import { create } from "tailwind-rn/dist";
 
 const ApiBookingPartSeat = (
   Data,
   navigation,
   setIsLoading,
   dataTrip,
-  setUrl
+  setUrl,
+  setResponseDataTicket,
+  createNoti
 ) => {
   setIsLoading(true);
   axios({
@@ -22,13 +25,16 @@ const ApiBookingPartSeat = (
     .then((data) => {
       setIsLoading(false);
       if (data?.paymentId) {
+        setResponseDataTicket(data);
         ApiPaymentAfterBooking(
           {
             id: data.paymentId,
             price: data.totalPrice,
           },
           setUrl,
-          navigation
+          navigation,
+          createNoti,
+          data
         );
       } else {
         Alert.alert("Sorry, booking isn't successfully!");
@@ -44,7 +50,15 @@ const ApiBookingPartSeat = (
     });
 };
 
-const ApiBookingSeat = (Data, navigation, setIsLoading, dataTrip, setUrl) => {
+const ApiBookingSeat = (
+  Data,
+  navigation,
+  setIsLoading,
+  dataTrip,
+  setUrl,
+  setResponseDataTicket,
+  createNoti
+) => {
   setIsLoading(true);
   axios({
     method: "post",
@@ -57,13 +71,16 @@ const ApiBookingSeat = (Data, navigation, setIsLoading, dataTrip, setUrl) => {
     .then((data) => {
       setIsLoading(false);
       if (data?.paymentId) {
+        setResponseDataTicket(data);
         ApiPaymentAfterBooking(
           {
             id: data.paymentId,
             price: data.totalPrice,
           },
           setUrl,
-          navigation
+          navigation,
+          createNoti,
+          data
         );
       } else {
         Alert.alert("Sorry, booking isn't successfully!");
@@ -101,7 +118,13 @@ const ApiPayment = (Data, navigation, setIsLoading) => {
     });
 };
 
-const ApiPaymentAfterBooking = (Data, setUrl, navigation) => {
+const ApiPaymentAfterBooking = (
+  Data,
+  setUrl,
+  navigation,
+  createNoti,
+  response
+) => {
   axios({
     method: "post",
     url: `${baseUrl}payment`,
@@ -111,6 +134,7 @@ const ApiPaymentAfterBooking = (Data, setUrl, navigation) => {
       return res.data;
     })
     .then((data) => {
+      createNoti({ ...response, url: data.url.toString() });
       setUrl(data.url.toString());
       Linking.openURL(data.url.toString());
       navigation.navigate("Home");
@@ -123,14 +147,14 @@ const ApiPaymentAfterBooking = (Data, setUrl, navigation) => {
 const ApiRefund = (idPayment, navigation) => {
   axios({
     method: "post",
-    url: `${baseUrl}refund${idPayment}`,
+    url: `${baseUrl}refund/${idPayment}`,
   })
     .then((res) => {
       return res.data;
     })
     .then((data) => {
-      navigation.navigate("Home");
       Alert.alert("This book removed successfully");
+      navigation.navigate("Home");
     })
     .catch((err) => {
       console.warn(err);
@@ -140,7 +164,7 @@ const ApiRefund = (idPayment, navigation) => {
 const ApiRefundEdit = (idPayment, Data, nameScreen) => {
   axios({
     method: "post",
-    url: `${baseUrl}refund${idPayment}`,
+    url: `${baseUrl}refund/${idPayment}`,
   })
     .then((res) => {
       return res.data;

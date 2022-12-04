@@ -58,6 +58,8 @@ import Loading from "./src/components/Loading/Loading";
 import * as Sentry from "sentry-expo";
 import Profile from "./src/screens/MyAccount/Profile";
 import getExpireJwt from "./src/utils/getExpire";
+import DetailTicket from "./src/screens/MyTickets/DetailTicket";
+import Test from "./src/screens/MyTickets/Test";
 
 Sentry.init({
   dsn: "https://59e443ac7dfb46f280541589357621c1@o4504106872209408.ingest.sentry.io/4504155015020544",
@@ -374,6 +376,20 @@ const App = () => {
                   >
                     {(props) => <Payment {...props} />}
                   </Stack.Screen>
+                </Stack.Group>
+                <Stack.Group>
+                  <Stack.Screen
+                    name="DetailTicket"
+                    component={DetailTicket}
+                    options={{
+                      title: "Detail ticket",
+                      headerShown: true,
+                      headerStyle: {
+                        backgroundColor: colors.blue,
+                      },
+                      headerTintColor: "#fff",
+                    }}
+                  />
                 </Stack.Group>
                 <Stack.Group>
                   <Stack.Screen

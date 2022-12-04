@@ -28,12 +28,12 @@ import AwesomeAlert from "react-native-awesome-alerts";
 // import { auth } from "../../firebase/ConfigureFirebase";
 // import { auth, signInWithPhoneNumber } from "../../firebase/ConfigureFirebase";
 
-import { initializeApp, getApp } from "firebase/app";
-import {
-  getAuth,
-  PhoneAuthProvider,
-  signInWithCredential,
-} from "firebase/auth";
+// import { initializeApp, getApp } from "firebase/app";
+// import {
+//   getAuth,
+//   PhoneAuthProvider,
+//   signInWithCredential,
+// } from "firebase/auth";
 
 import {
   FirebaseRecaptchaVerifierModal,
