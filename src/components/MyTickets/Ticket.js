@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Ticket = ({ item, setCurrentTab }) => {
+const Ticket = ({ navigation, item, setCurrentTab }) => {
   const tailwind = useTailwind();
   const [isChoosing, setIsChoosing] = useState("Upcomming");
 

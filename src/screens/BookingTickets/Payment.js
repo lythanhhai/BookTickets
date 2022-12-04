@@ -22,6 +22,9 @@ import {
 } from "../../API/ApiBooking";
 import Loading from "../../components/Loading/Loading";
 import { useDispatch, useSelector } from "react-redux";
+import { onValue, ref, set } from "firebase/database";
+import { db } from "../../firebase/ConfigRealtimeDB";
+import { useEffect } from "react";
 
 const styles = StyleSheet.create(styleGlobal);
 const width = Dimensions.get("screen").width;
@@ -85,8 +88,46 @@ const Payment = ({ navigation, route }) => {
   const [seeSeat, setSeeSeat] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const inforBookTicket = useSelector((state) => state.inforBookReducer);
+  const [responseDataTicket, setResponseDataTicket] = useState({});
   const [url, setUrl] = useState("");
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.authenReducer);
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    let res = [];
+    // let res1 = 0;
+    onValue(
+      ref(db, "notifications/" + currentUser.username),
+      async (snapshot) => {
+        const data = await snapshot.val();
+        for (const [key, value] of Object.entries(data)) {
+          // res1 = key.split("-")[0].slice(1, key.split("-")[0].length);
+          // console.warn(res1);
+          let object = {
+            ...value,
+            notificationTitle: key,
+          };
+          res.push(object);
+        }
+        setCount(res.length);
+      }
+    );
+  }, []);
+  const createNoti = async (data) => {
+    await set(
+      ref(
+        db,
+        "notifications/" + `${currentUser.username}/` + `N${count + 1}-book`
+      ),
+      data
+    )
+      .then(() => {
+        Alert.alert("Booking successfully!");
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  };
   const handlePayment = () => {
     // let Data = {
     //   id: route.params.list.paymentId,
@@ -114,7 +155,9 @@ const Payment = ({ navigation, route }) => {
         navigation,
         setIsLoading,
         route.params,
-        setUrl
+        setUrl,
+        setResponseDataTicket,
+        createNoti
       );
     } else {
       inforTicketData = {
@@ -134,7 +177,9 @@ const Payment = ({ navigation, route }) => {
         navigation,
         setIsLoading,
         route.params,
-        setUrl
+        setUrl,
+        setResponseDataTicket,
+        createNoti
       );
     }
   };

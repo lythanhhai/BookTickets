@@ -43,7 +43,8 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new MyReactNativePackage());
       packages.add(new RNFirebaseMessagingPackage());//<- Dòng này
       packages.add(new RNFirebaseNotificationsPackage());//<- Dòng này
-      // new ReactNativePushNotificationPackage() // <---- Add the Package
+      new RNFirebaseNotificationsPackage();
+      new ReactNativePushNotificationPackage(); // <---- Add the Package
       return packages;
     }
 

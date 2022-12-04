@@ -37,6 +37,7 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
   var User = useSelector((state) => state.authenReducer);
   const [Data, setData] = useState([
     {
+      id: 1,
       icon: (
         <EvilIcons
           name="star"
@@ -73,6 +74,7 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
       ),
     },
     {
+      id: 2,
       icon: (
         <MaterialIcons
           name="card-giftcard"
@@ -109,6 +111,7 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
       ),
     },
     {
+      id: 3,
       icon: (
         <MaterialCommunityIcons
           name="image-auto-adjust"
@@ -133,6 +136,7 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
           }}
         />
       ),
+
       iconEndLogged: (
         <MaterialIcons
           name="navigate-next"
@@ -145,6 +149,7 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
       ),
     },
     {
+      id: 4,
       icon: (
         <AntDesign
           name="logout"
@@ -196,7 +201,7 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
           data={Data}
           horizontal={false}
           renderItem={({ item }) => {
-            if (!User.accessToken && item.title === "Log out") {
+            if (!User.accessToken && item.id === 4) {
               return <></>;
             } else {
               return (
@@ -211,8 +216,12 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
                     // width: Dimensions.get("screen").width,
                   }}
                   onPress={() => {
-                    if (item.title === "Log out") {
+                    if (item.id === 4) {
                       handleLogout();
+                    } else if (item.id === 3) {
+                      navigation.navigate("My_tickets", {
+                        rating: true,
+                      });
                     }
                   }}
                 >
