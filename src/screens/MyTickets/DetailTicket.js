@@ -24,6 +24,9 @@ import { ApiRefund, ApiRefundEdit } from "../../API/ApiBooking";
 // import { Permissions, Notifications } from "expo";
 import { ref as sRef, set } from "firebase/database";
 import { db } from "../../firebase/ConfigRealtimeDB";
+import { useRef } from "react";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
 
 const styles = StyleSheet.create(styleGlobal);
 const width = Dimensions.get("screen").width;
@@ -78,14 +81,54 @@ const stylesInfor = StyleSheet.create({
     paddingVertical: 5,
   },
 });
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 const DetailTicket = ({ navigation, route }) => {
   const inforBookTicket = useSelector((state) => state.inforBookReducer);
   // const [inforTicketData, setInforTicketData] = useState({})
-  useEffect(() => {}, []);
   const currentUser = useSelector((state) => state.authenReducer);
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
   const dispatch = useDispatch();
   const handleCancel = () => {
-    ApiRefund(route.params.payment.id, navigation);
+    ApiRefund(
+      route.params.payment.id,
+      navigation,
+      sendPushNotification,
+      expoPushToken
+    );
     // createNoti();
   };
   const createNoti = () => {
@@ -388,5 +431,54 @@ const DetailTicket = ({ navigation, route }) => {
     // </View>
   );
 };
+async function sendPushNotification(expoPushToken) {
+  const message = {
+    to: expoPushToken,
+    sound: "default",
+    title: "Cancel ticket successfully!",
+    body: `You canceled ticket and will be refunded money in some seconds`,
+    data: { cancel: true },
+  };
 
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  // if (Device.isDevice) {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+  if (finalStatus !== "granted") {
+    alert("Failed to get push token for push notification!");
+    return;
+  }
+  token = (await Notifications.getExpoPushTokenAsync()).data;
+  console.log(token);
+  // } else {
+  //   alert('Must use physical device for Push Notifications');
+  // }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
+}
 export default DetailTicket;

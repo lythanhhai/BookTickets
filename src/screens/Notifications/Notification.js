@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { onValue, ref } from "firebase/database";
 import { db } from "../../firebase/ConfigRealtimeDB";
+import RequireLogin from "../../components/MyTickets/RequireLogin";
 const styles = StyleSheet.create(styleGlobal);
 
 const Notification = ({ item, navigation }) => {
@@ -54,7 +55,9 @@ const Notification = ({ item, navigation }) => {
           whichScreen={screenName.tabNotificationScreen}
           navigation={navigation}
         />
-        {!listNotification.length ? (
+        {!currentUser.accessToken ? (
+          <RequireLogin></RequireLogin>
+        ) : !listNotification.length ? (
           <EmptyNotification />
         ) : (
           <View

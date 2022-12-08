@@ -216,6 +216,7 @@ const Register = ({ navigation, route }) => {
   };
   const [verificationId, setVerificationId] = useState(null);
   const recaptchaVerifier = useRef(null);
+  firebase.auth().settings.appVerificationDisabledForTesting = true;
 
   const sendVerification = (phoneNumber) => {
     const phoneProvider = new firebase.auth.PhoneAuthProvider();
@@ -861,9 +862,10 @@ const Register = ({ navigation, route }) => {
                   firebaseConfig={firebaseConfig}
                   androidHardwareAccelerationDisabled={true}
                   // androidLayerType="software"
-                  attemptInvisibleVerification={
-                    Platform.OS === "ios" ? true : true
-                  }
+                  // attemptInvisibleVerification={
+                  //   Platform.OS === "ios" ? true : true
+                  // }
+                  attemptInvisibleVerification={true}
                   // appVerificationDisabledForTesting={false}
                 />
                 {/* {attemptInvisibleVerification && <FirebaseRecaptchaBanner />} */}

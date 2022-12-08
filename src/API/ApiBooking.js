@@ -144,7 +144,12 @@ const ApiPaymentAfterBooking = (
     });
 };
 
-const ApiRefund = (idPayment, navigation) => {
+const ApiRefund = (
+  idPayment,
+  navigation,
+  sendPushNotification,
+  expoPushToken
+) => {
   axios({
     method: "post",
     url: `${baseUrl}refund/${idPayment}`,
@@ -152,7 +157,8 @@ const ApiRefund = (idPayment, navigation) => {
     .then((res) => {
       return res.data;
     })
-    .then((data) => {
+    .then(async (data) => {
+      await sendPushNotification(expoPushToken);
       Alert.alert("This book removed successfully");
       navigation.navigate("Home");
     })
