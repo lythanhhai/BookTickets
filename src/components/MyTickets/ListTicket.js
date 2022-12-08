@@ -5,8 +5,10 @@ import {
   Dimensions,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
+import colors from "../../constants/colors";
 import CardItemTicket from "./CardItemTicket";
 
 const styles = StyleSheet.create({
@@ -21,23 +23,34 @@ const styles = StyleSheet.create({
   },
 });
 
-const ListTicket = ({ item, list }) => {
+const ListTicket = ({
+  item,
+  list,
+  isLoading,
+  setModalVisible,
+  currentTab,
+  navigation,
+  route,
+}) => {
   const tailwind = useTailwind();
 
   return (
     <View
-      style={{
-        width: Dimensions.get("screen").width,
-        height:
-          Dimensions.get("screen").height -
-          Dimensions.get("screen").height / 8 +
-          -110,
-        marginTop: 15,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      style={[
+        {
+          width: Dimensions.get("screen").width,
+          height:
+            Dimensions.get("screen").height -
+            Dimensions.get("screen").height / 8 -
+            120,
+          marginTop: 15,
+          paddingBottom: 40,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: isLoading ? "flex-start" : "center",
+          alignItems: "center",
+        },
+      ]}
     >
       {/* <Text
           style={{
@@ -46,19 +59,33 @@ const ListTicket = ({ item, list }) => {
         >
           Pull to update tickets for the last 3 months
         </Text> */}
-      <FlatList
-        data={list}
-        horizontal={false}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => {
-          return <CardItemTicket />;
-        }}
-        contentContainerStyle={
-          {
-            // width: "100%",
+      {isLoading ? (
+        <ActivityIndicator size="large" color={colors.blue} />
+      ) : (
+        <FlatList
+          data={list}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => {
+            return (
+              <CardItemTicket
+                item={item}
+                setModalVisible={setModalVisible}
+                currentTab={currentTab}
+                navigation={navigation}
+                route={route}
+              />
+            );
+          }}
+          contentContainerStyle={
+            {
+              // width: "100%",
+              // height: "100%",
+              // flexGrow: 1,
+            }
           }
-        }
-      />
+        />
+      )}
     </View>
   );
 };

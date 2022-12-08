@@ -33,6 +33,7 @@
       "bundleIdentifier": "bookingtickets.pbl6.android"
     },
     "android": {
+      "googleServicesFile": "./android/app/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -56,7 +57,14 @@
           }
         }
       ],
-      "sentry-expo"
+      "sentry-expo",
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "development",
+          "devTeam": "91SW8A37CR"
+        }
+      ]
     ]
   }
 }

@@ -38,7 +38,7 @@ const Header = ({
   showChangeModal,
   item,
   handleCancelBooking,
-  route
+  route,
 }) => {
   const tailwind = useTailwind();
   const User = useSelector((state) => state.authenReducer);
@@ -74,6 +74,7 @@ const Header = ({
         }}
         onPress={() => {
           if (User.accessToken) {
+            navigation.navigate("Profile");
           } else {
             navigation.navigate("Login");
           }
@@ -137,6 +138,7 @@ const Header = ({
         }}
         onPress={() => {
           if (User.accessToken) {
+            navigation.navigate("Profile");
           } else {
             navigation.navigate("Login");
           }
@@ -554,7 +556,7 @@ const Header = ({
         >
           <TouchableOpacity
             onPress={() => {
-              handleCancelBooking()
+              handleCancelBooking();
               // navigation.replace(inforDetailScreen);
               // navigation.goBack();
             }}

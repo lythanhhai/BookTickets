@@ -28,12 +28,12 @@ import AwesomeAlert from "react-native-awesome-alerts";
 // import { auth } from "../../firebase/ConfigureFirebase";
 // import { auth, signInWithPhoneNumber } from "../../firebase/ConfigureFirebase";
 
-import { initializeApp, getApp } from "firebase/app";
-import {
-  getAuth,
-  PhoneAuthProvider,
-  signInWithCredential,
-} from "firebase/auth";
+// import { initializeApp, getApp } from "firebase/app";
+// import {
+//   getAuth,
+//   PhoneAuthProvider,
+//   signInWithCredential,
+// } from "firebase/auth";
 
 import {
   FirebaseRecaptchaVerifierModal,
@@ -44,6 +44,7 @@ import firebase from "firebase/compat/app";
 import { ApiRegister } from "../../API/ApiLoginRegister";
 import { useDispatch } from "react-redux";
 import Loading from "../Loading/Loading";
+import CustomInput from "../CustomInput/CustomInput";
 
 const styles = StyleSheet.create({
   errMsg: {
@@ -215,6 +216,7 @@ const Register = ({ navigation, route }) => {
   };
   const [verificationId, setVerificationId] = useState(null);
   const recaptchaVerifier = useRef(null);
+  firebase.auth().settings.appVerificationDisabledForTesting = true;
 
   const sendVerification = (phoneNumber) => {
     const phoneProvider = new firebase.auth.PhoneAuthProvider();
@@ -284,7 +286,7 @@ const Register = ({ navigation, route }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+      style={[styles.container]}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
@@ -617,6 +619,7 @@ const Register = ({ navigation, route }) => {
                   </>
                 )}
                 {/*  */}
+
                 <Text
                   style={[
                     tailwind("text-sm"),
@@ -859,9 +862,10 @@ const Register = ({ navigation, route }) => {
                   firebaseConfig={firebaseConfig}
                   androidHardwareAccelerationDisabled={true}
                   // androidLayerType="software"
-                  attemptInvisibleVerification={
-                    Platform.OS === "ios" ? true : true
-                  }
+                  // attemptInvisibleVerification={
+                  //   Platform.OS === "ios" ? true : true
+                  // }
+                  attemptInvisibleVerification={true}
                   // appVerificationDisabledForTesting={false}
                 />
                 {/* {attemptInvisibleVerification && <FirebaseRecaptchaBanner />} */}

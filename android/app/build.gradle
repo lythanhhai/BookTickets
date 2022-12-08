@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.google.gms.google-services"
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -92,6 +93,7 @@ project.ext.react = [
 ]
 
 apply from: new File(reactNativeRoot, "react.gradle")
+apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -345,6 +347,9 @@ dependencies {
     implementation "com.google.firebase:firebase-storage:15.0.2"
     implementation "com.google.firebase:firebase-auth:17.0.0"
     implementation "androidx.browser:browser:1.2.0"
+    implementation "com.google.firebase:firebase-messaging:20.0.0"
+    implementation project(':react-native-push-notification')
+    classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.10, 0.99.99]'
 }
 
 if (isNewArchitectureEnabled()) {

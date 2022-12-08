@@ -1,6 +1,21 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import React from "react";
-const CardItemTicket = () => {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
+const CardItemTicket = ({
+  item,
+  setModalVisible,
+  currentTab,
+  navigation,
+  route,
+}) => {
+  // useEffect(() => {
+  //   console.warn(item.payment.paymentMethods?.txnRef === true);
+  // }, []);
+  const handleSeeMoreInfor = () => {
+    // setModalVisible(true);
+    navigation.navigate("DetailTicket", item);
+  };
   return (
     <View
       style={{
@@ -56,7 +71,7 @@ const CardItemTicket = () => {
                   fontWeight: "600",
                 }}
               >
-                23:00
+                {item.timeStart.split(":").slice(0, 2).join(":")}
               </Text>
               <Text
                 style={{
@@ -64,7 +79,7 @@ const CardItemTicket = () => {
                   fontWeight: "500",
                 }}
               >
-                Nov 07, 2022
+                {item.dateStart.split("T")[0]}
               </Text>
             </View>
             <View
@@ -84,14 +99,14 @@ const CardItemTicket = () => {
                   fontWeight: "600",
                 }}
               >
-                An Anh Limousine
+                {item.nameVehicle}
               </Text>
               <Text
                 style={{
                   fontSize: 14,
                 }}
               >
-                Da nang - Quang Tri
+                {item.route}
               </Text>
             </View>
           </View>
@@ -119,7 +134,9 @@ const CardItemTicket = () => {
                 fontWeight: "600",
               }}
             >
-              YY992DZ
+              {item.payment.paymentMethods?.txnRef
+                ? item.payment.paymentMethods.txnRef
+                : ""}
             </Text>
           </View>
         </View>
@@ -147,26 +164,30 @@ const CardItemTicket = () => {
                 color: "rgb(210,90,107)",
               }}
             >
-              Unpaid
+              {item.payment.paymentMethods?.txnRef ? "Paid" : "Canceled"}
             </Text>
           </View>
-          <View
-            style={{
-              backgroundColor: "rgb(254,235,237)",
-              marginTop: 20,
-              borderRadius: 7,
-            }}
-          >
-            <Text
+          {currentTab === "Upcomming" ? (
+            <View
               style={{
-                paddingVertical: 15,
-                paddingHorizontal: 10,
-                fontSize: 14,
+                backgroundColor: "rgb(254,235,237)",
+                marginTop: 20,
+                borderRadius: 7,
               }}
             >
-              Pay your ticket before ...
-            </Text>
-          </View>
+              <Text
+                style={{
+                  paddingVertical: 15,
+                  paddingHorizontal: 10,
+                  fontSize: 14,
+                }}
+              >
+                Click to see detail information ...
+              </Text>
+            </View>
+          ) : (
+            <></>
+          )}
         </View>
         <View
           style={{
@@ -179,28 +200,113 @@ const CardItemTicket = () => {
             paddingTop: 20,
           }}
         >
-          <TouchableOpacity
-            //   color="#841584"
-            //   accessibilityLabel="Learn more about this purple button"
-            style={{
-              backgroundColor: "rgb(254,210,61)",
-              width: "100%",
-              borderRadius: 6,
-            }}
-            onPress={() => {}}
-          >
-            <Text
+          {currentTab === "Upcomming" ? (
+            <TouchableOpacity
               style={{
-                color: "black",
-                textAlign: "center",
-                paddingVertical: 15,
-                fontSize: 15,
-                fontWeight: "700",
+                backgroundColor: "rgb(254,210,61)",
+                width: "100%",
+                borderRadius: 6,
+              }}
+              onPress={() => {
+                handleSeeMoreInfor();
               }}
             >
-              Pay now
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: "black",
+                  textAlign: "center",
+                  paddingVertical: 15,
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                See more
+              </Text>
+            </TouchableOpacity>
+          ) : currentTab === "Completed" ? (
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "rgb(254,210,61)",
+                  width: "100%",
+                  borderRadius: 6,
+                  marginBottom: 10,
+                }}
+                onPress={async () => {
+                  setModalVisible(true);
+                  await AsyncStorage.setItem(
+                    "RatingTrip",
+                    JSON.stringify(item)
+                  );
+                }}
+              >
+                <Text
+                  style={{
+                    color: "black",
+                    textAlign: "center",
+                    paddingVertical: 15,
+                    fontSize: 15,
+                    fontWeight: "700",
+                  }}
+                >
+                  Rating this trip
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "rgb(254,210,61)",
+                  width: "100%",
+                  borderRadius: 6,
+                }}
+                onPress={() => {
+                  handleSeeMoreInfor();
+                }}
+              >
+                <Text
+                  style={{
+                    color: "black",
+                    textAlign: "center",
+                    paddingVertical: 15,
+                    fontSize: 15,
+                    fontWeight: "700",
+                  }}
+                >
+                  See more
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={{
+                backgroundColor: "rgb(254,210,61)",
+                width: "100%",
+                borderRadius: 6,
+              }}
+              onPress={() => {
+                // setModalVisible(true);
+              }}
+            >
+              <Text
+                style={{
+                  color: "black",
+                  textAlign: "center",
+                  paddingVertical: 15,
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                Book again
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>

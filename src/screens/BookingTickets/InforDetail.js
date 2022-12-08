@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React from "react";
+import React, { useCallback, useLayoutEffect, useMemo } from "react";
 import styleGlobal from "../../constants/styleGlobal";
 import Header from "../../components/Header/Header";
 import { useState, useEffect } from "react";
@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setInforPassenger } from "../../redux/actions/inforBookAction";
 import { ApiBookingPartSeat, ApiBookingSeat } from "../../API/ApiBooking";
 import Loading from "../../components/Loading/Loading";
+import { GetProfile } from "../../API/ApiProfile";
 
 const styles = StyleSheet.create(styleGlobal);
 const widthDevice = Dimensions.get("screen").width;
@@ -27,9 +28,27 @@ const heightModalBottom = 130;
 
 const InforDetail = ({ navigation, route }) => {
   const userCurrent = useSelector((state) => state.authenReducer);
+  const [dataDetail, setDataDetail] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const GetData = async () => {
+    await GetProfile(setDataDetail, userCurrent.accessToken, setIsLoading);
+  };
+  useLayoutEffect(() => {
+    // await GetProfile(setDataDetail, userCurrent.accessToken, setIsLoading);
+    GetData();
+  }, []);
+  useEffect(() => {
+    setData({
+      email: dataDetail.email,
+      phoneNumber: dataDetail.phone,
+      name: dataDetail.name,
+      note: "",
+    });
+  }, [dataDetail]);
+
   const [data, setData] = useState({
     email: "",
-    phoneNumber: userCurrent.username,
+    phoneNumber: "",
     name: "",
     note: "",
   });
@@ -52,8 +71,10 @@ const InforDetail = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const inforTicketBook = useSelector((state) => state.inforBookReducer);
   const [loading, setLoading] = useState(false);
+  const [url, setUrl] = useState("");
   const printTicket = () => {
     // console.warn(inValidData);
+    // console.warn(data);
     if (!data.email || !data.phoneNumber || !data.name) {
       setInValidData({
         ...inValidData,
@@ -73,38 +94,18 @@ const InforDetail = ({ navigation, route }) => {
         !inValidData.errEmail
       ) {
         dispatch(setInforPassenger(data));
-        let inforTicketData = {};
         if (inforTicketBook.routeStationBook.length === 0) {
-          inforTicketData = {
-            email: data.email,
-            name: data.name,
-            note: data.note,
-            phoneNumber: data.phoneNumber,
-            // price: inforTicketBook.price,
-            // quantity: inforTicketBook.quantity,
-            // routeStationBook: inforTicketBook.routeStationBook,
-            seatIds: inforTicketBook.seatIds,
-            tripId: inforTicketBook.tripId,
-          };
-
-          ApiBookingSeat(inforTicketData, navigation, setLoading, route.params);
+          navigation.replace(screenName.inforTicketScreen, {
+            // list: data,
+            dataTrip: route.params,
+            name: "bookSeat",
+          });
         } else {
-          inforTicketData = {
-            email: data.email,
-            name: data.name,
-            note: data.note,
-            phoneNumber: data.phoneNumber,
-            price: inforTicketBook.price,
-            quantity: inforTicketBook.quantity,
-            routeStationBook: inforTicketBook.routeStationBook,
-            tripId: inforTicketBook.tripId,
-          };
-          ApiBookingPartSeat(
-            inforTicketData,
-            navigation,
-            setLoading,
-            route.params
-          );
+          navigation.replace(screenName.inforTicketScreen, {
+            // list: data,
+            dataTrip: route.params,
+            name: "bookPartSeat",
+          });
         }
       }
     }

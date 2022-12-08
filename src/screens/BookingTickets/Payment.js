@@ -15,8 +15,19 @@ import colors from "../../constants/colors";
 import Feather from "react-native-vector-icons/Feather";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { useState } from "react";
-import { ApiPayment } from "../../API/ApiBooking";
+import {
+  ApiBookingPartSeat,
+  ApiBookingSeat,
+  ApiPayment,
+} from "../../API/ApiBooking";
 import Loading from "../../components/Loading/Loading";
+import { useDispatch, useSelector } from "react-redux";
+import { onValue, ref, set } from "firebase/database";
+import { db } from "../../firebase/ConfigRealtimeDB";
+import { useEffect } from "react";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import { useRef } from "react";
 
 const styles = StyleSheet.create(styleGlobal);
 const width = Dimensions.get("screen").width;
@@ -74,16 +85,145 @@ const stylesInfor = StyleSheet.create({
     paddingVertical: 5,
   },
 });
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 const Payment = ({ navigation, route }) => {
   const [chooseMethod, setChooseMethod] = useState(false);
   const [select, setSelect] = useState(false);
+  const [seeSeat, setSeeSeat] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const handlePayment = () => {
-    let Data = {
-      id: route.params.list[0].paymentId,
-      price: route.params.list[0].price * route.params.list.length,
+  const inforBookTicket = useSelector((state) => state.inforBookReducer);
+  const [responseDataTicket, setResponseDataTicket] = useState({});
+  const [url, setUrl] = useState("");
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.authenReducer);
+  const [count, setCount] = useState(0);
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
     };
-    ApiPayment(Data, navigation, setIsLoading);
+  }, []);
+  useEffect(() => {
+    let res = [];
+    // let res1 = 0;
+    onValue(
+      ref(db, "notifications/" + currentUser.username),
+      async (snapshot) => {
+        const data = await snapshot.val();
+        for (const [key, value] of Object.entries(data)) {
+          // res1 = key.split("-")[0].slice(1, key.split("-")[0].length);
+          // console.warn(res1);
+          let object = {
+            ...value,
+            notificationTitle: key,
+          };
+          res.push(object);
+        }
+        setCount(res.length);
+      }
+    );
+  }, []);
+  const createNoti = async (data) => {
+    await set(
+      ref(
+        db,
+        "notifications/" + `${currentUser.username}/` + `N${count + 1}-book`
+      ),
+      data
+    )
+      .then(async () => {
+        await sendPushNotification(expoPushToken, data);
+        Alert.alert("Booking successfully!");
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  };
+  const handlePayment = () => {
+    // let Data = {
+    //   id: route.params.list.paymentId,
+    //   price: route.params.list.totalPrice,
+    // };
+    // ApiPayment(Data, navigation, setIsLoading);
+    let inforTicketData = {};
+    if (inforBookTicket.routeStationBook.length === 0) {
+      inforTicketData = {
+        email: inforBookTicket.email,
+        name: inforBookTicket.name,
+        note: inforBookTicket.note,
+        phoneNumber: inforBookTicket.phoneNumber,
+        // price: inforBookTicket.price,
+        // quantity: inforBookTicket.quantity,
+        // routeStationBook: inforBookTicket.routeStationBook,
+        seatIds: inforBookTicket.seatIds,
+        tripId: inforBookTicket.tripId,
+        nameAgency: inforBookTicket.nameAgency,
+        nameVehicle: inforBookTicket.nameVehicle,
+      };
+      // console.warn(inforTicketData)
+      ApiBookingSeat(
+        inforTicketData,
+        navigation,
+        setIsLoading,
+        route.params,
+        setUrl,
+        setResponseDataTicket,
+        createNoti
+      );
+    } else {
+      inforTicketData = {
+        email: inforBookTicket.email,
+        name: inforBookTicket.name,
+        note: inforBookTicket.note,
+        phoneNumber: inforBookTicket.phoneNumber,
+        price: inforBookTicket.price,
+        quantity: inforBookTicket.quantity,
+        routeStationBook: inforBookTicket.routeStationBook,
+        tripId: inforBookTicket.tripId,
+        nameAgency: inforBookTicket.nameAgency,
+        nameVehicle: inforBookTicket.nameVehicle,
+      };
+      ApiBookingPartSeat(
+        inforTicketData,
+        navigation,
+        setIsLoading,
+        route.params,
+        setUrl,
+        setResponseDataTicket,
+        createNoti
+      );
+    }
   };
   return (
     <View>
@@ -281,7 +421,7 @@ const Payment = ({ navigation, route }) => {
                 paddingHorizontal: 20,
               }}
             >
-              <View style={[stylesInfor.flex]}>
+              <View style={[stylesInfor.flex, { alignItems: "flex-start" }]}>
                 <Text
                   style={[
                     stylesInfor.textLeftPassenger,
@@ -295,28 +435,123 @@ const Payment = ({ navigation, route }) => {
                 >
                   Total
                 </Text>
-                <TouchableOpacity
+                <View
                   style={{
                     width: "70%",
+                    display: "flex",
+                    flexDirection: "column",
+                    // backgroundColor: "red",
                   }}
-                  onPress={() => {}}
                 >
-                  <Text
-                    style={[
-                      stylesInfor.touchable,
-                      {
-                        fontWeight: "600",
-                        textDecorationLine: "none",
-                        color: "black",
-                      },
-                    ]}
+                  <TouchableOpacity
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                    }}
+                    onPress={() => {
+                      setSeeSeat(!seeSeat);
+                    }}
                   >
-                    {formatCurrency(
-                      route.params.list[0].price * route.params.list.length
+                    <Text
+                      style={[
+                        stylesInfor.touchable,
+                        {
+                          fontWeight: "600",
+                          textDecorationLine: "none",
+                          color: "black",
+                          marginRight: 7,
+                        },
+                      ]}
+                    >
+                      {route.params.name === "bookSeat"
+                        ? formatCurrency(
+                            route.params.dataTrip.price *
+                              inforBookTicket.seatIds.length
+                          )
+                        : formatCurrency(
+                            route.params.dataTrip.price *
+                              inforBookTicket.quantity
+                          )}
+                      {"VND"}
+                    </Text>
+                    {seeSeat ? (
+                      <Feather
+                        name="chevron-up"
+                        style={{
+                          fontSize: 20,
+                          fontWeight: "500",
+                        }}
+                      />
+                    ) : (
+                      <Feather
+                        name="chevron-down"
+                        style={{
+                          fontSize: 20,
+                          fontWeight: "500",
+                        }}
+                      />
                     )}
-                    {"VND"}
-                  </Text>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                  {seeSeat ? (
+                    <View
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "flex-end",
+                        alignItems: "center",
+                        marginTop: 10,
+                      }}
+                    >
+                      {/* <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: "500",
+                        }}
+                      >
+                        Seats:{" "}
+                      </Text>
+                      {route.params.list.ticketInfoResponseList.map(
+                        (item, index) => {
+                          if (
+                            index ===
+                            route.params.list.ticketInfoResponseList.length - 1
+                          ) {
+                            return (
+                              <Text
+                                style={{
+                                  fontSize: 15,
+                                  fontWeight: "500",
+                                }}
+                                key={index}
+                              >
+                                {item.nameSeat}
+                              </Text>
+                            );
+                          } else {
+                            return (
+                              <Text
+                                style={{
+                                  fontSize: 15,
+                                  fontWeight: "500",
+                                }}
+                                key={index}
+                              >
+                                {item.nameSeat}
+                                {", "}
+                              </Text>
+                            );
+                          }
+                        }
+                      )} */}
+                    </View>
+                  ) : (
+                    <></>
+                  )}
+                </View>
               </View>
             </View>
           </ScrollView>
@@ -368,7 +603,7 @@ const Payment = ({ navigation, route }) => {
                   fontWeight: "500",
                 }}
               >
-                Pay Securely
+                Book and Proceed Payment
               </Text>
             </TouchableOpacity>
           </View>
@@ -379,5 +614,59 @@ const Payment = ({ navigation, route }) => {
     // </View>
   );
 };
+async function sendPushNotification(expoPushToken, data) {
+  const message = {
+    to: expoPushToken,
+    sound: "default",
+    title: "Booking ticket successfully!",
+    body: `You booked ticket, see detail information below: From ${
+      data.dep
+    } To ${data.des} at ${data.timeStart.split(":").slice(0, 2).join(":")} in ${
+      data.date
+    }`,
+    data: data,
+  };
+
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  // if (Device.isDevice) {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+  if (finalStatus !== "granted") {
+    alert("Failed to get push token for push notification!");
+    return;
+  }
+  token = (await Notifications.getExpoPushTokenAsync()).data;
+  console.log(token);
+  // } else {
+  //   alert('Must use physical device for Push Notifications');
+  // }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
+}
 
 export default Payment;
