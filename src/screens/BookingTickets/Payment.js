@@ -22,6 +22,12 @@ import {
 } from "../../API/ApiBooking";
 import Loading from "../../components/Loading/Loading";
 import { useDispatch, useSelector } from "react-redux";
+import { onValue, ref, set } from "firebase/database";
+import { db } from "../../firebase/ConfigRealtimeDB";
+import { useEffect } from "react";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import { useRef } from "react";
 
 const styles = StyleSheet.create(styleGlobal);
 const width = Dimensions.get("screen").width;
@@ -79,14 +85,91 @@ const stylesInfor = StyleSheet.create({
     paddingVertical: 5,
   },
 });
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 const Payment = ({ navigation, route }) => {
   const [chooseMethod, setChooseMethod] = useState(false);
   const [select, setSelect] = useState(false);
   const [seeSeat, setSeeSeat] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const inforBookTicket = useSelector((state) => state.inforBookReducer);
+  const [responseDataTicket, setResponseDataTicket] = useState({});
   const [url, setUrl] = useState("");
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.authenReducer);
+  const [count, setCount] = useState(0);
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+  useEffect(() => {
+    let res = [];
+    // let res1 = 0;
+    onValue(
+      ref(db, "notifications/" + currentUser.username),
+      async (snapshot) => {
+        const data = await snapshot.val();
+        for (const [key, value] of Object.entries(data)) {
+          // res1 = key.split("-")[0].slice(1, key.split("-")[0].length);
+          // console.warn(res1);
+          let object = {
+            ...value,
+            notificationTitle: key,
+          };
+          res.push(object);
+        }
+        setCount(res.length);
+      }
+    );
+  }, []);
+  const createNoti = async (data) => {
+    await set(
+      ref(
+        db,
+        "notifications/" + `${currentUser.username}/` + `N${count + 1}-book`
+      ),
+      data
+    )
+      .then(async () => {
+        await sendPushNotification(expoPushToken, data);
+        Alert.alert("Booking successfully!");
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  };
   const handlePayment = () => {
     // let Data = {
     //   id: route.params.list.paymentId,
@@ -114,7 +197,9 @@ const Payment = ({ navigation, route }) => {
         navigation,
         setIsLoading,
         route.params,
-        setUrl
+        setUrl,
+        setResponseDataTicket,
+        createNoti
       );
     } else {
       inforTicketData = {
@@ -134,7 +219,9 @@ const Payment = ({ navigation, route }) => {
         navigation,
         setIsLoading,
         route.params,
-        setUrl
+        setUrl,
+        setResponseDataTicket,
+        createNoti
       );
     }
   };
@@ -527,5 +614,59 @@ const Payment = ({ navigation, route }) => {
     // </View>
   );
 };
+async function sendPushNotification(expoPushToken, data) {
+  const message = {
+    to: expoPushToken,
+    sound: "default",
+    title: "Booking ticket successfully!",
+    body: `You booked ticket, see detail information below: From ${
+      data.dep
+    } To ${data.des} at ${data.timeStart.split(":").slice(0, 2).join(":")} in ${
+      data.date
+    }`,
+    data: data,
+  };
+
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  // if (Device.isDevice) {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+  if (finalStatus !== "granted") {
+    alert("Failed to get push token for push notification!");
+    return;
+  }
+  token = (await Notifications.getExpoPushTokenAsync()).data;
+  console.log(token);
+  // } else {
+  //   alert('Must use physical device for Push Notifications');
+  // }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
+}
 
 export default Payment;

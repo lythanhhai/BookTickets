@@ -72,6 +72,13 @@ const MyTicket = ({ navigation, route }) => {
     GetHistory(setList, setIsLoading, currentTab);
   }, [currentTab]);
   useEffect(() => {
+    // console.warn(route.params);
+    if (route.params?.rating) {
+      setCurrentTab("Completed");
+    } else {
+    }
+  }, [route.params]);
+  useEffect(() => {
     GetHistory(setList, setIsLoading, currentTab);
   }, []);
   const { onReview } = useAppReview();
@@ -83,39 +90,42 @@ const MyTicket = ({ navigation, route }) => {
           whichScreen={screenName.tabMyTicketScreen}
           navigation={navigation}
         />
-        <Ticket
+      </View>
+      <Ticket
+        navigation={navigation}
+        route={route}
+        setCurrentTab={setCurrentTab}
+      />
+
+      <ModalReview
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+
+      {!User.accessToken ? (
+        <RequireLogin navigation={navigation} route={route} />
+      ) : list.length === 0 ? (
+        <Logged />
+      ) : (
+        <ListTicket
+          list={list}
+          isLoading={isLoading}
+          setModalVisible={setModalVisible}
+          currentTab={currentTab}
           navigation={navigation}
           route={route}
-          setCurrentTab={setCurrentTab}
         />
-
-        <ModalReview
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
-
-        {!User.accessToken ? (
-          <RequireLogin navigation={navigation} route={route} />
-        ) : list.length === 0 ? (
-          <Logged />
-        ) : (
-          <ListTicket
-            list={list}
-            isLoading={isLoading}
-            setModalVisible={setModalVisible}
-            currentTab={currentTab}
-          />
-        )}
-        {/* <ReviewModal
+      )}
+      {/* <ReviewModal
           starRating={this.state.starCount}
           onStarRatingPress={(rating) => {
             this.onStarRatingPress(rating);
           }}
         /> */}
 
-        {/* <RequireLogin /> */}
-      </View>
+      {/* <RequireLogin /> */}
     </View>
+    // </View>
   );
 };
 

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "945689161740",
+    "firebase_url": "https://testotp123-8c200-default-rtdb.firebaseio.com",
     "project_id": "testotp123-8c200",
     "storage_bucket": "testotp123-8c200.appspot.com"
   },
@@ -37,6 +38,13 @@
             {
               "client_id": "945689161740-f4dh6435bug6uopc3q6r62gjvskkacof.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "945689161740-o106keora76i6o7eufi881hb7e9dj6s8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "bookingtickets.pbl6.ios"
+              }
             }
           ]
         }

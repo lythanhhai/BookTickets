@@ -58,6 +58,9 @@ import Loading from "./src/components/Loading/Loading";
 import * as Sentry from "sentry-expo";
 import Profile from "./src/screens/MyAccount/Profile";
 import getExpireJwt from "./src/utils/getExpire";
+import DetailTicket from "./src/screens/MyTickets/DetailTicket";
+import Test from "./src/screens/MyTickets/Test";
+// import OneSignal from "react-native-onesignal";
 
 Sentry.init({
   dsn: "https://59e443ac7dfb46f280541589357621c1@o4504106872209408.ingest.sentry.io/4504155015020544",
@@ -250,6 +253,32 @@ const App = () => {
     inactiveTintColor: "gray",
     // style: { backgroundColor: "white" },
   };
+  useEffect(() => {
+    // OneSignal Initialization
+    // OneSignal.setAppId("3375760c-240c-4190-ad3a-2ba9d1140be1");
+    // promptForPushNotificationsWithUserResponse will show the native iOS or Android notification permission prompt.
+    // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 8)
+    // OneSignal.promptForPushNotificationsWithUserResponse();
+    // //Method for handling notifications received while app in foreground
+    // OneSignal.setNotificationWillShowInForegroundHandler(
+    //   (notificationReceivedEvent) => {
+    //     console.log(
+    //       "OneSignal: notification will show in foreground:",
+    //       notificationReceivedEvent
+    //     );
+    //     let notification = notificationReceivedEvent.getNotification();
+    //     console.log("notification: ", notification);
+    //     const data = notification.additionalData;
+    //     console.log("additionalData: ", data);
+    //     // Complete with null means don't show a notification.
+    //     notificationReceivedEvent.complete(notification);
+    //   }
+    // );
+    // //Method for handling notifications opened
+    // OneSignal.setNotificationOpenedHandler((notification) => {
+    //   console.log("OneSignal: notification opened:", notification);
+    // });
+  }, []);
   // Sentry.Native.captureException(new Error("error"));
   try {
     return (
@@ -374,6 +403,20 @@ const App = () => {
                   >
                     {(props) => <Payment {...props} />}
                   </Stack.Screen>
+                </Stack.Group>
+                <Stack.Group>
+                  <Stack.Screen
+                    name="DetailTicket"
+                    component={DetailTicket}
+                    options={{
+                      title: "Detail ticket",
+                      headerShown: true,
+                      headerStyle: {
+                        backgroundColor: colors.blue,
+                      },
+                      headerTintColor: "#fff",
+                    }}
+                  />
                 </Stack.Group>
                 <Stack.Group>
                   <Stack.Screen
