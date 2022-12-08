@@ -44,6 +44,7 @@ const ListTicket = ({
             Dimensions.get("screen").height / 8 -
             120,
           marginTop: 15,
+          paddingBottom: 40,
           display: "flex",
           flexDirection: "column",
           justifyContent: isLoading ? "flex-start" : "center",

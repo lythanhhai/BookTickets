@@ -97,7 +97,7 @@ const Profile = (props) => {
             alignItems: "center",
             height:
               Dimensions.get("screen").height -
-              Dimensions.get("screen").height / 9,
+              Dimensions.get("screen").height / 15,
           }}
         >
           <View
@@ -184,6 +184,7 @@ const Profile = (props) => {
               borderBottomColor: "transparent",
               paddingTop: 20,
               paddingBottom: Platform.OS === "ios" ? 30 : 70,
+              marginBottom: 20,
             }}
           >
             <TouchableOpacity
@@ -193,6 +194,7 @@ const Profile = (props) => {
                 backgroundColor: "rgb(254,210,61)",
                 width: Dimensions.get("screen").width / 1.1,
                 borderRadius: 6,
+                marginBottom: 10,
               }}
               onPress={() => {
                 handleEditProfile();
