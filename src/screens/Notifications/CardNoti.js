@@ -1,35 +1,36 @@
 import React from "react";
 import { useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Entypo from "react-native-vector-icons/Entypo";
 import colors from "../../constants/colors";
 import { calculateSumHour } from "../../utils/calculateSumHour";
+import moment from "moment";
 
 const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-
-    width: "95%",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    width: "100%",
     borderColor: "rgb(215, 215, 215)",
     borderBottomWidth: 1,
-    // borderTopWidth: 1,
-    paddingVertical: 15,
+    paddingVertical: 18,
   },
   iconStart: {
-    fontSize: 21,
-    marginHorizontal: 15,
+    fontSize: 32,
+    marginLeft: 6,
+    width: "8%",
   },
   iconEnd: {
     fontSize: 25,
     color: colors.blue,
   },
   containerBetween: {
-    width: "65%",
+    width: "66%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -40,6 +41,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    width: "25%",
+    marginRight: 4,
   },
 });
 const CardNoti = ({ item }) => {
@@ -54,51 +57,46 @@ const CardNoti = ({ item }) => {
         alignItems: "center",
       }}
       onPress={() => {
-        // console.warn("oke");
+        Alert.alert(`${item.content}`);
       }}
     >
       <TouchableOpacity style={[styles.container]} disabled={true}>
-        {/* {isChosen === item ? (
-          <Feather
-            name="check-circle"
-            style={[
-              styles.iconStart,
-              {
-                color: colors.blue,
-              },
-            ]}
-          />
-        ) : (
-          <Feather name="circle" style={styles.iconStart} />
-        )} */}
-
-        <Ionicons
-          name="notifications-outline"
+        <Entypo
+          name="dot-single"
           style={[styles.iconStart, { color: colors.blue }]}
         />
-
         <View style={[styles.containerBetween]}>
           <Text
             style={{
-              fontSize: 17,
-              fontWeight: "500",
-              color: "rgb(75, 75, 75)",
+              fontSize: 18,
+              fontWeight: "600",
+              color: colors.blue,
+              paddingBottom: 5,
             }}
           >
-            {item.notificationTitle.includes("book")
-              ? "You booked successfully ticket"
-              : "You canceled successfully ticket"}
+            {item.title}
           </Text>
           <Text
             style={{
-              fontSize: 14,
+              fontSize: 15,
+              // fontWeight: "500",
+              color: "rgb(60, 60, 60)",
+            }}
+            numberOfLines={1}
+          >
+            {item.content}
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
               //   fontWeight: "500",
               paddingTop: 7,
+              color: "rgb(100, 100, 100)",
             }}
           >
-            {item.dateBook.split("T")[0]} {", "}
+            {item.createdAt.split("T")[0]} {", "}
             {"at "}
-            {item.dateBook
+            {item.createdAt
               .split("T")[1]
               .split(".")[0]
               .split(":")
@@ -106,9 +104,26 @@ const CardNoti = ({ item }) => {
               .join(":")}
           </Text>
         </View>
-        {/* <TouchableOpacity style={[styles.containerEnd]}>
-          <MaterialIcons name="navigate-next" style={styles.iconEnd} />
-        </TouchableOpacity> */}
+        <View style={[styles.containerEnd]}>
+          <Text
+            style={{
+              fontSize: 10,
+            }}
+          >
+            {moment
+              .utc(
+                `${item.createdAt.split("T")[0]} ${item.createdAt
+                  .split("T")[1]
+                  .split(".")[0]
+                  .split(":")
+                  .slice(0, 3)
+                  .join(":")}`
+              )
+              .local()
+              .startOf("seconds")
+              .fromNow()}
+          </Text>
+        </View>
       </TouchableOpacity>
     </TouchableOpacity>
   );

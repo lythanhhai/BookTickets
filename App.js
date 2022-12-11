@@ -7,9 +7,11 @@ import {
   View,
   Platform,
   Alert,
+  TouchableWithoutFeedback,
+  TouchableHighlight,
 } from "react-native";
 import { TailwindProvider } from "tailwind-rn";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, Children } from "react";
 import utilities from "./tailwind.json";
 import Login from "./src/components/Login/Login";
 import Register from "./src/components/Register/Register";
@@ -20,6 +22,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -60,6 +63,8 @@ import Profile from "./src/screens/MyAccount/Profile";
 import getExpireJwt from "./src/utils/getExpire";
 import DetailTicket from "./src/screens/MyTickets/DetailTicket";
 import Test from "./src/screens/MyTickets/Test";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import UnpaidNavigation from "./src/navigations/Unpaid";
 // import OneSignal from "react-native-onesignal";
 
 Sentry.init({
@@ -143,20 +148,25 @@ const Home = () => {
       // tabBarOptions={{ showIcon: true }}
 
       tabBarStyle={{ marginBottom: 10 }}
+      initialRouteName="Search_tickets"
     >
       <Tab.Screen
-        name="Search_tickets"
-        component={SearchTicketNavigation}
+        name="Unpaid_Screen"
+        component={UnpaidNavigation}
         options={({ route }) => ({
           // ​tabBarLabel: ({ focused, color }) => {
           //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
           // },
-          title: "Search tickets",
+          title: "Unpaid",
           tabBarIcon: ({ focused, color, size }) => {
             var elem;
             focused
-              ? (elem = <Icon size={17} color={colors.blue} name="search1" />)
-              : (elem = <Icon size={17} color={colors.gray} name="search1" />);
+              ? (elem = (
+                  <MaterialIcons size={17} color={colors.blue} name="payment" />
+                ))
+              : (elem = (
+                  <MaterialIcons size={17} color={colors.gray} name="payment" />
+                ));
             return elem;
           },
           // tabBarStyle: { display: 'flex' }
@@ -179,6 +189,72 @@ const Home = () => {
           },
         }}
       />
+      <Tab.Screen
+        name="Search_tickets"
+        component={SearchTicketNavigation}
+        options={({ route }) => ({
+          // ​tabBarLabel: ({ focused, color }) => {
+          //   return <Text style={{color: focused ? 'red' : colors.gray}}>Search tickets</Text>
+          // },
+          // title: "",
+          // tabBarIcon: ({ focused, color, size }) => {
+          //   var elem;
+          //   focused
+          //     ? (elem = (
+          //         <Icon
+          //           size={25}
+          //           color="white"
+          //           name="search1"
+          //           justifyContent="center"
+          //           alignItems="center"
+          //         />
+          //       ))
+          //     : (elem = (
+          //         <Icon
+          //           size={25}
+          //           color="white"
+          //           name="search1"
+          //           justifyContent="center"
+          //           alignItems="center"
+          //         />
+          //       ));
+          //   return elem;
+          // },
+          // tabBarStyle: { borderWidth: 1, borderColor: colors.blue },
+          tabBarButton: ({ children, onPress }) => {
+            return (
+              <TouchableOpacity
+                style={{
+                  top: -25,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={onPress}
+              >
+                <View
+                  style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: 35,
+                    backgroundColor: colors.blue,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {/* {children} */}
+                  <Icon
+                    size={25}
+                    color="white"
+                    name="search1"
+                    justifyContent="center"
+                    alignItems="center"
+                  />
+                </View>
+              </TouchableOpacity>
+            );
+          },
+        })}
+      ></Tab.Screen>
       <Tab.Screen
         name="Notifications"
         component={NotificationNavigation}
