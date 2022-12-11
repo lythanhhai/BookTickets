@@ -41,6 +41,9 @@ const GetHistory = (setData, setIsLoading, currentTab) => {
           return item.status !== "Success";
         });
       }
+      result.sort((item1, item2) => {
+        return item2.id - item1.id;
+      });
       setData(result);
       setIsLoading(false);
     })

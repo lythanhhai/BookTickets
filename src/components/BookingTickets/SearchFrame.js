@@ -99,12 +99,13 @@ const SearchFrame = ({ navigation, route, screen, setCheckClickSearch }) => {
     if (screen === "Home") {
       if (location.date && location.startPoint && location.stopPoint) {
         navigation.replace("ChooseTrip", { screen: "Home" });
-        // setCheckClickSearch(true);
+        setCheckClickSearch(true);
       } else {
         Alert.alert("Cannot Search", "Please fill out information!");
       }
     } else {
       navigation.replace("ChooseTrip", { screen: "ChooseTrip" });
+      // setCheckClickSearch(true);
     }
   };
   const [Count, setCount] = useState(1);

@@ -18,6 +18,8 @@ import colors from "../../constants/colors";
 import CardRoute from "../../components/BookingTickets/CardRoute";
 import { useSelector } from "react-redux";
 import * as screenName from "../../constants/nameScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { async } from "@firebase/util";
 
 const styles = StyleSheet.create({
   background: {
@@ -45,23 +47,49 @@ const BookingTickets = ({ navigation, route }) => {
   const tailwind = useTailwind();
   // const [list, setList] = useState([...Data]);
   const [list, setList] = useState([
-    {
-      image:
-        "https://storage.googleapis.com/vex-config/cms-tool/destination/images/25/img_hero.png",
-      departLocation: "Đà Nẵng",
-      arriveLocation: "Quảng Trị",
-      date: "2022-10-19",
-      price: "150.000vnd",
-      originalPrice: "300.000vnd",
-    },
+    // {
+    //   image:
+    //     "https://storage.googleapis.com/vex-config/cms-tool/destination/images/25/img_hero.png",
+    //   departLocation: "Đà Nẵng",
+    //   arriveLocation: "Quảng Trị",
+    //   date: "2022-10-19",
+    //   price: "150.000vnd",
+    //   originalPrice: "300.000vnd",
+    // },
   ]);
   const [checkClickSearch, setCheckClickSearch] = useState(false);
-  // useEffect(() => {
-  //   console.warn(route.params);
-  // });
+
   const location = useSelector((state) => state.getLocationReducer);
+  const SaveRecentSearch = async (data) => {
+    await AsyncStorage.setItem("ListRecentSearch", JSON.stringify(data));
+  };
+  const getRecentSearch = async () => {
+    try {
+      const data = await AsyncStorage.getItem("ListRecentSearch");
+      const list = JSON.parse(data);
+      if (!list) {
+        return [];
+      } else {
+        return list;
+      }
+    } catch (err) {
+      console.warn(err);
+      return null;
+    }
+  };
   useEffect(() => {
-    // console.warn("aaaa");
+    //   console.warn(route.params);
+    // setList(getRecentSearch());
+    getRecentSearch()
+      .then((data) => {
+        // console.log(data);
+        setList(data);
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  }, []);
+  useEffect(() => {
     if (checkClickSearch) {
       if (list.length === 5) {
         var fourItem = [...list].slice(0, [...list].length - 1);
@@ -73,8 +101,24 @@ const BookingTickets = ({ navigation, route }) => {
           },
           ...fourItem,
         ]);
+        SaveRecentSearch([
+          {
+            departLocation: location.startPoint,
+            arriveLocation: location.stopPoint,
+            date: location.date,
+          },
+          ...fourItem,
+        ]);
       } else {
         setList([
+          {
+            departLocation: location.startPoint,
+            arriveLocation: location.stopPoint,
+            date: location.date,
+          },
+          ...list,
+        ]);
+        SaveRecentSearch([
           {
             departLocation: location.startPoint,
             arriveLocation: location.stopPoint,

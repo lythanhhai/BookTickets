@@ -99,6 +99,7 @@ const Profile = (props) => {
               Dimensions.get("screen").height -
               Dimensions.get("screen").height / 15,
           }}
+          showsVerticalScrollIndicator={false}
         >
           <View
             style={{

@@ -10,6 +10,8 @@ import { useTailwind } from "tailwind-rn/dist";
 import Icon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const styles = StyleSheet.create({
   background: {
@@ -25,9 +27,25 @@ const styles = StyleSheet.create({
 
 const CardRecent = ({ item }) => {
   const tailwind = useTailwind();
+  // const [Data, setData] = useState([]);
+  // const [DataFilter, setDataFilter] = useState([]);
+  // const [loading, setLoading] = useState(false);
+  // useEffect(() => {
+  //   // setShowChangeModal(false)
+  //   getTrips(
+  //     {
+  //       date: formatDate(location.date),
+  //       dep: parseInt(location.startPoint.split("-")[1]),
+  //       des: parseInt(location.stopPoint.split("-")[1]),
+  //     },
+  //     setData,
+  //     setLoading,
+  //     setDataFilter
+  //   );
+  // }, []);
 
   return (
-    <View
+    <TouchableOpacity
       style={{
         display: "flex",
         flexDirection: "row",
@@ -52,6 +70,7 @@ const CardRecent = ({ item }) => {
         marginRight: 10,
         marginBottom: 10,
       }}
+      onPress={() => {}}
     >
       <View
         style={{
@@ -139,7 +158,7 @@ const CardRecent = ({ item }) => {
           right: 15,
         }}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 
