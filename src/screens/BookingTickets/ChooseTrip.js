@@ -85,29 +85,42 @@ const ChooseTrip = ({ navigation, route }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     // setShowChangeModal(false)
-    if (route.params?.screen === "Home") {
+    if (route.params?.departLocation) {
       getTrips(
         {
-          date: formatDate(location.date),
-          dep: parseInt(location.startPoint.split("-")[1]),
-          des: parseInt(location.stopPoint.split("-")[1]),
+          date: route.params?.date,
+          dep: route.params?.departLocation,
+          des: route.params?.arriveLocation,
         },
         setData,
         setLoading,
         setDataFilter
       );
     } else {
-      getTrips(
-        {
-          date: formatDate(location.newDate),
-          dep: parseInt(location.newStartPoint.split("-")[1]),
-          des: parseInt(location.newStopPoint.split("-")[1]),
-        },
-        setData,
-        setLoading,
-        setDataFilter
-      );
-      dispatch(search());
+      if (route.params?.screen === "Home") {
+        getTrips(
+          {
+            date: formatDate(location.date),
+            dep: parseInt(location.startPoint.split("-")[1]),
+            des: parseInt(location.stopPoint.split("-")[1]),
+          },
+          setData,
+          setLoading,
+          setDataFilter
+        );
+      } else {
+        getTrips(
+          {
+            date: formatDate(location.newDate),
+            dep: parseInt(location.newStartPoint.split("-")[1]),
+            des: parseInt(location.newStopPoint.split("-")[1]),
+          },
+          setData,
+          setLoading,
+          setDataFilter
+        );
+        dispatch(search());
+      }
     }
   }, []);
 
