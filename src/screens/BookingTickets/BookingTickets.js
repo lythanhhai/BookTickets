@@ -89,43 +89,61 @@ const BookingTickets = ({ navigation, route }) => {
         console.warn(err);
       });
   }, []);
+
+  const checkExistSearch = (list) => {
+    let isExist = false;
+    list.forEach((item, index) => {
+      if (
+        item.departLocation === location.startPoint &&
+        item.arriveLocation === location.stopPoint &&
+        item.date === location.date
+      ) {
+        isExist = true;
+      }
+    });
+    return isExist;
+  };
+
   useEffect(() => {
     if (checkClickSearch) {
-      if (list.length === 5) {
-        var fourItem = [...list].slice(0, [...list].length - 1);
-        setList([
-          {
-            departLocation: location.startPoint,
-            arriveLocation: location.stopPoint,
-            date: location.date,
-          },
-          ...fourItem,
-        ]);
-        SaveRecentSearch([
-          {
-            departLocation: location.startPoint,
-            arriveLocation: location.stopPoint,
-            date: location.date,
-          },
-          ...fourItem,
-        ]);
+      if (checkExistSearch(list)) {
       } else {
-        setList([
-          {
-            departLocation: location.startPoint,
-            arriveLocation: location.stopPoint,
-            date: location.date,
-          },
-          ...list,
-        ]);
-        SaveRecentSearch([
-          {
-            departLocation: location.startPoint,
-            arriveLocation: location.stopPoint,
-            date: location.date,
-          },
-          ...list,
-        ]);
+        if (list.length === 5) {
+          var fourItem = [...list].slice(0, [...list].length - 1);
+          setList([
+            {
+              departLocation: location.startPoint,
+              arriveLocation: location.stopPoint,
+              date: location.date,
+            },
+            ...fourItem,
+          ]);
+          SaveRecentSearch([
+            {
+              departLocation: location.startPoint,
+              arriveLocation: location.stopPoint,
+              date: location.date,
+            },
+            ...fourItem,
+          ]);
+        } else {
+          setList([
+            {
+              departLocation: location.startPoint,
+              arriveLocation: location.stopPoint,
+              date: location.date,
+            },
+            ...list,
+          ]);
+          SaveRecentSearch([
+            {
+              departLocation: location.startPoint,
+              arriveLocation: location.stopPoint,
+              date: location.date,
+            },
+            ...list,
+          ]);
+        }
       }
     }
     return setCheckClickSearch(false);
@@ -205,7 +223,9 @@ const BookingTickets = ({ navigation, route }) => {
           data={list}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => <CardRecent item={item} />}
+          renderItem={({ item }) => (
+            <CardRecent item={item} navigation={navigation} />
+          )}
         ></FlatList>
       </View>
 

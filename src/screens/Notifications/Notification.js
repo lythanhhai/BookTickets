@@ -57,7 +57,10 @@ const Notification = ({ item, navigation }) => {
           navigation={navigation}
         />
         {!currentUser.accessToken ? (
-          <RequireLogin></RequireLogin>
+          <RequireLogin
+            navigation={navigation}
+            name="notifications"
+          ></RequireLogin>
         ) : !listNotification.length ? (
           <EmptyNotification />
         ) : (

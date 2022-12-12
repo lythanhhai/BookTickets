@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RequireLogin = ({ item, navigation, route }) => {
+const RequireLogin = ({ item, navigation, route, name }) => {
   const tailwind = useTailwind();
 
   return (
@@ -59,9 +59,7 @@ const RequireLogin = ({ item, navigation, route }) => {
       <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 6 }}>
         Signin required
       </Text>
-      <Text style={{ marginBottom: 15 }}>
-        Sign in to see your booking history
-      </Text>
+      <Text style={{ marginBottom: 15 }}>Sign in to see your {name}</Text>
       <TouchableOpacity
         // onPress={onPressLearnMore}
         //   color="#841584"

@@ -85,7 +85,7 @@ const UnpaidTicket = ({ navigation, route }) => {
       </View>
 
       {!User.accessToken ? (
-        <RequireLogin navigation={navigation} route={route} />
+        <RequireLogin navigation={navigation} route={route} name="unpaid ticket" />
       ) : list.length === 0 ? (
         <Logged />
       ) : (

@@ -12,6 +12,13 @@ import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
 import { useEffect } from "react";
+import { formatDate } from "../../utils/formatDate";
+import { useDispatch } from "react-redux";
+import {
+  getDate,
+  getLocationStart,
+  getLocationStop,
+} from "../../redux/actions/getLocationAction";
 
 const styles = StyleSheet.create({
   background: {
@@ -25,25 +32,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const CardRecent = ({ item }) => {
+const CardRecent = ({ item, navigation }) => {
   const tailwind = useTailwind();
-  // const [Data, setData] = useState([]);
-  // const [DataFilter, setDataFilter] = useState([]);
-  // const [loading, setLoading] = useState(false);
-  // useEffect(() => {
-  //   // setShowChangeModal(false)
-  //   getTrips(
-  //     {
-  //       date: formatDate(location.date),
-  //       dep: parseInt(location.startPoint.split("-")[1]),
-  //       des: parseInt(location.stopPoint.split("-")[1]),
-  //     },
-  //     setData,
-  //     setLoading,
-  //     setDataFilter
-  //   );
-  // }, []);
-
+  const dispatch = useDispatch();
+  const findTrip = () => {
+    dispatch(getLocationStart(item.departLocation));
+    dispatch(getLocationStop(item.arriveLocation));
+    dispatch(getDate(item.date));
+    navigation.navigate("ChooseTrip");
+  };
   return (
     <TouchableOpacity
       style={{
@@ -70,7 +67,9 @@ const CardRecent = ({ item }) => {
         marginRight: 10,
         marginBottom: 10,
       }}
-      onPress={() => {}}
+      onPress={() => {
+        findTrip();
+      }}
     >
       <View
         style={{

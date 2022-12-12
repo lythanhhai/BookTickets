@@ -103,7 +103,7 @@ const MyTicket = ({ navigation, route }) => {
       />
 
       {!User.accessToken ? (
-        <RequireLogin navigation={navigation} route={route} />
+        <RequireLogin navigation={navigation} route={route} name="booking history"/>
       ) : list.length === 0 ? (
         <Logged />
       ) : (
