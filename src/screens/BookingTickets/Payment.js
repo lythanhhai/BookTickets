@@ -402,7 +402,7 @@ const Payment = ({ navigation, route }) => {
                         },
                       ]}
                     >
-                      Online payment with VNPAY - QR Code
+                      Online payment with VNPAY
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -571,7 +571,7 @@ const Payment = ({ navigation, route }) => {
               borderWidth: 1,
               borderColor: "rgb(220, 220, 220)",
               paddingTop: 20,
-              paddingBottom: Platform.OS === "ios" ? 30 : 70,
+              paddingBottom: Platform.OS === "ios" ? 30 : 30,
             }}
           >
             <TouchableOpacity

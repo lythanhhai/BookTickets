@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-const ContentReview = ({ setModalVisible }) => {
-  const [ratingEnd, setRatingEnd] = useState(1);
+const ContentReview = ({ setModalVisible, setLoadAfterAction }) => {
+  const [ratingEnd, setRatingEnd] = useState(5);
   const [comment, setComment] = useState("");
   let ratingCompleted = (rating) => {
     setRatingEnd(rating);
@@ -66,11 +66,11 @@ const ContentReview = ({ setModalVisible }) => {
   const handleRating = async () => {
     const itemBefore = await AsyncStorage.getItem("RatingTrip");
     const item = JSON.parse(itemBefore);
-    RatingTrip(setIsLoading, {
+    RatingTrip(setLoadAfterAction, {
       comment,
-      nameAgency: item.nameAgency,
+      nameAgency: item.historyBooking.nameAgency,
       rating: ratingEnd,
-      idPayment: item.payment.id,
+      idPayment: item.historyBooking.payment.id,
     });
     setModalVisible(false);
     // console.warn({
@@ -97,7 +97,7 @@ const ContentReview = ({ setModalVisible }) => {
           }}
         >
           <AirbnbRating
-            defaultRating={1}
+            defaultRating={5}
             imageSize={10}
             size={25}
             onFinishRating={(rating) => {

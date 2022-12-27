@@ -157,7 +157,7 @@ const ModalSeatSelected = ({
       </View>
       <View
         style={{
-          paddingBottom: Platform.OS === "ios" ? 30 : 70,
+          paddingBottom: Platform.OS === "ios" ? 30 : 30,
           width: "100%",
           display: "flex",
           flexDirection: "row",

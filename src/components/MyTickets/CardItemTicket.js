@@ -8,13 +8,16 @@ const CardItemTicket = ({
   currentTab,
   navigation,
   route,
+  index,
+  length,
+  setLoadAfterAction,
 }) => {
   // useEffect(() => {
   //   console.warn(item.payment.paymentMethods?.txnRef === true);
   // }, []);
   const handleSeeMoreInfor = () => {
     // setModalVisible(true);
-    navigation.navigate("DetailTicket", item);
+    navigation.navigate("DetailTicket", item.historyBooking);
   };
   return (
     <View
@@ -24,6 +27,7 @@ const CardItemTicket = ({
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
+        paddingBottom: length - 1 === index ? 100 : 0,
       }}
     >
       <View
@@ -71,7 +75,7 @@ const CardItemTicket = ({
                   fontWeight: "600",
                 }}
               >
-                {item.timeStart.split(":").slice(0, 2).join(":")}
+                {item.historyBooking.timeStart.split(":").slice(0, 2).join(":")}
               </Text>
               <Text
                 style={{
@@ -79,7 +83,7 @@ const CardItemTicket = ({
                   fontWeight: "500",
                 }}
               >
-                {item.dateStart.split("T")[0]}
+                {item.historyBooking.dateStart.split("T")[0]}
               </Text>
             </View>
             <View
@@ -99,14 +103,14 @@ const CardItemTicket = ({
                   fontWeight: "600",
                 }}
               >
-                {item.nameVehicle}
+                {item.historyBooking.nameVehicle}
               </Text>
               <Text
                 style={{
                   fontSize: 14,
                 }}
               >
-                {item.route}
+                {item.historyBooking.route}
               </Text>
             </View>
           </View>
@@ -134,8 +138,8 @@ const CardItemTicket = ({
                 fontWeight: "600",
               }}
             >
-              {item.payment.paymentMethods?.txnRef
-                ? item.payment.paymentMethods.txnRef
+              {item.historyBooking.payment.paymentMethods?.txnRef
+                ? item.historyBooking.payment.paymentMethods.txnRef
                 : ""}
             </Text>
           </View>
@@ -164,7 +168,9 @@ const CardItemTicket = ({
                 color: "rgb(210,90,107)",
               }}
             >
-              {item.payment.paymentMethods?.txnRef ? "Paid" : "Canceled"}
+              {item.historyBooking.payment.paymentMethods?.txnRef
+                ? "Paid"
+                : "Canceled"}
             </Text>
           </View>
           {currentTab === "Upcomming" ? (
@@ -182,7 +188,25 @@ const CardItemTicket = ({
                   fontSize: 14,
                 }}
               >
-                Click to see detail information ...
+                Click see more to see detail information ...
+              </Text>
+            </View>
+          ) : currentTab === "Completed" && item.rated ? (
+            <View
+              style={{
+                backgroundColor: "rgb(254,235,237)",
+                marginTop: 20,
+                borderRadius: 7,
+              }}
+            >
+              <Text
+                style={{
+                  paddingVertical: 15,
+                  paddingHorizontal: 10,
+                  fontSize: 14,
+                }}
+              >
+                You have already rated this trip ...
               </Text>
             </View>
           ) : (
@@ -233,33 +257,36 @@ const CardItemTicket = ({
                 width: "100%",
               }}
             >
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "rgb(254,210,61)",
-                  width: "100%",
-                  borderRadius: 6,
-                  marginBottom: 10,
-                }}
-                onPress={async () => {
-                  setModalVisible(true);
-                  await AsyncStorage.setItem(
-                    "RatingTrip",
-                    JSON.stringify(item)
-                  );
-                }}
-              >
-                <Text
+              {item.rated ? null : (
+                <TouchableOpacity
                   style={{
-                    color: "black",
-                    textAlign: "center",
-                    paddingVertical: 15,
-                    fontSize: 15,
-                    fontWeight: "700",
+                    backgroundColor: "rgb(254,210,61)",
+                    width: "100%",
+                    borderRadius: 6,
+                    marginBottom: 10,
+                  }}
+                  onPress={async () => {
+                    setModalVisible(true);
+                    await AsyncStorage.setItem(
+                      "RatingTrip",
+                      JSON.stringify(item)
+                    );
                   }}
                 >
-                  Rating this trip
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={{
+                      color: "black",
+                      textAlign: "center",
+                      paddingVertical: 15,
+                      fontSize: 15,
+                      fontWeight: "700",
+                    }}
+                  >
+                    Rating this trip
+                  </Text>
+                </TouchableOpacity>
+              )}
+
               <TouchableOpacity
                 style={{
                   backgroundColor: "rgb(254,210,61)",
@@ -292,6 +319,7 @@ const CardItemTicket = ({
               }}
               onPress={() => {
                 // setModalVisible(true);
+                handleSeeMoreInfor();
               }}
             >
               <Text
@@ -303,7 +331,7 @@ const CardItemTicket = ({
                   fontWeight: "700",
                 }}
               >
-                Book again
+                See more
               </Text>
             </TouchableOpacity>
           )}

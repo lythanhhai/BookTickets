@@ -15,7 +15,7 @@ import ContentReview from "./ContentReview";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useEffect } from "react";
 
-const ModalReview = ({ modalVisible, setModalVisible }) => {
+const ModalReview = ({ modalVisible, setModalVisible, setLoadAfterAction }) => {
   const [isLoad, setIsLoad] = useState(true);
   useEffect(() => {
     // console.warn(isLoad);
@@ -67,7 +67,10 @@ const ModalReview = ({ modalVisible, setModalVisible }) => {
                 }}
               />
             </Pressable>
-            <ContentReview setModalVisible={setModalVisible}/>
+            <ContentReview
+              setModalVisible={setModalVisible}
+              setLoadAfterAction={setLoadAfterAction}
+            />
           </View>
           {/* </View> */}
         </KeyboardAvoidingView>

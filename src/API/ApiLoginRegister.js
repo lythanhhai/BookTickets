@@ -18,7 +18,7 @@ const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
     data: Data,
   })
     .then((res) => {
-      // console.warn(res.data);
+      // console.log(res.data);
       return res.data;
     })
     .then(async (data) => {
@@ -27,22 +27,22 @@ const ApiLogin = (Data, navigation, dispatch, setIsLoading) => {
       // throw new Error("hhe");
       try {
         if (data.message) {
-          // console.warn(data.message);
+          // console.log(data.message);
           Alert.alert(data.message, "Your username or password are incorrect");
         } else {
           await AsyncStorage.setItem("currentUser", JSON.stringify(data));
           await AsyncStorage.setItem("expireJwt", JSON.stringify(new Date()));
           // Sentry.captureException(err)
           dispatch(loginAction(data));
-          // console.warn(data)
+          // console.log(data)
           navigation.goBack("PickupPoint");
         }
       } catch (e) {
-        console.warn(e);
+        console.log(e);
       }
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 
@@ -66,11 +66,11 @@ const ApiRegister = (
       setIsLoading(false);
       try {
         if (data.message) {
-          // console.warn(res.data.message)
+          // console.log(res.data.message)
           // setErrRegister(data.message);
           Alert.alert(data.message, "Your phone number is existed");
         } else {
-          // console.warn(data.accessToken);
+          // console.log(data.accessToken);
           await AsyncStorage.setItem("currentUser", JSON.stringify(data));
           await AsyncStorage.setItem("expireJwt", JSON.stringify(new Date()));
           dispatch(signupAction(data));
@@ -93,11 +93,11 @@ const ApiRegister = (
           navigation.goBack("PickupPoint");
         }
       } catch (e) {
-        console.warn(e);
+        console.log(e);
       }
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 
@@ -127,7 +127,7 @@ const ApiLogout = (dispatch, navigation, setIsLoading) => {
       // Alert.alert("Logout", "Your username or password are incorrect");
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 
@@ -143,7 +143,7 @@ const ApiGetCurrent = (setCurrentUser) => {
       setCurrentUser(data);
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 

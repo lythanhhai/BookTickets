@@ -123,11 +123,46 @@ const DetailTicket = ({ navigation, route }) => {
   }, []);
   const dispatch = useDispatch();
   const handleCancel = () => {
-    ApiRefund(
-      route.params.payment.id,
-      navigation,
-      sendPushNotification,
-      expoPushToken
+    Alert.alert(
+      "Cancel ticket",
+      "Are you sure delete this trip",
+      Platform.OS === "ios"
+        ? [
+            {
+              text: "OK",
+              onPress: () => {
+                ApiRefund(
+                  route.params.payment.id,
+                  navigation,
+                  sendPushNotification,
+                  expoPushToken
+                );
+              },
+            },
+            {
+              text: "Cancel",
+              onPress: () => {},
+              style: "cancel",
+            },
+          ]
+        : [
+            {
+              text: "Cancel",
+              onPress: () => {},
+              style: "cancel",
+            },
+            {
+              text: "OK",
+              onPress: () => {
+                ApiRefund(
+                  route.params.payment.id,
+                  navigation,
+                  sendPushNotification,
+                  expoPushToken
+                );
+              },
+            },
+          ]
     );
     // createNoti();
   };
@@ -143,17 +178,6 @@ const DetailTicket = ({ navigation, route }) => {
       });
   };
 
-  // useEffect(() => {
-  //   if (requestUserPermission()) {
-  //     messaging()
-  //       .getToken()
-  //       .then((token) => {
-  //         console.warn(token);
-  //       });
-  //   } else {
-  //     console.warn("Failed to get token", authStatus);
-  //   }
-  // }, []);
   return (
     <View
       style={[
@@ -214,6 +238,12 @@ const DetailTicket = ({ navigation, route }) => {
             <Text style={[stylesInfor.textRight]}>
               {route.params.payment.timeStart.split(":").slice(0, 2).join(":")}
               {", "}
+              {formatDate(route.params.payment.dateStart.split("T")[0])}
+            </Text>
+          </View>
+          <View style={[stylesInfor.flex]}>
+            <Text style={[stylesInfor.textLeft]}>Date order</Text>
+            <Text style={[stylesInfor.textRight]}>
               {formatDate(route.params.payment.dateOrder.split("T")[0])}
             </Text>
           </View>
@@ -271,7 +301,7 @@ const DetailTicket = ({ navigation, route }) => {
                   .slice(0, 2)
                   .join(":")}
                 {", "}
-                {formatDate(route.params.payment.dateOrder.split("T")[0])}
+                {formatDate(route.params.payment.dateStart.split("T")[0])}
               </Text>
             </View>
           </View>
@@ -307,125 +337,43 @@ const DetailTicket = ({ navigation, route }) => {
               <Text style={[stylesInfor.textDetailPoint]}>
                 Bến xe {route.params.payment.des}
               </Text>
-              {/* <Text style={[stylesInfor.textDetailPoint]}>
-                Boarding at{" "}
-                {
-                  calculateSumHour(
-                    route.params.payment.timeStart,
-                    route.params.payment.timeStations.slice(
-                      0,
-                      route.params.payment.timeStations.length
-                    )
-                  ).endTime
-                }
-                {", "}
-                {formatDate(route.params.payment.dateOrder.split("T")[0])}
-              </Text> */}
             </View>
           </View>
         </View>
-        {/* <View
-          style={{
-            // height: 400,
-            width: "100%",
-            paddingVertical: 20,
-            borderBottomColor: "rgb(210, 210, 210)",
-            borderBottomWidth: 1,
-            paddingHorizontal: 10,
-          }}
-        >
-          <View style={[stylesInfor.flex]}>
-            <Text
-              style={[
-                stylesInfor.textLeftPassenger,
-                {
-                  fontWeight: "600",
-                  fontSize: 20,
-                  color: "black",
-                  width: "50%",
-                },
-              ]}
-            >
-              Passenger details
-            </Text>
+        {new Date().valueOf() - Date.parse(route.params.payment.dateStart) >
+          0 || route.params.status === "Cancel" ? null : (
+          <View
+            style={{
+              marginBottom: 150,
+              // backgroundColor: "red"
+            }}
+          >
             <TouchableOpacity
+              //   color="#841584"
+              //   accessibilityLabel="Learn more about this purple button"
               style={{
-                width: "50%",
+                backgroundColor: "rgb(237,88,90)",
+                width: width / 1.1,
+                borderRadius: 6,
               }}
               onPress={() => {
-                // ApiRefundEdit(
-                //   route.params.list.paymentId,
-                //   route.params,
-                //   screenName.inforDetailScreen
-                // );
-                navigation.replace(
-                  screenName.inforDetailScreen,
-                  route.params.dataTrip
-                );
+                handleCancel();
               }}
             >
               <Text
-                style={[
-                  stylesInfor.touchable,
-                  {
-                    fontWeight: "600",
-                  },
-                ]}
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  paddingVertical: 20,
+                  fontSize: 16,
+                  fontWeight: "500",
+                }}
               >
-                Edit
+                Cancel booking
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={[stylesInfor.flex]}>
-            <Text style={[stylesInfor.textLeftPassenger]}>Full name</Text>
-            <Text style={[stylesInfor.textRightPassenger]}>
-              {inforBookTicket.name}
-            </Text>
-          </View>
-          <View style={[stylesInfor.flex]}>
-            <Text style={[stylesInfor.textLeftPassenger]}>Phone number</Text>
-            <Text style={[stylesInfor.textRightPassenger]}>
-              {inforBookTicket.phoneNumber}
-            </Text>
-          </View>
-          <View style={[stylesInfor.flex]}>
-            <Text style={[stylesInfor.textLeftPassenger]}>Email address</Text>
-            <Text style={[stylesInfor.textRightPassenger]}>
-              {inforBookTicket.email}
-            </Text>
-          </View>
-        </View> */}
-        <View
-          style={{
-            marginBottom: 150,
-            // backgroundColor: "red"
-          }}
-        >
-          <TouchableOpacity
-            //   color="#841584"
-            //   accessibilityLabel="Learn more about this purple button"
-            style={{
-              backgroundColor: "rgb(237,88,90)",
-              width: width / 1.1,
-              borderRadius: 6,
-            }}
-            onPress={() => {
-              handleCancel();
-            }}
-          >
-            <Text
-              style={{
-                color: "white",
-                textAlign: "center",
-                paddingVertical: 20,
-                fontSize: 16,
-                fontWeight: "500",
-              }}
-            >
-              Cancel booking
-            </Text>
-          </TouchableOpacity>
-        </View>
+        )}
       </ScrollView>
     </View>
     // </View>

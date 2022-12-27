@@ -61,15 +61,16 @@ const Notification = ({ item, navigation }) => {
             navigation={navigation}
             name="notifications"
           ></RequireLogin>
-        ) : !listNotification.length ? (
+        ) : !listNotification?.length ? (
           <EmptyNotification />
         ) : (
           <View
             style={{
               height:
                 Dimensions.get("screen").height -
-                Dimensions.get("screen").height / 8.5,
+                Dimensions.get("screen").height / 4,
               marginTop: 10,
+              // flex: 1,
             }}
           >
             <FlatList
@@ -77,7 +78,7 @@ const Notification = ({ item, navigation }) => {
               showsVerticalScrollIndicator={false}
               horizontal={false}
               renderItem={({ item }) => {
-                return <CardNoti item={item} />;
+                return <CardNoti item={item} navigation={navigation} />;
               }}
             ></FlatList>
           </View>

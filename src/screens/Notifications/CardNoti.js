@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 });
-const CardNoti = ({ item }) => {
+const CardNoti = ({ item, navigation }) => {
   // useEffect(() => {
   //   console.warn(item.dateBook);
   // }, []);
@@ -57,7 +57,11 @@ const CardNoti = ({ item }) => {
         alignItems: "center",
       }}
       onPress={() => {
-        Alert.alert(`${item.content}`);
+        if (!item.historyBooking) {
+          Alert.alert(item.title, item.content);
+        } else {
+          navigation.navigate("DetailTicket", item.historyBooking);
+        }
       }}
     >
       <TouchableOpacity style={[styles.container]} disabled={true}>

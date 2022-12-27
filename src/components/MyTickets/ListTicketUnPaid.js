@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import colors from "../../constants/colors";
@@ -33,11 +34,11 @@ const ListTicketUnpaid = ({ item, list, isLoading, navigation, route }) => {
         {
           width: Dimensions.get("screen").width,
           height:
-            Dimensions.get("screen").height -
-            Dimensions.get("screen").height / 8 -
-            120,
+            Dimensions.get("window").height -
+            Dimensions.get("window").height / 8 -
+            100,
           marginTop: 15,
-          paddingBottom: 40,
+          // paddingBottom: Platform.OS === "ios" ? 60 : 0,
           display: "flex",
           flexDirection: "column",
           justifyContent: isLoading ? "flex-start" : "center",
@@ -52,12 +53,14 @@ const ListTicketUnpaid = ({ item, list, isLoading, navigation, route }) => {
           data={list}
           horizontal={false}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             return (
               <CardItemUnpaid
                 item={item}
                 navigation={navigation}
                 route={route}
+                index={index}
+                length={list.length}
               />
             );
           }}

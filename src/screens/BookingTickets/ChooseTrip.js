@@ -18,6 +18,7 @@ import colors from "../../constants/colors";
 import styleGlobal from "../../constants/styleGlobal";
 import CardTrip from "../../components/BookingTickets/CardTrip";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import * as screenName from "../../constants/nameScreen";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useRef } from "react";
@@ -77,7 +78,7 @@ const ChooseTrip = ({ navigation, route }) => {
   const [showModalFilter, setShowModalFilter] = useState(false);
   const [tripChosen, setTripChosen] = useState({});
   const [method, setMethod] = useState({
-    type: "",
+    type: "Rating",
     orient: false,
   });
   const RBSheetRefTrip = useRef();
@@ -125,21 +126,21 @@ const ChooseTrip = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    let res = DataFilter;
+    let res = [...Data];
     // console.warn(method);
     if (method.type === "Time") {
       if (!method.orient) {
         res = Data.sort((a, b) => {
           return (
-            Number(a.timeStart.split(":")[0]) -
-            Number(b.timeStart.split(":")[0])
+            parseInt(a.timeStart.split(":")[0]) -
+            parseInt(b.timeStart.split(":")[0])
           );
         });
       } else {
         res = Data.sort((a, b) => {
           return (
-            Number(b.timeStart.split(":")[0]) -
-            Number(a.timeStart.split(":")[0])
+            parseInt(b.timeStart.split(":")[0]) -
+            parseInt(a.timeStart.split(":")[0])
           );
         });
       }
@@ -153,10 +154,16 @@ const ChooseTrip = ({ navigation, route }) => {
           return b.price - a.price;
         });
       }
-    } else {
+    } else if (method.type === "Rating") {
+      if (!method.orient) {
+        res = Data.reverse();
+      } else {
+        res = [...Data];
+      }
     }
+
     setDataFilter(res);
-  }, [method.type, method.orient]);
+  }, [method]);
   return (
     <View
       style={[
@@ -177,34 +184,27 @@ const ChooseTrip = ({ navigation, route }) => {
 
         {/* <CardTrip /> */}
       </View>
-      <ScrollView
+      {/* <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={tailwind(
           "flex flex-row justify-start items-center"
         )}
         style={[
-          // tailwind("flex flex-row justify-start items-center"),
           {
-            // height: Dimensions.get("screen").height / 20,
             width: Dimensions.get("screen").width,
             height: 100,
             backgroundColor: "white",
-            // paddingVertical: 5,
           },
         ]}
       >
-        <TouchableOpacity style={stylesFilter.touchableFirst}>
-          <Ionicons name="filter" style={stylesFilter.icon}></Ionicons>
-          <Text style={stylesFilter.text}>Filter</Text>
-        </TouchableOpacity>
         <TouchableOpacity
           style={stylesFilter.touchable}
           onPress={() => {
-            // console.warn("a");
+            // console.log(method.orient);
             if (method.type === "Time") {
               setMethod({
-                type: "Time",
+                ...method,
                 orient: !method.orient,
               });
             } else {
@@ -218,13 +218,27 @@ const ChooseTrip = ({ navigation, route }) => {
         >
           <Ionicons name="time-outline" style={stylesFilter.icon}></Ionicons>
           <Text style={stylesFilter.text}>Time</Text>
+          {method.type === "Time" ? (
+            method.orient ? (
+              <AntDesign
+                name="up"
+                style={[stylesFilter.icon, { marginLeft: 4, marginRight: 0 }]}
+              ></AntDesign>
+            ) : (
+              <AntDesign
+                name="down"
+                style={[stylesFilter.icon, { marginLeft: 4, marginRight: 0 }]}
+              ></AntDesign>
+            )
+          ) : null}
         </TouchableOpacity>
         <TouchableOpacity
           style={stylesFilter.touchable}
           onPress={() => {
+            // console.log(method);
             if (method.type === "Price") {
               setMethod({
-                type: "Price",
+                ...method,
                 orient: !method.orient,
               });
             } else {
@@ -241,13 +255,26 @@ const ChooseTrip = ({ navigation, route }) => {
             style={stylesFilter.icon}
           ></Ionicons>
           <Text style={stylesFilter.text}>Price</Text>
+          {method.type === "Price" ? (
+            method.orient ? (
+              <AntDesign
+                name="up"
+                style={[stylesFilter.icon, { marginLeft: 4, marginRight: 0 }]}
+              ></AntDesign>
+            ) : (
+              <AntDesign
+                name="down"
+                style={[stylesFilter.icon, { marginLeft: 4, marginRight: 0 }]}
+              ></AntDesign>
+            )
+          ) : null}
         </TouchableOpacity>
         <TouchableOpacity
           style={stylesFilter.touchable}
           onPress={() => {
             if (method.type === "Rating") {
               setMethod({
-                type: "Rating",
+                ...method,
                 orient: !method.orient,
               });
             } else {
@@ -261,8 +288,21 @@ const ChooseTrip = ({ navigation, route }) => {
         >
           <Ionicons name="star-outline" style={stylesFilter.icon}></Ionicons>
           <Text style={stylesFilter.text}>Rating</Text>
+          {method.type === "Rating" ? (
+            method.orient ? (
+              <AntDesign
+                name="up"
+                style={[stylesFilter.icon, { marginLeft: 4, marginRight: 0 }]}
+              ></AntDesign>
+            ) : (
+              <AntDesign
+                name="down"
+                style={[stylesFilter.icon, { marginLeft: 4, marginRight: 0 }]}
+              ></AntDesign>
+            )
+          ) : null}
         </TouchableOpacity>
-      </ScrollView>
+      </ScrollView> */}
       {loading ? (
         <View
           style={[
@@ -330,6 +370,7 @@ const ChooseTrip = ({ navigation, route }) => {
                   navigation={navigation}
                   showModalDetailTrip={RBSheetRefTrip}
                   setTripChosen={setTripChosen}
+                  DataFilter={DataFilter}
                 />
               );
             }}

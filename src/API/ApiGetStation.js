@@ -9,7 +9,7 @@ const getListLocation = (setListLocation, setLoading) => {
   })
     .then((res) => {
       let listResponse = res.data;
-      // console.warn(res)
+      // console.log(res)
       let listAll = [];
       // listResponse.forEach((item, index) => {
       //   listAll.push(item.name);
@@ -27,10 +27,10 @@ const getListLocation = (setListLocation, setLoading) => {
         });
       });
       setListLocation(listAll);
-      // console.warn(listResponse)
+      // console.log(listResponse)
       setLoading(false);
     })
-    .catch((err) => console.warn(err));
+    .catch((err) => console.log(err));
 };
 
 export { getListLocation };

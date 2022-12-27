@@ -75,119 +75,121 @@ const Profile = (props) => {
     // >
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
+      onStartShouldSetResponder={() => true}
+      style={{
+        // backgroundColor: "red",
+        flex: 1,
+      }}
     >
-      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-      {isLoading ? (
-        <View
-          style={[
-            {
-              marginTop: 40,
-            },
-          ]}
-        >
-          <ActivityIndicator size="large" color={colors.blue} />
-        </View>
-      ) : (
-        <ScrollView
-          contentContainerStyle={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "white",
-            // justifyContent: "center",
-            alignItems: "center",
-            height:
-              Dimensions.get("screen").height -
-              Dimensions.get("screen").height / 15,
-          }}
-          showsVerticalScrollIndicator={false}
-        >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        {isLoading ? (
           <View
-            style={{
-              borderRadius: 7,
-              backgroundColor: colors.backgroundCardPoint,
-              marginVertical: 20,
-              marginTop: 30,
-              width: "90%",
-            }}
-          >
-            <Text
-              style={{
-                textAlign: "center",
-                paddingVertical: 10,
-                paddingHorizontal: 15,
-                fontSize: 16,
-                borderRadius: 6,
-                color: "rgb(40, 40, 40)",
-              }}
-            >
+            style={[
               {
-                "Provide your basic information so that we can help you easily book tickets"
-              }
-            </Text>
+                marginTop: 40,
+              },
+            ]}
+          >
+            <ActivityIndicator size="large" color={colors.blue} />
           </View>
-          <CustomInput
-            label={"Name"}
-            defaultValue={data.name}
-            setIsLoading={setIsLoading}
-            setData={setName}
-          />
-          <CustomInput
-            label={"Email"}
-            defaultValue={data.email}
-            setIsLoading={setIsLoading}
-            setData={setEmail}
-          />
-          <CustomInput
-            label={"Phone number"}
-            defaultValue={data.phone}
-            setIsLoading={setIsLoading}
-            setData={setPhone}
-          />
-          <CustomInput
-            label={"Country"}
-            defaultValue={data.country}
-            setIsLoading={setIsLoading}
-            setData={setCountry}
-          />
-          <CustomInput
-            label={"City"}
-            defaultValue={data.city}
-            setIsLoading={setIsLoading}
-            setData={setCity}
-          />
-          <CustomInput
-            label={"Ward"}
-            defaultValue={data.wards}
-            setIsLoading={setIsLoading}
-            setData={setWards}
-          />
-          <CustomInput
-            label={"Address"}
-            defaultValue={data.address}
-            setIsLoading={setIsLoading}
-            setData={setAddress}
-          />
-          <View
-            style={{
-              width: Dimensions.get("screen").width,
-              backgroundColor: "white",
-              // position: "absolute",
-              // bottom: 0,
-              // left: 0,
-              // right: 0,
-              // zIndex: 1,
+        ) : (
+          <ScrollView
+            contentContainerStyle={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "flex-start",
               alignItems: "center",
-              borderWidth: 1,
-              borderColor: "rgb(220, 220, 220)",
-              borderBottomColor: "transparent",
-              paddingTop: 20,
-              paddingBottom: Platform.OS === "ios" ? 30 : 70,
-              marginBottom: 20,
+              backgroundColor: "white",
+              height:
+                Dimensions.get("screen").height -
+                Dimensions.get("screen").height / 8,
+              // height: "100%",
             }}
+            showsVerticalScrollIndicator={false}
+            horizontal={false}
           >
+            <View
+              style={{
+                borderRadius: 7,
+                backgroundColor: colors.backgroundCardPoint,
+                marginVertical: 20,
+                marginTop: 30,
+                width: "90%",
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  paddingVertical: 10,
+                  paddingHorizontal: 15,
+                  fontSize: 16,
+                  borderRadius: 6,
+                  color: "rgb(40, 40, 40)",
+                }}
+              >
+                {
+                  "Provide your basic information so that we can help you easily book tickets"
+                }
+              </Text>
+            </View>
+            <View></View>
+            <CustomInput
+              label={"Name"}
+              defaultValue={data.name}
+              setIsLoading={setIsLoading}
+              setData={setName}
+            />
+            <CustomInput
+              label={"Email"}
+              defaultValue={data.email}
+              setIsLoading={setIsLoading}
+              setData={setEmail}
+            />
+            <CustomInput
+              label={"Phone number"}
+              defaultValue={data.phone}
+              setIsLoading={setIsLoading}
+              setData={setPhone}
+            />
+            <CustomInput
+              label={"Country"}
+              defaultValue={data.country}
+              setIsLoading={setIsLoading}
+              setData={setCountry}
+            />
+            <CustomInput
+              label={"City"}
+              defaultValue={data.city}
+              setIsLoading={setIsLoading}
+              setData={setCity}
+            />
+            <CustomInput
+              label={"Ward"}
+              defaultValue={data.wards}
+              setIsLoading={setIsLoading}
+              setData={setWards}
+            />
+            <CustomInput
+              label={"Address"}
+              defaultValue={data.address}
+              setIsLoading={setIsLoading}
+              setData={setAddress}
+            />
+            {/* <View
+              style={{
+                width: Dimensions.get("screen").width,
+                backgroundColor: "white",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "rgb(220, 220, 220)",
+                borderBottomColor: "transparent",
+                paddingTop: 20,
+                paddingBottom: Platform.OS === "ios" ? 30 : 70,
+                marginBottom: 20,
+              }}
+            > */}
             <TouchableOpacity
               //   color="#841584"
               //   accessibilityLabel="Learn more about this purple button"
@@ -213,51 +215,51 @@ const Profile = (props) => {
                 SAVE
               </Text>
             </TouchableOpacity>
-          </View>
-        </ScrollView>
-      )}
-      {/* </TouchableWithoutFeedback> */}
+            {/* </View> */}
+          </ScrollView>
+        )}
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
 
     // </View>
   );
 };
-const styles = StyleSheet.create({
-  container9T: {
-    marginTop: 24,
-    alignItems: "center",
-  },
-  buttonUf: {
-    height: 48,
-    alignSelf: "stretch",
-  },
-  keyboardAvoidingView5A: {
-    flexGrow: 1,
-    justifyContent: "space-between",
-  },
-  textEa: {
-    textAlign: "center",
-  },
-  containerVk: {
-    alignItems: "center",
-  },
-  textUm: {
-    marginTop: 16,
-    textAlign: "center",
-  },
-  imageSq: {
-    width: 100,
-    height: 100,
-    marginTop: 24,
-  },
-  textFieldK7: {
-    height: 82,
-    marginTop: 16,
-  },
-  textField8U: {
-    height: 82,
-    marginTop: 16,
-    width: "100%",
-  },
-});
+// const styles = StyleSheet.create({
+//   container9T: {
+//     marginTop: 24,
+//     alignItems: "center",
+//   },
+//   buttonUf: {
+//     height: 48,
+//     alignSelf: "stretch",
+//   },
+//   keyboardAvoidingView5A: {
+//     flexGrow: 1,
+//     justifyContent: "space-between",
+//   },
+//   textEa: {
+//     textAlign: "center",
+//   },
+//   containerVk: {
+//     alignItems: "center",
+//   },
+//   textUm: {
+//     marginTop: 16,
+//     textAlign: "center",
+//   },
+//   imageSq: {
+//     width: 100,
+//     height: 100,
+//     marginTop: 24,
+//   },
+//   textFieldK7: {
+//     height: 82,
+//     marginTop: 16,
+//   },
+//   textField8U: {
+//     height: 82,
+//     marginTop: 16,
+//     width: "100%",
+//   },
+// });
 export default withTheme(Profile);

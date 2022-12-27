@@ -31,6 +31,7 @@ const ListTicket = ({
   currentTab,
   navigation,
   route,
+  setLoadAfterAction,
 }) => {
   const tailwind = useTailwind();
 
@@ -44,7 +45,7 @@ const ListTicket = ({
             Dimensions.get("screen").height / 8 -
             120,
           marginTop: 15,
-          paddingBottom: 40,
+          // paddingBottom: 40,
           display: "flex",
           flexDirection: "column",
           justifyContent: isLoading ? "flex-start" : "center",
@@ -66,7 +67,7 @@ const ListTicket = ({
           data={list}
           horizontal={false}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             return (
               <CardItemTicket
                 item={item}
@@ -74,6 +75,9 @@ const ListTicket = ({
                 currentTab={currentTab}
                 navigation={navigation}
                 route={route}
+                index={index}
+                length={list.length}
+                setLoadAfterAction={setLoadAfterAction}
               />
             );
           }}
