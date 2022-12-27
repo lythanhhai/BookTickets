@@ -14,7 +14,7 @@ const getTrips = (Data, setData, setLoading, setDataFilter) => {
       setDataFilter(listResponse);
       setLoading(false);
     })
-    .catch((err) => console.warn(err));
+    .catch((err) => console.log(err));
 };
 
 export { getTrips };

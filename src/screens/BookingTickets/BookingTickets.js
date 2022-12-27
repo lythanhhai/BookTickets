@@ -46,17 +46,7 @@ const styles = StyleSheet.create({
 const BookingTickets = ({ navigation, route }) => {
   const tailwind = useTailwind();
   // const [list, setList] = useState([...Data]);
-  const [list, setList] = useState([
-    // {
-    //   image:
-    //     "https://storage.googleapis.com/vex-config/cms-tool/destination/images/25/img_hero.png",
-    //   departLocation: "Đà Nẵng",
-    //   arriveLocation: "Quảng Trị",
-    //   date: "2022-10-19",
-    //   price: "150.000vnd",
-    //   originalPrice: "300.000vnd",
-    // },
-  ]);
+  const [list, setList] = useState([]);
   const [checkClickSearch, setCheckClickSearch] = useState(false);
 
   const location = useSelector((state) => state.getLocationReducer);
@@ -96,7 +86,8 @@ const BookingTickets = ({ navigation, route }) => {
       if (
         item.departLocation === location.startPoint &&
         item.arriveLocation === location.stopPoint &&
-        item.date === location.date
+        item.date === location.date &&
+        index === 0
       ) {
         isExist = true;
       }
@@ -194,9 +185,9 @@ const BookingTickets = ({ navigation, route }) => {
           Recent searches
         </Text>
         <TouchableOpacity
-          onPress={() => {
-            // navigation.navigate("Profile");
-            // Linking.openURL("https://mailchimp.com/landers/templates/?gclid=Cj0KCQiA4OybBhCzARIsAIcfn9k1Cbj7UNGk9U1Z4xYgA9wDWT03-q0lAfd4bEyDb8zQVmtvBim7qRcaAgn3EALw_wcB&gclsrc=aw.ds")
+          onPress={async () => {
+            await AsyncStorage.removeItem("ListRecentSearch");
+            setList([]);
           }}
         >
           <Text

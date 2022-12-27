@@ -6,12 +6,22 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  Image,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import colors from "../../constants/colors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "../../utils/formatDate";
 import { calculateSumHour } from "../../utils/calculateSumHour";
+import { GetRatingByAgency } from "../../API/history.api";
+import { AirbnbRating } from "react-native-ratings";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import {
+  setAgency,
+  setIdTrip,
+  setPrice,
+} from "../../redux/actions/inforBookAction";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -34,6 +44,8 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip, tripChosen }) => {
   };
   const location = useSelector((state) => state.getLocationReducer);
   const [data, setData] = useState([]);
+  const [dataRating, setDataRating] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     // console.warn(route.params.routeStations)
     let arrayRes = [];
@@ -47,8 +59,28 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip, tripChosen }) => {
         arrayRes.push(tripChosen.routeStations[item][1]);
       });
       setData(arrayRes);
+    } else if (currentTab == rating) {
+      GetRatingByAgency(
+        setIsLoading,
+        tripChosen.nameAgency,
+        setDataRating,
+        tripChosen.idTrip
+      );
     }
   }, [currentTab]);
+  const dispatch = useDispatch();
+  const HandleChooseATrip = () => {
+    RBSheetRefTrip.current.close();
+    dispatch(setIdTrip(tripChosen.idTrip));
+    dispatch(setPrice(tripChosen.price));
+    dispatch(
+      setAgency({
+        nameAgency: tripChosen.nameAgency,
+        nameVehicle: tripChosen.nameVehicle,
+      })
+    );
+    navigation.replace("ChooseSeat", tripChosen);
+  };
   return (
     <View
       style={{
@@ -265,6 +297,22 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip, tripChosen }) => {
                 );
               }}
             />
+          ) : currentTab === rating ? (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={dataRating}
+              renderItem={({ item, index }) => {
+                return (
+                  <CartItemRating
+                    item={item}
+                    index={index}
+                    tripChosen={tripChosen}
+                    dropScreen={true}
+                    length={dataRating.length}
+                  />
+                );
+              }}
+            />
           ) : (
             <></>
           )}
@@ -300,7 +348,7 @@ const ModalTrip = ({ navigation, route, RBSheetRefTrip, tripChosen }) => {
             marginBottom: 20,
           }}
           onPress={() => {
-            // handleChoosePickup();
+            HandleChooseATrip();
           }}
         >
           <Text
@@ -384,6 +432,109 @@ const CartItemPoint = ({ item, index, tripChosen, dropScreen }) => {
           </Text>
         </View>
       </View>
+    </View>
+  );
+};
+const CartItemRating = ({ item, index, tripChosen, dropScreen, length }) => {
+  const generateStar = () => {
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push(i);
+    }
+    return arr;
+  };
+  return (
+    <View
+      style={{
+        width: "100%",
+        backgroundColor: "transparent",
+        alignItems: "center",
+      }}
+    >
+      {length > 0 ? (
+        <View style={[styles.container]}>
+          <View
+            style={{
+              width: "20%",
+            }}
+          >
+            {/* <Ionicons name="person-circle-outline" size={50} /> */}
+            <Image
+              source={require("../../../assets/Image/account.png")}
+              style={{
+                height: 30,
+                width: 30,
+                objectFit: "cover",
+                resizeMode: "contain",
+                marginRight: 10,
+              }}
+            ></Image>
+          </View>
+
+          <View style={[styles.containerBetween]}>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: "600",
+                paddingTop: 3,
+                paddingBottom: 4,
+              }}
+            >
+              {item.userName}
+            </Text>
+
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              {generateStar().map((item1, index) => {
+                if (item1 < item.rating) {
+                  return (
+                    <AntDesign
+                      name="star"
+                      size={12}
+                      key={index}
+                      color="rgb(252,222,108)"
+                      style={{
+                        marginRight: 2,
+                      }}
+                    />
+                  );
+                } else {
+                  return (
+                    <AntDesign
+                      name="star"
+                      size={12}
+                      key={index}
+                      color="rgb(217,217,217)"
+                      style={{
+                        marginRight: 2,
+                      }}
+                    />
+                  );
+                }
+              })}
+            </View>
+            <Text
+              style={{
+                fontSize: 13,
+                paddingTop: 6,
+                paddingBottom: 4,
+              }}
+            >
+              {item.comment}
+            </Text>
+          </View>
+        </View>
+      ) : (
+        <View style={[styles.container]}>
+          <Text>This agency haven't any reviews</Text>
+        </View>
+      )}
     </View>
   );
 };

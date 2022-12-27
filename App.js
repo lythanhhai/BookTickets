@@ -225,31 +225,23 @@ const Home = () => {
             return (
               <TouchableOpacity
                 style={{
-                  top: -25,
+                  top: -30,
                   justifyContent: "center",
                   alignItems: "center",
+                  width: 60,
+                  height: 60,
+                  borderRadius: 60,
+                  backgroundColor: colors.blue,
                 }}
                 onPress={onPress}
               >
-                <View
-                  style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 35,
-                    backgroundColor: colors.blue,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  {/* {children} */}
-                  <Icon
-                    size={25}
-                    color="white"
-                    name="search1"
-                    justifyContent="center"
-                    alignItems="center"
-                  />
-                </View>
+                <Icon
+                  size={25}
+                  color="white"
+                  name="search1"
+                  justifyContent="center"
+                  alignItems="center"
+                />
               </TouchableOpacity>
             );
           },

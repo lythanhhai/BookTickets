@@ -15,7 +15,7 @@ const getNotification = (setListNotification) => {
     .then((body) => {
       setListNotification(body);
     })
-    .catch((err) => console.warn(err));
+    .catch((err) => console.log(err));
 };
 
 const getUnpaidTicket = (setListUnpaidTicket) => {
@@ -32,7 +32,7 @@ const getUnpaidTicket = (setListUnpaidTicket) => {
       });
       setListUnpaidTicket(arr);
     })
-    .catch((err) => console.warn(err));
+    .catch((err) => console.log(err));
 };
 
 export { getNotification, getUnpaidTicket };

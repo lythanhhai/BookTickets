@@ -36,48 +36,48 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
   const tailwind = useTailwind();
   var User = useSelector((state) => state.authenReducer);
   const [Data, setData] = useState([
-    {
-      id: 1,
-      icon: (
-        <EvilIcons
-          name="star"
-          color={colors.blue}
-          style={{
-            fontSize: 22,
-            paddingHorizontal: 15,
-            paddingBottom: 10,
-          }}
-        />
-      ),
-      title: "My reward points",
-      desc: "Collect reward points to exchange facinating vouchers",
-      iconEndYetLogin: (
-        <Entypo
-          name="lock"
-          color={colors.blue}
-          style={{
-            fontSize: 20,
-            color: "black",
-            paddingRight: 70,
-          }}
-        />
-      ),
-      iconEndLogged: (
-        <MaterialIcons
-          name="navigate-next"
-          style={{
-            fontSize: 20,
-            color: "black",
-            paddingRight: 70,
-          }}
-        />
-      ),
-    },
+    // {
+    //   id: 1,
+    //   icon: (
+    //     <EvilIcons
+    //       name="star"
+    //       color={colors.blue}
+    //       style={{
+    //         fontSize: 22,
+    //         paddingHorizontal: 15,
+    //         paddingBottom: 10,
+    //       }}
+    //     />
+    //   ),
+    //   title: "My reward points",
+    //   desc: "Collect reward points to exchange facinating vouchers",
+    //   iconEndYetLogin: (
+    //     <Entypo
+    //       name="lock"
+    //       color={colors.blue}
+    //       style={{
+    //         fontSize: 20,
+    //         color: "black",
+    //         paddingRight: 70,
+    //       }}
+    //     />
+    //   ),
+    //   iconEndLogged: (
+    //     <MaterialIcons
+    //       name="navigate-next"
+    //       style={{
+    //         fontSize: 20,
+    //         color: "black",
+    //         paddingRight: 70,
+    //       }}
+    //     />
+    //   ),
+    // },
     {
       id: 2,
       icon: (
-        <MaterialIcons
-          name="card-giftcard"
+        <AntDesign
+          name="profile"
           color={colors.blue}
           style={{
             fontSize: 22,
@@ -86,8 +86,8 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
           }}
         />
       ),
-      title: "Vouchers",
-      desc: "See list of voucher which spend on you",
+      title: "Profile",
+      desc: "See or edit your profile",
       iconEndYetLogin: (
         <Entypo
           name="lock"
@@ -168,17 +168,6 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    // var User = await getTokenAferAuthen()
-    // if(User)
-    // {
-    //   await AsyncStorage.removeItem("User")
-    //   console.warn(User)
-    // }
-    // else
-    // {
-    //   console.warn(User)
-    // }
-    // console.warn(User);
     ApiLogout(dispatch, navigation, setLoading);
   };
   return (
@@ -222,6 +211,8 @@ const MenuFunction = ({ item, navigation, route, setLoading }) => {
                       navigation.navigate("My_tickets", {
                         rating: true,
                       });
+                    } else if (item.id === 2) {
+                      navigation.navigate("Profile");
                     }
                   }}
                 >

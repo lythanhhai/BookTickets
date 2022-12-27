@@ -67,10 +67,11 @@ const MyTicket = ({ navigation, route }) => {
   const [isLogged, setIsLogged] = useState(false);
   const [currentTab, setCurrentTab] = useState("Upcomming");
   const [isLoading, setIsLoading] = useState(false);
+  const [loadAfterAction, setLoadAfterAction] = useState(false);
   const User = useSelector((state) => state.authenReducer);
   useEffect(() => {
     GetHistory(setList, setIsLoading, currentTab);
-  }, [currentTab]);
+  }, [currentTab, loadAfterAction]);
   useEffect(() => {
     // console.warn(route.params);
     if (route.params?.rating) {
@@ -100,10 +101,15 @@ const MyTicket = ({ navigation, route }) => {
       <ModalReview
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        setLoadAfterAction={setLoadAfterAction}
       />
 
       {!User.accessToken ? (
-        <RequireLogin navigation={navigation} route={route} name="booking history"/>
+        <RequireLogin
+          navigation={navigation}
+          route={route}
+          name="booking history"
+        />
       ) : list.length === 0 ? (
         <Logged />
       ) : (
@@ -114,6 +120,7 @@ const MyTicket = ({ navigation, route }) => {
           currentTab={currentTab}
           navigation={navigation}
           route={route}
+          setLoadAfterAction={setLoadAfterAction}
         />
       )}
       {/* <ReviewModal

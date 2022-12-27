@@ -21,6 +21,9 @@ import {
   setIdTrip,
   setPrice,
 } from "../../redux/actions/inforBookAction";
+import { useEffect } from "react";
+import { GetRatingByAgency } from "../../API/history.api";
+import { useState } from "react";
 
 const styles = StyleSheet.create({
   background: {
@@ -34,10 +37,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const CardTrip = ({ item, navigation, showModalDetailTrip, setTripChosen }) => {
+const CardTrip = ({
+  item,
+  navigation,
+  showModalDetailTrip,
+  setTripChosen,
+  DataFilter,
+}) => {
   const tailwind = useTailwind();
   const dispatch = useDispatch();
   const heightDevice = Dimensions.get("screen").height;
+  const [dataRating, setDataRating] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [sumRating, setSumRating] = useState(0);
   const HandleChooseATrip = () => {
     dispatch(setIdTrip(item.idTrip));
     dispatch(setPrice(item.price));
@@ -49,6 +61,24 @@ const CardTrip = ({ item, navigation, showModalDetailTrip, setTripChosen }) => {
     );
     navigation.replace("ChooseSeat", item);
   };
+  useEffect(() => {
+    GetRatingByAgency(
+      setIsLoading,
+      item.nameAgency,
+      setDataRating,
+      item.idTrip
+    );
+  }, [item.idTrip]);
+  useEffect(() => {
+    if (dataRating.length > 0) {
+      let sum = 0;
+      dataRating.forEach((item, index) => {
+        sum += item.rating;
+      });
+      // console.log(sum);
+      setSumRating(Math.floor((sum / dataRating.length) * 10) / 10);
+    }
+  }, [dataRating]);
   const handleClickDetailTrip = () => {
     showModalDetailTrip.current.open();
     setTripChosen(item);
@@ -252,17 +282,21 @@ const CardTrip = ({ item, navigation, showModalDetailTrip, setTripChosen }) => {
                     },
                   ]}
                 >
-                  4.6{""}
-                  <Entypo
-                    name="star"
-                    style={{
-                      color: colors.starColor,
-                      fontSize: 13,
-                      fontWeight: "500",
-                    }}
-                  ></Entypo>{" "}
+                  {dataRating.length > 0 ? sumRating : null}
+                  {""}
+                  {dataRating.length > 0 ? (
+                    <Entypo
+                      name="star"
+                      style={{
+                        color: colors.starColor,
+                        fontSize: 13,
+                        fontWeight: "500",
+                      }}
+                    ></Entypo>
+                  ) : null}
+
                   <Text style={{ fontSize: 10, color: colors.gray }}>
-                    (1500 rating)
+                    ({dataRating.length} rating)
                   </Text>
                 </Text>
               </View>

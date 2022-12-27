@@ -24,6 +24,7 @@ import {
   inforDetailScreen,
   inforTicketScreen,
   paymentScreen,
+  myUnpaid,
 } from "../../constants/nameScreen";
 import colors from "../../constants/colors";
 import { resetNew } from "../../redux/actions/getLocationAction";
@@ -94,6 +95,11 @@ const Header = ({
   // My ticket screen
   else if (whichScreen === tabMyTicketScreen) {
     title = <Text style={{ color: "white", fontSize: 16 }}>My Tickets</Text>;
+    pl = Dimensions.get("screen").width / 17;
+  } else if (whichScreen === myUnpaid) {
+    title = (
+      <Text style={{ color: "white", fontSize: 16 }}>My Unpaid Tickets</Text>
+    );
     pl = Dimensions.get("screen").width / 17;
   }
   // Notification screen

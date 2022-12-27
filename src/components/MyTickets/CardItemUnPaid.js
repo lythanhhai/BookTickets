@@ -7,7 +7,7 @@ import moment from "moment";
 import { formatDate } from "../../utils/formatDate";
 import { formatHour } from "../../utils/formatHour";
 
-const CardItemUnpaid = ({ item, navigation, route }) => {
+const CardItemUnpaid = ({ item, navigation, route, index, length }) => {
   // useEffect(() => {
   //   console.warn(item.payment.paymentMethods?.txnRef === true);
   // }, []);
@@ -29,6 +29,7 @@ const CardItemUnpaid = ({ item, navigation, route }) => {
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
+        paddingBottom: length - 1 === index ? 50 : 0,
       }}
     >
       <View

@@ -57,7 +57,7 @@ const CardNoti = ({ item }) => {
         alignItems: "center",
       }}
       onPress={() => {
-        Alert.alert(`${item.content}`);
+        Alert.alert(item.title, item.content);
       }}
     >
       <TouchableOpacity style={[styles.container]} disabled={true}>

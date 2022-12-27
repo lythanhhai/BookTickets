@@ -160,7 +160,7 @@ const InforDetail = ({ navigation, route }) => {
                     justifyContent: "flex-start",
                     alignItems: "center",
                     paddingTop: 20,
-                    paddingBottom: Platform.OS === "ios" ? 30 : 70,
+                    paddingBottom: Platform.OS === "ios" ? 30 : 30,
                   }}
                 >
                   <TouchableOpacity

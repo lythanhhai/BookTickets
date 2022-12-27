@@ -11,7 +11,7 @@ import { baseUrl } from "./config";
 
 const GetProfile = (setData, accessToken, setIsLoading) => {
   setIsLoading(true);
-  // console.warn(accessToken);
+  // console.log(accessToken);
   axios({
     method: "get",
     url: `${baseUrl}profile/info`,
@@ -27,18 +27,18 @@ const GetProfile = (setData, accessToken, setIsLoading) => {
       return data.body;
     })
     .then((body) => {
-      // console.warn(body);
+      // console.log(body);
       setData(body);
       setIsLoading(false);
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 
 const EditProfile = (data, accessToken) => {
   // setIsLoading(true);
-  // console.warn(accessToken);
+  // console.log(accessToken);
   axios({
     method: "post",
     url: `${baseUrl}profile/update`,
@@ -51,11 +51,11 @@ const EditProfile = (data, accessToken) => {
       return res.data;
     })
     .then((data) => {
-      // console.warn(data.body);
+      // console.log(data.body);
       Alert.alert("Edit profile successully");
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 

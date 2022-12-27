@@ -39,14 +39,14 @@ const ApiBookingPartSeat = (
       } else {
         Alert.alert("Sorry, booking isn't successfully!");
       }
-      // console.warn("booking oke");
+      // console.log("booking oke");
       // navigation.replace(screenName.inforTicketScreen, {
       //   list: data,
       //   dataTrip: dataTrip,
       // });
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 
@@ -85,15 +85,15 @@ const ApiBookingSeat = (
       } else {
         Alert.alert("Sorry, booking isn't successfully!");
       }
-      // console.warn("booking oke");
-      // console.warn(data);
+      // console.log("booking oke");
+      // console.log(data);
       // navigation.replace(screenName.inforTicketScreen, {
       //   list: data,
       //   dataTrip: dataTrip,
       // });
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 
@@ -108,13 +108,13 @@ const ApiPayment = (Data, navigation, setIsLoading) => {
       return res.data;
     })
     .then((data) => {
-      // console.warn(data);
+      // console.log(data);
       setIsLoading(false);
       Linking.openURL(data.url.toString());
       navigation.navigate("Home");
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 
@@ -140,7 +140,7 @@ const ApiPaymentAfterBooking = (
       navigation.navigate("Home");
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 
@@ -163,7 +163,7 @@ const ApiRefund = (
       navigation.navigate("Home");
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 
@@ -179,7 +179,7 @@ const ApiRefundEdit = (idPayment, Data, nameScreen) => {
       navigation.replace(nameScreen, Data);
     })
     .catch((err) => {
-      console.warn(err);
+      console.log(err);
     });
 };
 

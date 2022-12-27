@@ -79,7 +79,7 @@ const UnpaidTicket = ({ navigation, route }) => {
     <View style={styles.backgroundBottom}>
       <View style={[styles.background]}>
         <Header
-          whichScreen={screenName.tabMyTicketScreen}
+          whichScreen={screenName.myUnpaid}
           navigation={navigation}
         />
       </View>
