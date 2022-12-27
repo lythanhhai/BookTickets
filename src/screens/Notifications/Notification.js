@@ -78,7 +78,7 @@ const Notification = ({ item, navigation }) => {
               showsVerticalScrollIndicator={false}
               horizontal={false}
               renderItem={({ item }) => {
-                return <CardNoti item={item} />;
+                return <CardNoti item={item} navigation={navigation} />;
               }}
             ></FlatList>
           </View>
